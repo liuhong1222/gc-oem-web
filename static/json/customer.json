@@ -1,0 +1,15 @@
+{
+  "msg": "success",
+  "code": 0,
+  "page":{
+    "totalCount": 4,
+    "pageSize": 10,
+    "totalPage": 1,
+    "currPage": 1,
+    "list":[
+      {"id": 1,"director": "余多","companyName": "创蓝文化传播有限公司","joinStatus": "合同","contacts": "毛毛","contactWay": "17233669966","contractStatus": 1,"wsAccounts": "2","wsProducts": "2","wsRecharges": "9999999.9999","wsConsumes": "9999999.9999","mark": "","createTime": "2018-06-05"},
+      {"id": 2,"director": "余多","companyName": "创蓝文化传播有限公司","joinStatus": "意向","contacts": "毛毛","contactWay": "17233669966","contractStatus": 0,"wsAccounts": "2","wsProducts": "2","wsRecharges": "9999999.9999","wsConsumes": "9999999.9999","mark": "","createTime": "2018-06-05"},
+      {"id": 3,"director": "余多","companyName": "创蓝文化传播有限公司","joinStatus": "沉默","contacts": "毛毛","contactWay": "17233669966","contractStatus": 0,"wsAccounts": "2","wsProducts": "2","wsRecharges": "9999999.9999","wsConsumes": "9999999.9999","mark": "","createTime": "2018-06-05"}
+    ]
+  }
+}
