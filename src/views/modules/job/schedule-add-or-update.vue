@@ -1,8 +1,5 @@
 <template>
-  <el-dialog
-    :title="!dataForm.id ? '新增' : '修改'"
-    :close-on-click-modal="false"
-    :visible.sync="visible">
+  <el-dialog :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="100px">
       <el-form-item label="bean名称" prop="beanName">
         <el-input v-model="dataForm.beanName" placeholder="spring bean名称, 如: testTask"></el-input>
@@ -29,7 +26,7 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         visible: false,
         dataForm: {
@@ -55,7 +52,7 @@
       }
     },
     methods: {
-      init (id) {
+      init(id) {
         this.dataForm.id = id || 0
         this.visible = true
         this.$nextTick(() => {
@@ -65,7 +62,7 @@
               url: this.$http.adornUrl(`/sys/schedule/info/${this.dataForm.id}`),
               method: 'get',
               params: this.$http.adornParams()
-            }).then(({data}) => {
+            }).then(({ data }) => {
               if (data && data.code === 0) {
                 this.dataForm.beanName = data.schedule.beanName
                 this.dataForm.methodName = data.schedule.methodName
@@ -79,7 +76,7 @@
         })
       },
       // 表单提交
-      dataFormSubmit () {
+      dataFormSubmit() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
@@ -94,7 +91,7 @@
                 'remark': this.dataForm.remark,
                 'status': !this.dataForm.id ? undefined : this.dataForm.status
               })
-            }).then(({data}) => {
+            }).then(({ data }) => {
               if (data && data.code === 0) {
                 this.$message({
                   message: '操作成功',
@@ -114,4 +111,5 @@
       }
     }
   }
+
 </script>

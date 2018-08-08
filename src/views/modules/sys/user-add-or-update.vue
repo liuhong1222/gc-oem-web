@@ -1,8 +1,5 @@
 <template>
-  <el-dialog
-    :title="!dataForm.id ? '新增' : '修改'"
-    :close-on-click-modal="false"
-    :visible.sync="visible">
+  <el-dialog :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
       <el-form-item label="用户名" prop="userName">
         <el-input v-model="dataForm.userName" placeholder="登录帐号"></el-input>
@@ -41,7 +38,7 @@
 <script>
   import { isEmail, isMobile } from '@/utils/validate'
   export default {
-    data () {
+    data() {
       var validatePassword = (rule, value, callback) => {
         if (!this.dataForm.id && !/\S/.test(value)) {
           callback(new Error('密码不能为空'))
@@ -108,13 +105,13 @@
       }
     },
     methods: {
-      init (id) {
+      init(id) {
         this.dataForm.id = id || 0
         this.$http({
           url: this.$http.adornUrl('/sys/role/select'),
           method: 'get',
           params: this.$http.adornParams()
-        }).then(({data}) => {
+        }).then(({ data }) => {
           this.roleList = data && data.code === 0 ? data.list : []
         }).then(() => {
           this.visible = true
@@ -127,7 +124,7 @@
               url: this.$http.adornUrl(`/sys/user/info/${this.dataForm.id}`),
               method: 'get',
               params: this.$http.adornParams()
-            }).then(({data}) => {
+            }).then(({ data }) => {
               if (data && data.code === 0) {
                 this.dataForm.userName = data.user.username
                 this.dataForm.salt = data.user.salt
@@ -141,7 +138,7 @@
         })
       },
       // 表单提交
-      dataFormSubmit () {
+      dataFormSubmit() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
@@ -157,7 +154,7 @@
                 'status': this.dataForm.status,
                 'roleIdList': this.dataForm.roleIdList
               })
-            }).then(({data}) => {
+            }).then(({ data }) => {
               if (data && data.code === 0) {
                 this.$message({
                   message: '操作成功',
@@ -177,4 +174,5 @@
       }
     }
   }
+
 </script>

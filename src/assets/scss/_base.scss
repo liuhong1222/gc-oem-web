@@ -5,7 +5,7 @@
 }
 body {
   font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.15;
   color: #303133;
   background-color: #fff;
@@ -124,8 +124,8 @@ img {
   z-index: 1030;
   height: 50px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .08);
-  background-color: $navbar--background-color;
-
+  // background-color: $navbar--background-color;
+background-color: #0f1c4e;;
   &--inverse {
     .site-navbar__body {
       background-color: transparent;
@@ -356,7 +356,16 @@ img {
     }
   }
 }
-
-
+.el-table {
+  font-size: 14px;
+}
+.cf:after{
+  content:'';
+  display: block;
+  clear: both;
+}
+li {
+  list-style: none
+}
 /* Dropdown
 ------------------------------ */

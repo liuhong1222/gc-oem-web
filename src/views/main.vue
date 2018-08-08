@@ -21,7 +21,7 @@
 
   import watermark from 'watermark-dom'
 
-  watermark.init({ watermark_txt: "测试水印"});
+  // watermark.init({ watermark_txt: "测试水印"});
   export default {
     data () {
       return {

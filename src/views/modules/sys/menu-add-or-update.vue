@@ -1,8 +1,5 @@
 <template>
-  <el-dialog
-    :title="!dataForm.id ? '新增' : '修改'"
-    :close-on-click-modal="false"
-    :visible.sync="visible">
+  <el-dialog :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
       <el-form-item label="类型" prop="type">
         <el-radio-group v-model="dataForm.type">
@@ -13,19 +10,9 @@
         <el-input v-model="dataForm.name" :placeholder="dataForm.typeList[dataForm.type] + '名称'"></el-input>
       </el-form-item>
       <el-form-item label="上级菜单" prop="parentName">
-        <el-popover
-          ref="menuListPopover"
-          placement="bottom-start"
-          trigger="click">
-          <el-tree
-            :data="menuList"
-            :props="menuListTreeProps"
-            node-key="menuId"
-            ref="menuListTree"
-            @current-change="menuListTreeCurrentChangeHandle"
-            :default-expand-all="true"
-            :highlight-current="true"
-            :expand-on-click-node="false">
+        <el-popover ref="menuListPopover" placement="bottom-start" trigger="click">
+          <el-tree :data="menuList" :props="menuListTreeProps" node-key="menuId" ref="menuListTree" @current-change="menuListTreeCurrentChangeHandle"
+            :default-expand-all="true" :highlight-current="true" :expand-on-click-node="false">
           </el-tree>
         </el-popover>
         <el-input v-model="dataForm.parentName" v-popover:menuListPopover :readonly="true" placeholder="点击选择上级菜单" class="menu-list__input"></el-input>
@@ -42,17 +29,9 @@
       <el-form-item v-if="dataForm.type !== 2" label="菜单图标" prop="icon">
         <el-row>
           <el-col :span="22">
-            <el-popover
-              ref="iconListPopover"
-              placement="bottom-start"
-              trigger="click"
-              popper-class="mod-menu__icon-popover">
+            <el-popover ref="iconListPopover" placement="bottom-start" trigger="click" popper-class="mod-menu__icon-popover">
               <div class="mod-menu__icon-list">
-                <el-button
-                  v-for="(item, index) in iconList"
-                  :key="index"
-                  @click="iconActiveHandle(item)"
-                  :class="{ 'is-active': item === dataForm.icon }">
+                <el-button v-for="(item, index) in iconList" :key="index" @click="iconActiveHandle(item)" :class="{ 'is-active': item === dataForm.icon }">
                   <icon-svg :name="item"></icon-svg>
                 </el-button>
               </div>
@@ -79,7 +58,7 @@
   import { treeDataTranslate } from '@/utils'
   import Icon from '@/icons'
   export default {
-    data () {
+    data() {
       var validateUrl = (rule, value, callback) => {
         if (this.dataForm.type === 1 && !/\S/.test(value)) {
           callback(new Error('菜单URL不能为空'))
@@ -120,17 +99,17 @@
         }
       }
     },
-    created () {
+    created() {
       this.iconList = Icon.getNameList()
     },
     methods: {
-      init (id) {
+      init(id) {
         this.dataForm.id = id || 0
         this.$http({
           url: this.$http.adornUrl('/sys/menu/select'),
           method: 'get',
           params: this.$http.adornParams()
-        }).then(({data}) => {
+        }).then(({ data }) => {
           this.menuList = treeDataTranslate(data.menuList, 'menuId')
         }).then(() => {
           this.visible = true
@@ -147,7 +126,7 @@
               url: this.$http.adornUrl(`/sys/menu/info/${this.dataForm.id}`),
               method: 'get',
               params: this.$http.adornParams()
-            }).then(({data}) => {
+            }).then(({ data }) => {
               this.dataForm.id = data.menu.menuId
               this.dataForm.type = data.menu.type
               this.dataForm.name = data.menu.name
@@ -162,21 +141,21 @@
         })
       },
       // 菜单树选中
-      menuListTreeCurrentChangeHandle (data, node) {
+      menuListTreeCurrentChangeHandle(data, node) {
         this.dataForm.parentId = data.menuId
         this.dataForm.parentName = data.name
       },
       // 菜单树设置当前选中节点
-      menuListTreeSetCurrentNode () {
+      menuListTreeSetCurrentNode() {
         this.$refs.menuListTree.setCurrentKey(this.dataForm.parentId)
         this.dataForm.parentName = (this.$refs.menuListTree.getCurrentNode() || {})['name']
       },
       // 图标选中
-      iconActiveHandle (iconName) {
+      iconActiveHandle(iconName) {
         this.dataForm.icon = iconName
       },
       // 表单提交
-      dataFormSubmit () {
+      dataFormSubmit() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
@@ -192,7 +171,7 @@
                 'orderNum': this.dataForm.orderNum,
                 'icon': this.dataForm.icon
               })
-            }).then(({data}) => {
+            }).then(({ data }) => {
               if (data && data.code === 0) {
                 this.$message({
                   message: '操作成功',
@@ -212,13 +191,14 @@
       }
     }
   }
+
 </script>
 
 <style lang="scss">
   .mod-menu {
     .menu-list__input,
     .icon-list__input {
-       > .el-input__inner {
+      >.el-input__inner {
         cursor: pointer;
       }
     }
@@ -229,10 +209,10 @@
       max-height: 180px;
       padding: 0;
       margin: -8px 0 0 -8px;
-      > .el-button {
+      >.el-button {
         padding: 8px;
         margin: 8px 0 0 8px;
-        > span {
+        >span {
           display: inline-block;
           vertical-align: middle;
           width: 18px;
