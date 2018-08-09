@@ -3,7 +3,7 @@
     <el-row :gutter="20">
       <el-col :span="12">
         <div class="grid-content bg-purple">
-          <h2>嗨！廖炎</h2>
+          <h2>嗨！{{ userName }}</h2>
           <ul class="cf basic-mess">
             <li v-for="(item,index) in basicList" :key="index">
               <p>{{item.title}}</p>
@@ -13,7 +13,6 @@
             <li>
               <button class="copyLink" @click="copyLink">复制推广链接</button>
             </li>
-
           </ul>
         </div>
       </el-col>
@@ -54,8 +53,8 @@
             <li v-for="(item,index) in mealList" :key="index">
               <p><span>{{item.mealName}}</span><span class="line"></span></p>
               <span class="moneyMeal">{{item.mealMoney}}元</span>
-              <span v-if="index == '3'">/{{item.count}}万条</span>
-              <span class="label" v-else>条</span>
+              <span v-if="index == '3'">/{{item.count}}条</span>
+              <span class="label" v-else>/{{item.count}}万条</span>
             </li>
           </ul>
         </div>
@@ -68,11 +67,11 @@
           <el-input style="border:none" v-model="chdataForm.chPrice" placeholder="" readonly id="chprice"></el-input>
         </el-form-item>
         <el-form-item label="充值金额" prop="chMoney">
-          <el-input v-model="chdataForm.chMoney" placeholder="充值金额" ref="inputMoney"></el-input>
+          <el-input v-model.number="chdataForm.chMoney" placeholder="充值金额" ref="inputMoney"></el-input>
           <span>元</span>
         </el-form-item>
         <el-form-item label="充值条数">
-          <el-input v-model="chdataForm.chCounts" placeholder="请输入充值条数" ref="inputVal" readonly></el-input>
+          <el-input v-model.number="chdataForm.chCounts" placeholder="请输入充值条数" ref="inputVal" readonly></el-input>
           <span>条</span>
         </el-form-item>
         <el-form-item label="备注">
@@ -125,8 +124,8 @@
           <div class="mealinput">
             <input type="text" v-model="dat.count[i]">
           </div>
-          <span class="label" v-if="i == '3'">万条</span>
-          <span class="label" v-else>条</span>
+          <span class="label" v-if="i == '3'">条</span>
+          <span class="label" v-else>万条</span>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -153,18 +152,18 @@
     </el-dialog>
     <!-- 更改邮箱 -->
     <el-dialog title="重新绑定邮箱" :visible.sync="reEmailVisible">
-        <el-form :model="reemailform" :rules="reemailrules" ref="reemailruleForm">
-          <el-form-item label="原邮箱" prop="oldemail">
-            <el-input v-model="reemailform.oldemail" auto-complete="off" id="emailInput" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="新邮箱" prop="newemail">
-              <el-input v-model="reemailform.newemail" auto-complete="off"></el-input>
-            </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="reEmailBtn()">确 定</el-button>
-        </div>
-      </el-dialog>
+      <el-form :model="reemailform" :rules="reemailrules" ref="reemailruleForm">
+        <el-form-item label="原邮箱" prop="oldemail">
+          <el-input v-model="reemailform.oldemail" auto-complete="off" id="emailInput" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="新邮箱" prop="newemail">
+          <el-input v-model="reemailform.newemail" auto-complete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="reEmailBtn()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -245,9 +244,9 @@
         addemailform: {
           email: ''
         },
-        reemailform:{
-          oldemail:'',
-          newemail:''
+        reemailform: {
+          oldemail: '',
+          newemail: ''
         },
         addemailrules: {
           email: [
@@ -262,8 +261,8 @@
           ],
         },
         copyVisible: false,
-        addEmailVisible:false,
-        reEmailVisible:false,
+        addEmailVisible: false,
+        reEmailVisible: false,
         phoneFormVisible: false,
         chdataFormVisible: false,
         warnFormVisible: false,
@@ -276,7 +275,12 @@
         },
         chdataFormrefRule: {
           chMoney: [
-            { required: true, message: '请输入修改的预警值', trigger: 'blur' }
+            { required: true, message: '请输入修改的预警值', trigger: 'blur' },
+            { type: 'number', message: '金额必须为数字' }
+          ],
+          chCounts: [
+            { required: true, message: '条数不能为空', trigger: 'blur' },
+            { type: 'number', message: '条数必须为数字' }
           ],
         },
         warinform: { counts: '', curcounts: '' },
@@ -298,6 +302,11 @@
           // 获取验证码
         },
         deep: true
+      }
+    },
+    computed: {
+      userName: {
+        get() { return this.$store.state.user.name }
       }
     },
     methods: {
@@ -322,17 +331,17 @@
         } else if (arrindex == 4) {
           if (btnCount == "") {
             console.log("添加弹出框");
-            this.addEmailVisible=true
+            this.addEmailVisible = true
             this.$nextTick(() => {
-            this.$refs['addemailruleForm'].resetFields();
-          })
+              this.$refs['addemailruleForm'].resetFields();
+            })
           } else {
             console.log("修改弹出框");
-            this.reemailform.oldemail=this.basicList[4].counts
-            this.reEmailVisible=true;
+            this.reemailform.oldemail = this.basicList[4].counts
+            this.reEmailVisible = true;
             this.$nextTick(() => {
-            this.$refs['reemailruleForm'].resetFields();
-          })
+              this.$refs['reemailruleForm'].resetFields();
+            })
           }
         }
       },
@@ -358,7 +367,7 @@
         })
       },
       // 添加邮箱
-      addEmailBtn(){
+      addEmailBtn() {
         this.$refs['addemailruleForm'].validate((valid) => {
           if (valid) {
             console.log(3333)
@@ -366,7 +375,7 @@
         })
       },
       // 修改邮箱
-      reEmailBtn(){
+      reEmailBtn() {
         this.$refs['reemailruleForm'].validate((valid) => {
           if (valid) {
             console.log(2222222)
@@ -392,7 +401,7 @@
       },
       // 提交修改套餐
 
-      
+
 
     }
   }
@@ -457,29 +466,15 @@
     text-align: center
   }
 
-  .customerList li {
-    width: 31%;
-    text-align: center;
-    float: left;
-    color: #666;
-  }
-
-  .customerList,
-  .mealPackage {
-    margin-top: 80px;
-  }
-
-  .customerList p:nth-child(2) {
-    font-size: 24px;
-    font-weight: 700;
-  }
-
   .el-table::before {
     left: 0;
     bottom: 0;
     width: 100%;
     height: 0px;
   }
+
+
+
 
   .mealPackage li {
     width: 33%;
@@ -583,8 +578,7 @@
     color: #fff;
     cursor: pointer;
   }
-
-  .el-dialog {
+  /* .el-dialog {
     width: 35%;
   }
 
@@ -609,7 +603,7 @@
 
   .el-dialog__body {
     border-top: 1px solid #e5e5e5;
-  }
+  } */
   /* 二维码 */
 
   #qrcodeCon {
