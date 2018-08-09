@@ -26,36 +26,36 @@
         </div>
         <div class="agentTable">
             <el-table :data="agentTableData" style="width: 100%" :header-cell-style="getRowClass">
-                <el-table-column fixed prop="number" label="序号" width="50" align="center">
+                <el-table-column fixed prop="agentId" label="序号" width="50" align="center">
                 </el-table-column>
                 <el-table-column prop="agentNumber" label="代理商编号" width="90" align="center">
                 </el-table-column>
                 <el-table-column prop="businNumber" label=" 商户编号" width="80" align="center">
                 </el-table-column>
-                <el-table-column prop="agentName" label=" 代理商名称" width="165" align="center">
+                <el-table-column prop="companyName" label=" 代理商名称" width="165" align="center">
                 </el-table-column>
-                <el-table-column prop="agentStatus" label=" 代理商状态" width="90" align="center">
+                <el-table-column prop="statusName" label=" 代理商状态" width="90" align="center">
                 </el-table-column>
-                <el-table-column prop="date" label="日期" width="150" align="center">
+                <el-table-column prop="createTime" label="日期" width="150" align="center">
                 </el-table-column>
-                <el-table-column prop="upgrade" label="是否升级" width="80" align="center">
+                <el-table-column prop="canUpgradeName" label="是否升级" width="80" align="center">
                 </el-table-column>
-                <el-table-column prop="proxyRank" label="代理等级" width="120" align="center">
+                <el-table-column prop="levelName" label="代理等级" width="120" align="center">
                 </el-table-column>
-                <el-table-column prop="rechargeTotal" label="充值总计（元）" width="120" align="center">
+                <el-table-column prop="totalRechargeMoney" label="充值总计（元）" width="120" align="center">
                 </el-table-column>
-                <el-table-column prop="rechargeCounts" label="充值总条数" width="120" align="center">
+                <el-table-column prop="totalRechargeNumber" label="充值总条数" width="120" align="center">
                 </el-table-column>
-                <el-table-column prop="reNumber" label="剩余条数" width="120" align="center">
+                <el-table-column prop="emptyBalance" label="剩余条数" width="120" align="center">
                 </el-table-column>
-                <el-table-column prop="allowBeyond" label="允许超出条数" width="120" align="center">
+                <el-table-column prop="emptyCreditNumber" label="允许超出条数" width="120" align="center">
                 </el-table-column>
-                <el-table-column prop="phone" label="联系电话" width="120" align="center">
+                <el-table-column prop="mobile" label="联系电话" width="120" align="center">
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="165" align="center">
                     <template slot-scope="scope">
                         <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-                        <el-button type="text" size="small"  @click="addUpdateAgent(1)" >修改</el-button>
+                        <el-button type="text" size="small" @click="addUpdateAgent(1)">修改</el-button>
                         <el-button type="text" size="small">充值</el-button>
                         <el-button type="text" size="small">禁用</el-button>
                     </template>
@@ -86,126 +86,54 @@
                     user: '',
                     region: ''
                 },
-                agentTableData: [
-                    {
-                        number: '01',
-                        agentNumber: '51252',
-                        businNumber: '6666',
-                        agentName: '上海创蓝文化传播有限公司',
-                        agentStatus: '使用中',
-                        date: '2016-05-03',
-                        upgrade: '是',
-                        proxyRank: '  一级  ',
-                        rechargeTotal: '10,000',
-                        rechargeCounts: '1,000,000',
-                        reNumber: ' 1,000,000 ',
-                        allowBeyond: ' 1,000,000 ',
-                        phone: '17612163551',
-                    }, {
-                        number: '01',
-                        agentNumber: '51252',
-                        businNumber: '6666',
-                        agentName: '上海创蓝文化传播有限公司',
-                        agentStatus: '使用中',
-                        date: '2016-05-03',
-                        upgrade: '是',
-                        proxyRank: '  一级  ',
-                        rechargeTotal: '10,000',
-                        rechargeCounts: '1,000,000',
-                        reNumber: ' 1,000,000 ',
-                        allowBeyond: ' 1,000,000 ',
-                        phone: '17612163551',
-                    }, {
-                        number: '01',
-                        agentNumber: '51252',
-                        businNumber: '6666',
-                        agentName: '上海创蓝文化传播有限公司',
-                        agentStatus: '使用中',
-                        date: '2016-05-03',
-                        upgrade: '是',
-                        proxyRank: '  一级  ',
-                        rechargeTotal: '10,000',
-                        rechargeCounts: '1,000,000',
-                        reNumber: ' 1,000,000 ',
-                        allowBeyond: ' 1,000,000 ',
-                        phone: '17612163551',
-                    }, {
-                        number: '01',
-                        agentNumber: '51252',
-                        businNumber: '6666',
-                        agentName: '上海创蓝文化传播有限公司',
-                        agentStatus: '使用中',
-                        date: '2016-05-03',
-                        upgrade: '是',
-                        proxyRank: '  一级  ',
-                        rechargeTotal: '10,000',
-                        rechargeCounts: '1,000,000',
-                        reNumber: ' 1,000,000 ',
-                        allowBeyond: ' 1,000,000 ',
-                        phone: '17612163551',
-                    }, {
-                        number: '01',
-                        agentNumber: '51252',
-                        businNumber: '6666',
-                        agentName: '上海创蓝文化传播有限公司',
-                        agentStatus: '使用中',
-                        date: '2016-05-03',
-                        upgrade: '是',
-                        proxyRank: '  一级  ',
-                        rechargeTotal: '10,000',
-                        rechargeCounts: '1,000,000',
-                        reNumber: ' 1,000,000 ',
-                        allowBeyond: ' 1,000,000 ',
-                        phone: '17612163551',
-                    }, {
-                        number: '01',
-                        agentNumber: '51252',
-                        businNumber: '6666',
-                        agentName: '上海创蓝文化传播有限公司',
-                        agentStatus: '使用中',
-                        date: '2016-05-03',
-                        upgrade: '是',
-                        proxyRank: '  一级  ',
-                        rechargeTotal: '10,000',
-                        rechargeCounts: '1,000,000',
-                        reNumber: ' 1,000,000 ',
-                        allowBeyond: ' 1,000,000 ',
-                        phone: '17612163551',
-                    }, {
-                        number: '01',
-                        agentNumber: '51252',
-                        businNumber: '6666',
-                        agentName: '上海创蓝文化传播有限公司',
-                        agentStatus: '使用中',
-                        date: '2016-05-03',
-                        upgrade: '是',
-                        proxyRank: '  一级  ',
-                        rechargeTotal: '10,000',
-                        rechargeCounts: '1,000,000',
-                        reNumber: ' 1,000,000 ',
-                        allowBeyond: ' 1,000,000 ',
-                        phone: '17612163551',
-                    }
-                ],
+                agentTableData: [],
                 pageIndex: 1,
-                pageSize: 10,
-                totalPage: 3000,
+                pageSize: 3,
+                totalPage: 0,
             }
         },
         components: {
             AddOrUpdate
         },
+        activated() {
+            this.getDataList()
+        },
         methods: {
+            // 获取代理商列表
+            getDataList() {
+                this.dataListLoading = true
+                this.$http({
+                    url: this.$http.adornUrl(`agent/agentInfo/list?token=${this.$cookie.get('token')}`),
+                    method: 'get',
+                    params: this.$http.adornParams({
+                        'currentPage': this.pageIndex,
+                        'pageSize': this.pageSize,
+                    })
+                }).then(({ data }) => {
+                    if (data && data.code === 0) {
+                        console.log(data)
+                        this.agentTableData = data.data.list
+                        this.totalPage = data.data.total
+                    } else {
+                        this.agentTableData = []
+                        this.totalPage = 0
+                    }
+
+                })
+            },
+
+
+
             // 每页数
             sizeChangeHandle(val) {
                 this.pageSize = val
                 this.pageIndex = 1
-                // this.getDataList()
+                this.getDataList()
             },
             // 当前页
             currentChangeHandle(val) {
                 this.pageIndex = val
-                // this.getDataList()
+                this.getDataList()
             },
             getRowClass({ row, column, rowIndex, columnIndex }) {
                 if (rowIndex == 0) {
@@ -227,9 +155,9 @@
                 })
             },
             // 查看
-            handleClick(row) {
-                
-            }
+            // handleClick(row) {
+
+            // }
         }
     }
 
