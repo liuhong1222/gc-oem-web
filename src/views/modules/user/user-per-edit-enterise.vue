@@ -10,19 +10,19 @@
                 <el-form-item label="客户编号" prop="custNum">
                     <el-input v-model="perDataForm.custNum" placeholder="客户编号"></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="身份证照片" prop="indoPic">
-                    <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="otherhandleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload" style="display:inline-block">
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <el-form-item label="身份证照片" prop="indoPic">
+                    <el-upload class="avatar-uploader" action="" :show-file-list="false" :on-success="otherhandleAvatarSuccess" :before-upload="beforeAvatarUpload"
+                        style="display:inline-block">
+                        <img v-if="perfaceimageUrl" :src="perfaceimageUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon" style="font-size:14px">正面</i>
                     </el-upload>
-                    <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="otherhandleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload" style="display:inline-block">
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                    <el-upload class="avatar-uploader" action="" :show-file-list="false" :on-success="otherhandleAvatarSuccess" :before-upload="beforeAvatarUpload"
+                        style="display:inline-block">
+                        <img v-if="perbackimageUrl" :src="perbackimageUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon" style="font-size:14px">反面</i>
                     </el-upload>
                     <span>（上传后，以下部分信息可自动导入）</span>
-                </el-form-item> -->
+                </el-form-item>
                 <el-form-item label="客户姓名" prop="custNanme">
                     <el-input v-model="perDataForm.custNanme" placeholder="客户姓名"></el-input>
                 </el-form-item>
@@ -32,7 +32,8 @@
                 <el-form-item label="详细地址" prop="peraddress">
                     <el-input v-model="perDataForm.peraddress" placeholder="详细地址"></el-input>
                 </el-form-item>
-                <el-form-item label="证件期限" prop="pertimelimit">
+                <el-form-item label="证件期限" prop="pertimelimit1">
+
                     <el-input v-model="perDataForm.pertimelimit1" placeholder="开始" style="width:35%"></el-input> 至
                     <el-input v-model="perDataForm.pertimelimit2" placeholder="结束" style="width:35%"></el-input>
                 </el-form-item>
@@ -57,7 +58,8 @@
                     <el-input v-model="priseDataForm.prisecustNum" placeholder="客户编号"></el-input>
                 </el-form-item>
                 <el-form-item label="营业执照：" prop="bussicLice">
-                    <el-upload class="avatar-uploader" :action="priseurl" accept="image/jpeg,image/jpg,image/png" :show-file-list="false" :on-success="perisehandleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                    <el-upload class="avatar-uploader" :action="priseurl" accept="image/jpeg,image/jpg,image/png" :show-file-list="false" :on-success="perisehandleAvatarSuccess"
+                        :before-upload="beforeAvatarUpload">
                         <img v-if="priseimageUrl" :src="priseimageUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
@@ -75,7 +77,7 @@
                 <el-form-item label="法人姓名：" prop="priseName">
                     <el-input v-model="priseDataForm.priseName" placeholder="法人姓名"></el-input>
                 </el-form-item>
-                <el-form-item label="营业期限：" prop="prisetimelimit">
+                <el-form-item label="营业期限：" prop="prisetimelimit1">
                     <el-input v-model="priseDataForm.prisetimelimit1" placeholder="开始" style="width:35%"></el-input> 至
                     <el-input v-model="priseDataForm.prisetimelimit2" placeholder="结束" style="width:35%"></el-input>
                 </el-form-item>
@@ -91,6 +93,7 @@
     </div>
 </template>
 <script>
+    import { isEmail, isMobile } from '@/utils/validate'
     export default {
         data() {
             var validateMobile = (rule, value, callback) => {
@@ -114,7 +117,11 @@
                 perVisible: false,
                 entriseVisible: false,
                 labelPosition: 'right',
+                perbackimageUrl: '',
+                perfaceimageUrl: '',
                 perDataForm: {
+                    id: '',
+                    creUserId: '',
                     mobile: '',
                     custNum: '',
                     custNanme: '',
@@ -131,9 +138,9 @@
                     custNum: [
                         { required: true, message: '请输入客户编号', trigger: 'blur' }
                     ],
-                    indoPic: [
-                        { required: true, message: '请上传身份证照片', trigger: 'blur' }
-                    ],
+                    // indoPic: [
+                    //     { required: true, message: '请上传身份证照片', trigger: 'blur' }
+                    // ],
                     custNanme: [
                         { required: true, message: '请输入客户姓名', trigger: 'blur' }
                     ],
@@ -143,7 +150,7 @@
                     peraddress: [
                         { required: true, message: '请输入详细地址', trigger: 'blur' }
                     ],
-                    pertimelimit: [
+                    pertimelimit1: [
                         { required: true, message: '请输入证件期限', trigger: 'blur' }
                     ],
                     peremail: [
@@ -152,6 +159,8 @@
                     ],
                 },
                 priseDataForm: {
+                    id: '',
+                    creUserId: '',
                     mobile: '',
                     prisecustNum: '',
                     priseComName: '',
@@ -182,32 +191,79 @@
                     priseName: [
                         { required: true, message: '请输入法人姓名', trigger: 'blur' }
                     ],
-                    prisetimelimit: [
+                    prisetimelimit1: [
                         { required: true, message: '请输入营业期限', trigger: 'blur' }
                     ],
                     priseDesc: [
                         { required: true, message: '请输入经营范围', trigger: 'blur' }
                     ],
-                    bussicLice: [
-                        { required: true, message: '请上传营业执照', trigger: 'blur' }
-                    ]
+                    // bussicLice: [
+                    //     { required: true, message: '请上传营业执照', trigger: 'blur' }
+                    // ]
                 }
             }
         },
         methods: {
             updateInit(arr) {
-                console.log(arr[0])
-                console.log(arr[1])
-                if (arr[1] == 1) {  //个人
+                console.log(arr[0])  //id
+                console.log(arr[1])  //个人 （0，null） 还是企业（1）
+                console.log(arr[2])  //creUserId
+                if (arr[1] == 0) {  //个人
                     this.perVisible = true
                     this.$nextTick(() => {
                         this.$refs['perDataForm'].resetFields()
                     })
-                } else { //企业
+                    this.perDataForm.id = arr[0]
+                    this.perDataForm.creUserId = arr[2]
+                    this.$http({
+                        url: this.$http.adornUrl(`agent/cust/findPersonById?token=${this.$cookie.get('token')}&id=${this.perDataForm.id}&creUserId=${this.perDataForm.creUserId}`),
+                        method: 'get',
+                        params: this.$http.adornParams()
+                    }).then(({ data }) => {
+                        if (data && data.code === 0) {
+                            console.log(data)
+                            this.perfaceimageUrl = data.idCardInfo.faceUrl
+                            this.perbackimageUrl = data.idCardInfo.backUrl
+                            this.perDataForm.mobile=data.mobile,
+                            this.perDataForm.custNum = data.idCardInfo.creUserId
+                            this.perDataForm.custNanme = data.idCardInfo.username
+                            this.perDataForm.perIdno = data.idCardInfo.idno
+                            this.perDataForm.peraddress = data.idCardInfo.address
+                            this.perDataForm.pertimelimit1 = data.idCardInfo.effectdate
+                            this.perDataForm.pertimelimit2 = data.idCardInfo.expiredate
+                            this.perDataForm.peremail = data.mail
+                        } else {
+                            this.$message.error(data.msg)
+                        }
+                    })
+                } else if (arr[1] == 1) { //企业
                     this.priseurl = this.$http.adornUrl(`agent/agentInfo/license/upload?token=${this.$cookie.get('token')}`)
                     this.entriseVisible = true
                     this.$nextTick(() => {
                         this.$refs['priseDataFormref'].resetFields()
+                    })
+                    this.priseDataForm.id = arr[0]
+                    this.priseDataForm.creUserId = arr[2]
+                    this.$http({
+                        url: this.$http.adornUrl(`agent/cust/findCompanyById?token=${this.$cookie.get('token')}&id=${this.priseDataForm.id}&creUserId=${this.priseDataForm.creUserId}`),
+                        method: 'get',
+                        params: this.$http.adornParams()
+                    }).then(({ data }) => {
+                        if (data && data.code === 0) {
+                            console.log(data)
+                            this.priseDataForm.mobile = data.mobile
+                            this.priseimageUrl = data.businessLicenceInfo.pictureUrl
+                            this.priseDataForm.prisecustNum = data.businessLicenceInfo.creUserId
+                            this.priseDataForm.priseComName = data.businessLicenceInfo.name
+                            this.priseDataForm.businNum = data.businessLicenceInfo.regnum
+                            this.priseDataForm.priseaddress = data.businessLicenceInfo.address
+                            this.priseDataForm.priseName = data.businessLicenceInfo.person
+                            this.priseDataForm.prisetimelimit1 = data.businessLicenceInfo.effectdate
+                            this.priseDataForm.prisetimelimit2 = data.businessLicenceInfo.expiredate
+                            this.priseDataForm.priseDesc = data.businessLicenceInfo.business
+                        } else {
+                            this.$message.error(data.msg)
+                        }
                     })
                 }
             },
@@ -216,6 +272,37 @@
                 this.$refs['perDataForm'].validate((valid) => {
                     if (valid) {
                         console.log('表单验证通过')
+                        this.$http({
+                            url: this.$http.adornUrl(`agent/cust/updatePerson?token=${this.$cookie.get('token')}`),
+                            method: 'post',
+                            params: this.$http.adornParams({
+                                'id': this.perDataForm.id,
+                                'creUserId': this.perDataForm.creUserId,
+                                'username': this.perDataForm.custNanme,
+                                'address': this.perDataForm.peraddress,
+                                'idno': this.perDataForm.perIdno,
+                                'effectdate': this.perDataForm.pertimelimit1,
+                                'expiredate': this.perDataForm.pertimelimit2,
+                                'faceUrl': this.perfaceimageUrl,
+                                'backUrl': this.perbackimageUrl,
+                                'email': this.perDataForm.peremail
+                            })
+                        }).then(({ data }) => {
+                            console.log(data)
+                            if (data && data.code === 0) {
+                                this.$message({
+                                    message: '操作成功',
+                                    type: 'success',
+                                    duration: 1500,
+                                    onClose: () => {
+                                        this.perVisible = false
+                                        this.$emit('refreshDataList')
+                                    }
+                                })
+                            } else {
+                                this.$message.error(data.msg)
+                            }
+                        })
                     }
                 })
             },
@@ -240,6 +327,37 @@
                 this.$refs['priseDataFormref'].validate((valid) => {
                     if (valid) {
                         console.log('表单验证通过')
+                        this.$http({
+                            url: this.$http.adornUrl(`agent/cust/updateCompany?token=${this.$cookie.get('token')}`),
+                            method: 'post',
+                            params: this.$http.adornParams({
+                                'id': this.priseDataForm.id,
+                                'creUserId': this.priseDataForm.creUserId,
+                                'name': this.priseDataForm.priseComName,
+                                'regnum': this.priseDataForm.businNum,
+                                'person': this.priseDataForm.priseName,
+                                'effectdate': this.priseDataForm.prisetimelimit1,
+                                'expiredate': this.priseDataForm.prisetimelimit2,
+                                'address': this.priseDataForm.priseaddress,
+                                'business': this.priseDataForm.priseDesc,
+                                'pictureUrl': this.priseimageUrl
+                            })
+                        }).then(({ data }) => {
+                            console.log(data)
+                            if (data && data.code === 0) {
+                                this.$message({
+                                    message: '操作成功',
+                                    type: 'success',
+                                    duration: 1500,
+                                    onClose: () => {
+                                        this.entriseVisible = false
+                                        this.$emit('refreshDataList')
+                                    }
+                                })
+                            } else {
+                                this.$message.error(data.msg)
+                            }
+                        })
                     }
                 })
             },
@@ -272,7 +390,7 @@
         line-height: 100px;
         text-align: center;
     }
-    
+
     .avatar {
         width: 100px;
         height: 100px;

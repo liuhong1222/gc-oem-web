@@ -11,17 +11,15 @@
                     <el-input v-model="perseeDataForm.custNum" placeholder="客户编号" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="身份证照片">
-                    <!-- <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="otherhandleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload" style="display:inline-block">
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                    <el-upload class="avatar-uploader" action="" :show-file-list="false" style="display:inline-block" disabled>
+                        <img v-if="imageUrlFace" :src="imageUrlFace" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon" style="font-size:14px">正面</i>
                     </el-upload>
-                    <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="otherhandleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload" style="display:inline-block">
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                    <el-upload class="avatar-uploader" action="" :show-file-list="false" style="display:inline-block" disabled>
+                        <img v-if="imageUrlback" :src="imageUrlback" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon" style="font-size:14px">反面</i>
                     </el-upload>
-                    <span>（上传后，以下部分信息可自动导入）</span> -->
+
                 </el-form-item>
                 <el-form-item label="客户姓名">
                     <el-input v-model="perseeDataForm.custNanme" placeholder="客户姓名" readonly></el-input>
@@ -57,12 +55,10 @@
                     <el-input v-model="seepriseDataForm.prisecustNum" placeholder="客户编号"></el-input>
                 </el-form-item>
                 <el-form-item label="营业执照：">
-                    <!-- <el-upload class="avatar-uploader" :action="priseurl" accept="image/jpeg,image/jpg,image/png" :show-file-list="false" :on-success="perisehandleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload">
-                        <img v-if="imageUrl" :src="priseimageUrl" class="avatar">
+                    <el-upload class="avatar-uploader" action="" :show-file-list="false" readonly>
+                        <img v-if="priseimageUrl" :src="priseimageUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
-                    <span>（上传后，以下部分信息可自动导入）</span> -->
                 </el-form-item>
                 <el-form-item label="公司名称：">
                     <el-input v-model="seepriseDataForm.priseComName" placeholder="公司名称"></el-input>
@@ -96,8 +92,13 @@
         data() {
             return {
                 perseeVisible: false,
-                entriseVisible:false,
-                perseeDataForm: {
+                entriseVisible: false,
+                imageUrlFace: '',
+                imageUrlback: '',
+                priseimageUrl: '',
+                perseeDataForm: {  //个人
+                    id: '',
+                    creUserId: '',
                     mobile: '',
                     custNum: '',
                     custNanme: '',
@@ -106,7 +107,9 @@
                     pertimelimit: '',
                     peremail: '',
                 },
-                seepriseDataForm: {
+                seepriseDataForm: {//企业
+                    id: '',
+                    creUserId: '',
                     mobile: '',
                     prisecustNum: '',
                     priseComName: '',
@@ -122,13 +125,60 @@
         },
         methods: {
             seeInit(arr) {
-                console.log(arr[0])
-                console.log(arr[1])
-                if (arr[1] == 1) {  //个人
+                console.log(arr[0])  //id
+                console.log(arr[1])  //个人 （0，null） 还是企业（1）
+                console.log(arr[2])  //creUserId
+                if (arr[1] == 0 || arr[1] == null) {  //个人
                     this.perseeVisible = true
+                    this.perseeDataForm.id = arr[0]
+                    this.perseeDataForm.creUserId = arr[2]
+                    this.$http({
+                        url: this.$http.adornUrl(`agent/cust/findPersonById?token=${this.$cookie.get('token')}&id=${this.perseeDataForm.id}&creUserId=${this.perseeDataForm.creUserId}`),
+                        method: 'get',
+                        params: this.$http.adornParams()
+                    }).then(({ data }) => {
+                        if (data && data.code === 0) {
+                            console.log(data)
+                            this.imageUrlFace = data.idCardInfo.faceUrl
+                            this.imageUrlback = data.idCardInfo.backUrl
+                            this.perseeDataForm.mobile=data.mobile.
+                            this.perseeDataForm.custNum = data.idCardInfo.creUserId
+                            this.perseeDataForm.custNanme = data.idCardInfo.username
+                            this.perseeDataForm.perIdno = data.idCardInfo.idno
+                            this.perseeDataForm.peraddress = data.idCardInfo.address
+                            this.perseeDataForm.pertimelimit1 = data.idCardInfo.effectdate
+                            this.perseeDataForm.pertimelimit2 = data.idCardInfo.expiredate
+                            this.perseeDataForm.peremail = data.mail
+                        } else {
+                            this.$message.error(data.msg)
+                        }
+                    })
 
-                } else { //企业
-                   this.entriseVisible=true
+                } else if (arr[1] == 1) { //企业
+                    this.entriseVisible = true
+                    this.seepriseDataForm.id = arr[0]
+                    this.seepriseDataForm.creUserId = arr[2]
+                    this.$http({
+                        url: this.$http.adornUrl(`agent/cust/findCompanyById?token=${this.$cookie.get('token')}&id=${this.seepriseDataForm.id}&creUserId=${this.seepriseDataForm.creUserId}`),
+                        method: 'get',
+                        params: this.$http.adornParams()
+                    }).then(({ data }) => {
+                        if (data && data.code === 0) {
+                            console.log(data)
+                            this.seepriseDataForm.mobile = data.mobile
+                            this.priseimageUrl = data.businessLicenceInfo.pictureUrl
+                            this.seepriseDataForm.prisecustNum = data.businessLicenceInfo.creUserId
+                            this.seepriseDataForm.priseComName = data.businessLicenceInfo.name
+                            this.seepriseDataForm.businNum = data.businessLicenceInfo.regnum
+                            this.seepriseDataForm.priseaddress = data.businessLicenceInfo.address
+                            this.seepriseDataForm.priseName = data.businessLicenceInfo.person
+                            this.seepriseDataForm.prisetimelimit1 = data.businessLicenceInfo.effectdate
+                            this.seepriseDataForm.prisetimelimit2 = data.businessLicenceInfo.expiredate
+                            this.seepriseDataForm.priseDesc = data.businessLicenceInfo.business
+                        } else {
+                            this.$message.error(data.msg)
+                        }
+                    })
                 }
 
             }
@@ -137,7 +187,8 @@
 
 </script>
 <style>
-    .seecuslog .el-input__inner,.seecuslog  .el-textarea__inner {
+    .seecuslog .el-input__inner,
+    .seecuslog .el-textarea__inner {
         border: none;
     }
 </style>

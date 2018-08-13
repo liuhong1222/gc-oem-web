@@ -26,37 +26,37 @@
           <el-input v-model="searchData.agentName" placeholder="代理商名称" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">查询</el-button>
+          <el-button type="primary" @click="getCustomList()">查询</el-button>
           <el-button type="primary">导出</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="agentTable">
-      <el-table :data="userTableData" style="width: 100%" :header-cell-style="getRowClass">
+      <el-table :data="userTableData" style="width: 100%" v-loading="dataListLoading" :header-cell-style="getRowClass">
         <el-table-column type="index" header-align="center" align="center" width="80" fixed label="序号">
         </el-table-column>
-        <el-table-column prop="mchId" label=" 客户编号" width="80" align="center">
+        <el-table-column prop="creUserId" label=" 客户编号" width="80" align="center">
         </el-table-column>
-        <el-table-column prop="mobile" label="手机号码" width="100" align="center">
+        <el-table-column prop="user_phone" label="手机号码" width="100" align="center">
         </el-table-column>
         <el-table-column prop="userType" label="客户类型" width="90" align="center">
         </el-table-column>
-        <el-table-column prop="companyName" label=" 客户名称" align="center">
+        <el-table-column prop="custName" label=" 客户名称" align="center">
         </el-table-column>
-        <el-table-column prop="statusName" label=" 代理商" align="center">
+        <el-table-column prop="company_name" label="代理商名称" align="center">
         </el-table-column>
-        <el-table-column prop="createTime" label="注册时间" align="center">
+        <el-table-column prop="create_time" label="注册时间" align="center">
         </el-table-column>
-        <el-table-column prop="totalRechargeMoney" label="充值总计（元）" width="120" align="center">
+        <el-table-column prop="money" label="充值总计（元）" width="120" align="center">
         </el-table-column>
-        <el-table-column prop="totalRechargeNumber" label="充值总条数" width="120" align="center">
+        <el-table-column prop="number" label="充值总条数" width="120" align="center">
         </el-table-column>
-        <el-table-column prop="emptyBalance" label="剩余条数" width="120" align="center">
+        <el-table-column prop="account" label="剩余条数" width="120" align="center">
         </el-table-column>
         <el-table-column fixed="right" label="操作" align="center">
           <template slot-scope="scope">
-            <el-button @click="perPriseSee()" type="text" size="small">查看</el-button>
-            <el-button type="text" size="small" @click="perEnterEditBtn()">修改</el-button>
+            <el-button @click="perPriseSee(scope.row)" type="text" size="small">查看</el-button>
+            <el-button type="text" size="small" @click="perEnterEditBtn(scope.row)">修改</el-button>
             <el-button type="text" size="small" @click="rechargedataBtn()">充值</el-button>
             <el-button type="text" size="small" @click="refundBtn()">退款</el-button>
           </template>
@@ -64,13 +64,13 @@
       </el-table>
     </div>
     <div class="agentPage">
-      <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex" :page-sizes="[3, 5]"
+      <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex" :page-sizes="[10, 20,50]"
         :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
       </el-pagination>
     </div>
 
     <!-- 个人，企业修改 -->
-    <per-edit-enterise v-if="updateVisible" ref="updatecon"></per-edit-enterise>
+    <per-edit-enterise v-if="updateVisible" ref="updatecon" @refreshDataList="getCustomList"></per-edit-enterise>
     <!-- 个人，企业查看 -->
     <per-see-enterprise v-if="seeVisible" ref="seecon"></per-see-enterprise>
     <!-- 个人，企业充值 -->
@@ -91,30 +91,35 @@
         updateVisible: false,
         chargeVisible: false,
         refundVisible: false,
-        arr: [1, 2],  //保存点击的id和区分个人和企业的id
+        dataListLoading: false,
+        arr: [],  //保存点击的id和区分个人和企业的id
         searchData: {
           dateTime: [],
-          agentName: "",
-          custType: "",
-          custName: '',
-          mobile: ""
+          creUserId: "",
+          user_phone: "",
+          user_type: '',
+          company_name: "",
+          create_time: "",
+          money: "",
+          number: "",
+          account: ""
         },
         userTableData: [
-          {
-            mchId: '51254',
-            mobile: '17612163551',
-            userType: '个人',
-            companyName: '上海创蓝文化传播有限公司',
-            statusName: '******公司',
-            createTime: '2018.06.22 08:44  ',
-            totalRechargeMoney: '1,000,000   ',
-            totalRechargeNumber: '1,000,000   ',
-            emptyBalance: '1,000,000   ',
-          }
+          // {
+          //   mchId: '51254',
+          //   mobile: '17612163551',
+          //   userType: '个人',
+          //   companyName: '上海创蓝文化传播有限公司',
+          //   statusName: '******公司',
+          //   createTime: '2018.06.22 08:44  ',
+          //   totalRechargeMoney: '1,000,000   ',
+          //   totalRechargeNumber: '1,000,000   ',
+          //   emptyBalance: '1,000,000   ',
+          // }
         ],
         pageIndex: 1,
-        pageSize: 3,
-        totalPage: 100,
+        pageSize: 10,
+        totalPage: 0,
       }
     },
     components: {
@@ -122,6 +127,9 @@
       perSeeEnterprise,
       perRechargePrise,
       perRefundPrise
+    },
+    activated() {
+      this.getCustomList()
     },
     methods: {
       getRowClass({ row, column, rowIndex, columnIndex }) {
@@ -131,29 +139,66 @@
           return ''
         }
       },
+      // 获取客户列表
+      getCustomList() {
+        this.dataListLoading = true
+        this.$http({
+          url: this.$http.adornUrl(`agent/cust/custList?token=${this.$cookie.get('token')}`),
+          method: 'get',
+          params: this.$http.adornParams({
+            'currentPage': this.pageIndex,
+            'pageSize': this.pageSize,
+            'agentName': this.searchData.agentName,
+            'custName': this.searchData.custName,
+            'custType': this.searchData.custType,
+            'mobile': this.searchData.mobile,
+            'startTimeStr': '' || this.searchData.dateTime == null ? '' : this.searchData.dateTime[0],
+            'endTimeStr': '' || this.searchData.dateTime == null ? '' : this.searchData.dateTime[1]
+          })
+        }).then(({ data }) => {
+          if (data && data.code === 0) {
+            console.log(data)
+            this.userTableData = data.data.list
+            this.totalPage = data.data.total
+          } else {
+            this.userTableData = []
+            this.totalPage = 0
+          }
+          this.dataListLoading = false
+        })
+      },
       // 每页数
       sizeChangeHandle(val) {
         this.pageSize = val
         this.pageIndex = 1
-        this.getDataList()
+        this.getCustomList()
       },
       // 当前页
       currentChangeHandle(val) {
         this.pageIndex = val
-        this.getDataList()
+        this.getCustomList()
       },
       // 修改个人、企业
-      perEnterEditBtn() {
+      perEnterEditBtn(row) {
         let arr = this.arr; //传id和当前修改的是企业还是个人
         this.updateVisible = true
+        // console.log(id,type)
+        this.arr[0] = row.id
+        this.arr[1] = row.user_type
+        this.arr[2] = row.creUserId
         this.$nextTick(() => {
           this.$refs.updatecon.updateInit(arr)
         })
       },
       // 查看个人、企业
-      perPriseSee() {
+      perPriseSee(row) {
         let arr = this.arr; //传id和当前修改的是企业还是个人
         this.seeVisible = true
+        // console.log(row.id)
+        // console.log(row.user_type)
+        this.arr[0] = row.id
+        this.arr[1] = row.user_type
+        this.arr[2] = row.creUserId
         this.$nextTick(() => {
           this.$refs.seecon.seeInit(arr)
         })
