@@ -60,7 +60,7 @@
         </div>
       </el-col>
     </el-row>
-    <!-- 余额查看弹框-->
+    <!-- 充值弹框-->
     <el-dialog title="充值" :visible.sync="chdataFormVisible">
       <el-form :model="chdataForm" ref="chdataFormref" :rules="chdataFormrefRule" label-width="100px">
         <el-form-item label="充值单价">

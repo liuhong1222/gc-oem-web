@@ -3,12 +3,12 @@
         <el-form :model="dataForm" :rules="datarules" ref="dataForm" label-width="150px" class="demo-ruleForm" :label-position="labelPosition">
             <h3>基本信息</h3>
             <el-form-item label="代理商编号：" prop="agentNumber">
-                <el-input v-model="dataForm.agentNumber" placeholder="代理商编号" ></el-input>
+                <el-input v-model="dataForm.agentNumber" placeholder="代理商编号"></el-input>
             </el-form-item>
-            <el-form-item label="营业执照：" prop="agentNumber">
-                <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess"
+            <el-form-item label="营业执照：" prop="">
+                <el-upload class="avatar-uploader" :action="priseurl" accept="image/jpeg,image/jpg,image/png" :show-file-list="false" :on-success="perisehandleAvatarSuccess"
                     :before-upload="beforeAvatarUpload">
-                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                    <img v-if="priseimageUrl" :src="priseimageUrl" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
                 <span>（上传后，以下部分信息可自动导入）</span>
@@ -75,6 +75,7 @@
 
 </template>
 <script>
+    import { isEmail, isMobile } from '@/utils/validate'
     export default {
         data() {
             var validateMobile = (rule, value, callback) => {
@@ -85,12 +86,31 @@
                 }
             }
             return {
-                imageUrl: '',
+                priseimageUrl: "",
+                priseurl: "",
+                licensePicNo: '',
                 visible: false,
                 labelPosition: 'right',
                 dataForm: {
                     id: 0,
-                    userName: ''
+                    agentNumber: '',
+                    businNumber: '',
+                    companyName: '',
+                    bussicAdress: '',
+                    lawName: '',
+                    businNum: '',
+                    busindate1: '',
+                    busindate2: '',
+                    username: '',
+                    mobile: '',
+                    email: '',
+                    work: '',
+                    loginAcc: '',
+                    pwd: '',
+                    agencylevel: [],  //级别
+                    price: '',
+                    allowCounts: ''
+
                 },
                 datarules: {
                     agentNumber: [
@@ -111,9 +131,9 @@
                     businNum: [
                         { required: true, message: '请输入营业执照号', trigger: 'blur' }
                     ],
-                    busindate: [
-                        { required: true, message: '请输入营业期限', trigger: 'blur' }
-                    ],
+                    // busindate: [
+                    //     { required: true, message: '请输入营业期限', trigger: 'blur' }
+                    // ],
                     username: [
                         { required: true, message: '请输入联系人姓名', trigger: 'blur' }
                     ],
@@ -127,9 +147,9 @@
                     pwd: [
                         { required: true, message: '请输入初始密码', trigger: 'blur' }
                     ],
-                    agencylevel: [
-                        { required: true, message: '请选择代理商级别', trigger: 'blur' }
-                    ],
+                    // agencylevel: [
+                    //     { required: true, message: '请选择代理商级别', trigger: 'blur' }
+                    // ],
                     price: [
                         { required: true, message: '请输入单价', trigger: 'blur' }
                     ],
@@ -143,23 +163,91 @@
             showInit(id) {
                 this.dataForm.id = id || 0
                 this.visible = true
+                console.log('id' + id)
                 console.log(this.$http.adornParams())
                 this.$nextTick(() => {
                     this.$refs['dataForm'].resetFields()
                 })
+                this.priseurl = this.$http.adornUrl(`agent/agentInfo/license/upload?token=${this.$cookie.get('token')}`)
+                if (this.dataForm.id) {
+                    this.$http({
+                        url: this.$http.adornUrl(`agent/agentInfo/detail?token=${this.$cookie.get('token')}&agentId=${this.dataForm.id}`),
+                        method: 'get',
+                        params: this.$http.adornParams()
+                    }).then(({ data }) => {
+                        if (data && data.code === 0) {
+                            this.priseimageUrl=data.data.licenseUrl
+                            this.dataForm.agentNumber = data.data.agentNo
+                            this.dataForm.businNumber = data.data.mchId
+                            this.dataForm.companyName = data.data.companyName
+                            this.dataForm.bussicAdress = data.data.address
+                            this.dataForm.lawName = data.data.legalPerson
+                            this.dataForm.businNum = data.data.licenseNo
+                            this.dataForm.busindate1 = data.data.effectDate
+                            this.dataForm.busindate2 = data.data.expireDate
+                            this.dataForm.username = data.data.contactName
+                            this.dataForm.mobile = data.data.mobile
+                            this.dataForm.email = data.data.email
+                            this.dataForm.work = data.data.position
+                            this.dataForm.loginAcc = data.data.mobile
+                            this.dataForm.agencylevel = data.data.levelId
+                            this.dataForm.price = data.data.price
+                            this.dataForm.allowCounts = data.data.emptyCreditNumber
+                        }
+                    })
+                }
+
             },
             dataFormSubmit() {
+                console.log(this.dataForm.busindate1)
+                console.log(this.dataForm.busindate2)
+                console.log(this.dataForm.allowCounts)
                 this.$refs['dataForm'].validate((valid) => {
                     if (valid) {
-                        console.log('表单验证通过')
+                        this.$http({
+                            url: this.$http.adornUrl(`agent/agentInfo/${!this.dataForm.id ? 'save' : 'update'}?token=${this.$cookie.get('token')}`),
+                            method: 'post',
+                            params: this.$http.adornParams({
+                                'agentId': this.dataForm.id || undefined,
+                                'licensePicNo':this.licensePicNo,
+                                'companyName': this.dataForm.companyName,
+                                'mchId': this.dataForm.businNumber,
+                                'address': this.dataForm.bussicAdress,
+                                'email': this.dataForm.email,
+                                'legalPerson': this.dataForm.lawName,
+                                'licenseNo': this.dataForm.businNum,
+                                'effectDate': this.dataForm.busindate1,
+                                'expireDate': this.dataForm.busindate2,
+                                'contactName': this.dataForm.username,
+                                'position': this.dataForm.work,
+                                'mobile': this.dataForm.mobile,
+                                'email': this.dataForm.email,
+                                'password': this.dataForm.pwd,
+                                'levelId': this.dataForm.agencylevel,
+                                'price': this.dataForm.price,
+                                'emptyCreditNumber': this.dataForm.allowCounts
+                            })
+                        }).then(({ data }) => {
+                            console.log(data)
+                            if (data && data.code === 0) {
+                                this.$message({
+                                    message: '操作成功',
+                                    type: 'success',
+                                    duration: 1500,
+                                    onClose: () => {
+                                        this.visible = false
+                                        this.$emit('refreshDataList')
+                                    }
+                                })
+                            } else {
+                                this.$message.error(data.msg)
+                            }
+                        })
                     }
                 })
             },
-            handleAvatarSuccess(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw);
-            },
             beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg';
+                const isJPG = (file.type === 'image/jpeg') || (file.type == 'image/png') || (file.type == 'image/jpg');
                 const isLt2M = file.size / 1024 / 1024 < 2;
 
                 if (!isJPG) {
@@ -169,6 +257,11 @@
                     this.$message.error('上传头像图片大小不能超过 2MB!');
                 }
                 return isJPG && isLt2M;
+            },
+            perisehandleAvatarSuccess(res, file) {
+                console.log(res.data.licensePicNo)
+                this.priseimageUrl = URL.createObjectURL(file.raw);
+                this.licensePicNo = res.data.licensePicNo
             }
         }
     }
