@@ -20,14 +20,14 @@
         <div class="grid-content bg-purple">
           <div>
             <h2>充值记录</h2>
-            <el-button type="text" style="float:right">查看详情</el-button>
+            <el-button type="text" style="float:right" @click="showDetails()">查看详情</el-button>
           </div>
           <el-table :data="tableData" style="width: 100%" :highlight-current-row="true">
-            <el-table-column prop="date" label="申请时间">
+            <el-table-column prop="payTime" label="申请时间">
             </el-table-column>
             <el-table-column prop="money" label="充值金额">
             </el-table-column>
-            <el-table-column prop="counts" label="充值条数">
+            <el-table-column prop="number" label="充值条数">
             </el-table-column>
           </el-table>
         </div>
@@ -67,7 +67,7 @@
           <el-input style="border:none" v-model="chdataForm.chPrice" placeholder="" readonly id="chprice"></el-input>
         </el-form-item>
         <el-form-item label="充值金额" prop="chMoney">
-          <el-input v-model.number="chdataForm.chMoney" placeholder="充值金额" ref="inputMoney"></el-input>
+          <el-input v-model.number="chdataForm.chMoney" placeholder="充值金额"></el-input>
           <span>元</span>
         </el-form-item>
         <el-form-item label="充值条数">
@@ -98,19 +98,6 @@
         <el-button type="primary" @click="warnFormSubmit()">确 定</el-button>
       </div>
     </el-dialog>
-
-    <!--更改手机号  -->
-    <!-- <el-dialog title="重新绑定手机号" :visible.sync="phoneFormVisible">
-      <el-form :model="phoneRuleForm" :rules="phonerules" ref="phonerules" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="原手机号" prop="oldPhone">
-          <el-input v-model="phoneRuleForm.oldPhone"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-          <el-button @click="phoneFormVisible = false">取消</el-button>
-          <el-button type="primary" @click="editPhone()">确定</el-button>
-        </span>
-    </el-dialog> -->
 
     <!-- 修改套餐 -->
     <el-dialog title="套餐修改" :visible.sync="editmealVisible" id="mealDialog">
@@ -143,7 +130,7 @@
     <el-dialog title="添加邮箱" :visible.sync="addEmailVisible">
       <el-form :model="addemailform" :rules="addemailrules" ref="addemailruleForm">
         <el-form-item label="新邮箱" prop="email">
-          <el-input v-model="addemailform.email" auto-complete="off"></el-input>
+          <el-input v-model="addemailform.email"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -153,21 +140,25 @@
     <!-- 更改邮箱 -->
     <el-dialog title="重新绑定邮箱" :visible.sync="reEmailVisible">
       <el-form :model="reemailform" :rules="reemailrules" ref="reemailruleForm">
-        <el-form-item label="原邮箱" prop="oldemail">
-          <el-input v-model="reemailform.oldemail" auto-complete="off" id="emailInput" readonly></el-input>
+        <el-form-item label="原邮箱">
+          <el-input v-model="reemailform.oldemail" id="emailInput" readonly></el-input>
         </el-form-item>
         <el-form-item label="新邮箱" prop="newemail">
-          <el-input v-model="reemailform.newemail" auto-complete="off"></el-input>
+          <el-input v-model="reemailform.newemail"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="reEmailBtn()">确 定</el-button>
       </div>
     </el-dialog>
+
+    <!-- 重新绑定手机号 -->
+    <re-bind-phone v-if="reBindVisible" ref="reBindPhoneCon"></re-bind-phone>
   </div>
 </template>
 
 <script>
+  import reBindPhone from './re-bind-phone'
   import { isEmail, isMobile } from '@/utils/validate'
   export default {
     data() {
@@ -191,56 +182,25 @@
           count: [],
           mealMoney: [],
         },
-        tableData: [
-          {
-            date: '2018-07-12 09:01:08',
-            money: '1000',
-            counts: '2000'
-          }, {
-            date: '2018-07-12 09:01:08',
-            money: '1000',
-            counts: '2000'
-          }, {
-            date: '2018-07-12 09:01:08',
-            money: '1000',
-            counts: '2000'
-          }, {
-            date: '2018-07-12 09:01:08',
-            money: '1000',
-            counts: '2000'
-          }, {
-            date: '2018-07-12 09:01:08',
-            money: '1000',
-            counts: '2000'
-          }
+        tableData: [], //充值记录
+        customMy: [  //我的客户
+          { title: '客户数量', counts: '' },
+          { title: '客户充值总计', counts: '' },
+          { title: '客户消费条数', counts: '' }
         ],
-        customMy: [
-          { title: '客户数量', counts: '10000' },
-          { title: '客户充值总计', counts: '1000' },
-          { title: '客户消费条数', counts: '1000,000' }
+        basicList: [ //基本信息
+          { title: '我的代理价（元/条）', counts: '', btnText: '', flag: false },
+          { title: '我的余额（条）', counts: '', btnText: '充值', flag: true },
+          { title: '预警值（条）', counts: '', btnText: '修改', flag: true },
+          { title: '手机号', counts: '', btnText: '更改', flag: true },
+          { title: '邮箱', counts: '', btnText: '更改', flag: true }
         ],
-        basicList: [
-          { title: '我的代理价（元/条）', counts: '10000', btnText: '', flag: false },
-          { title: '我的余额（条）', counts: '1000', btnText: '充值', flag: true },
-          { title: '预警值（条）', counts: '1000,000', btnText: '修改', flag: true },
-          { title: '手机号', counts: '17612163551', btnText: '更改', flag: true },
-          { title: '邮箱', counts: '984459368@qq.com', btnText: '更改', flag: true }
-        ],
-        mealList: [
+        mealList: [ //套餐
           { mealName: '套餐A', mealMoney: '950', count: '50' },
           { mealName: '套餐B', mealMoney: '9000', count: '500' },
           { mealName: '套餐C', mealMoney: '16000', count: '1000' },
           { mealName: '自定义', mealMoney: '0.02', count: '1' }
         ],
-        phoneRuleForm: {
-          oldPhone: ''
-        },
-        phonerules: {
-          oldPhone: [
-            { required: true, message: '手机号不能为空', trigger: 'blur' },
-            { validator: validateMobile, trigger: 'blur' }
-          ],
-        },
         addemailform: {
           email: ''
         },
@@ -260,10 +220,10 @@
             { validator: validateEmail, trigger: 'blur' }
           ],
         },
+        reBindVisible: false,
         copyVisible: false,
         addEmailVisible: false,
         reEmailVisible: false,
-        phoneFormVisible: false,
         chdataFormVisible: false,
         warnFormVisible: false,
         editmealVisible: false,
@@ -275,11 +235,11 @@
         },
         chdataFormrefRule: {
           chMoney: [
-            { required: true, message: '请输入修改的预警值', trigger: 'blur' },
+            { required: true, message: '请输入充值金额', trigger: 'blur' },
             { type: 'number', message: '金额必须为数字' }
           ],
           chCounts: [
-            { required: true, message: '条数不能为空', trigger: 'blur' },
+            { required: true, message: '请输入充值金额，自动计算条数', trigger: 'blur' },
             { type: 'number', message: '条数必须为数字' }
           ],
         },
@@ -291,14 +251,19 @@
         }
       }
     },
+    components: {
+      reBindPhone
+    },
     watch: {
       chdataForm: {
         handler: function (val, oldval) {
-          // let searchval = this.$refs.inputVal.value;
-          // // console.log(Number(searchval)*(this.chdataForm.chPrice));
-          // this.chdataForm.chMoney = Number(searchval) * (this.chdataForm.chPrice);
-          let searchMoney = this.$refs.inputMoney.value;
-          this.chdataForm.chCounts = Number(searchMoney) / (this.chdataForm.chPrice);
+          // let searchMoney = this.$refs.inputMoney.value;
+          if (this.chdataForm.chMoney !== "" && this.chdataForm.chPrice !== "") {
+            this.chdataForm.chCounts = Number(this.chdataForm.chMoney) / (this.chdataForm.chPrice);
+          } else {
+            this.chdataForm.chCounts = ""
+          }
+
           // 获取验证码
         },
         deep: true
@@ -308,6 +273,10 @@
       userName: {
         get() { return this.$store.state.user.name }
       }
+    },
+    activated() {
+      this.getAgentDeskInfo(),
+        this.myRechargeList()
     },
     methods: {
       basicBtn(arrindex, btnCount) {
@@ -324,20 +293,19 @@
             this.$refs['warinform'].resetFields();
           })
         } else if (arrindex == 3) {  //修改手机号
-          this.phoneFormVisible = true;
+          this.reBindVisible = true;
           this.$nextTick(() => {
-            this.$refs['phonerules'].resetFields();
+            this.$refs.reBindPhoneCon.showInit()
           })
         } else if (arrindex == 4) {
           if (btnCount == "") {
-            console.log("添加弹出框");
+            // console.log("添加弹出框");
             this.addEmailVisible = true
             this.$nextTick(() => {
               this.$refs['addemailruleForm'].resetFields();
             })
           } else {
-            console.log("修改弹出框");
-            this.reemailform.oldemail = this.basicList[4].counts
+            this.reemailform.oldemail= this.basicList[4].counts
             this.reEmailVisible = true;
             this.$nextTick(() => {
               this.$refs['reemailruleForm'].resetFields();
@@ -345,6 +313,7 @@
           }
         }
       },
+
       copyLink() {
         this.copyVisible = true;
       },
@@ -362,7 +331,21 @@
       warnFormSubmit() {
         this.$refs['warinform'].validate((valid) => {
           if (valid) {
-            console.log(111111)
+            this.$http({
+              url: this.$http.adornUrl(`agent/desk/updateWarnNumber?token=${this.$cookie.get('token')}`),
+              method: 'post',
+              params: this.$http.adornParams({
+                'warnNumber': this.warinform.counts,
+              })
+            }).then(({ data }) => {
+              if (data && data.code === 0) {
+                this.warnFormVisible = false
+                this.basicList[2].counts = (this.warinform.counts) / 10000
+                this.$message.success('预警值修改成功!')
+              } else {
+                this.$message.error(data.msg)
+              }
+            })
           }
         })
       },
@@ -370,7 +353,21 @@
       addEmailBtn() {
         this.$refs['addemailruleForm'].validate((valid) => {
           if (valid) {
-            console.log(3333)
+            this.$http({
+              url: this.$http.adornUrl(`agent/desk/updateMail?token=${this.$cookie.get('token')}`),
+              method: 'post',
+              params: this.$http.adornParams({
+                'mail': this.addemailform.email,
+              })
+            }).then(({ data }) => {
+              if (data && data.code === 0) {
+                this.addEmailVisible = false
+                this.basicList[4].counts = this.addemailform.email
+                this.$message.success('成功!')
+              } else {
+                this.$message.error(data.msg)
+              }
+            })
           }
         })
       },
@@ -378,19 +375,24 @@
       reEmailBtn() {
         this.$refs['reemailruleForm'].validate((valid) => {
           if (valid) {
-            console.log(2222222)
+            this.$http({
+              url: this.$http.adornUrl(`agent/desk/updateMail?token=${this.$cookie.get('token')}`),
+              method: 'post',
+              params: this.$http.adornParams({
+                'mail': this.reemailform.newemail,
+              })
+            }).then(({ data }) => {
+              if (data && data.code === 0) {
+                this.reEmailVisible = false
+                this.basicList[4].counts = this.reemailform.newemail
+                this.$message.success('成功!')
+              } else {
+                this.$message.error(data.msg)
+              }
+            })
           }
         })
       },
-      // 更改手机号
-      editPhone() {
-        this.$refs['phonerules'].validate((valid) => {
-          if (valid) {
-            console.log(3333)
-          }
-        })
-      },
-
       // 修改套餐
       editMeal() {
         this.editmealVisible = true;
@@ -400,6 +402,50 @@
         }
       },
       // 提交修改套餐
+
+
+      // 查看详情
+      showDetails() {
+        this.$router.push({ name: 'finance-myrecharge' })
+      },
+
+      // 获取基本信息
+      getAgentDeskInfo() {
+        this.$http({
+          url: this.$http.adornUrl(`agent/desk/getAgentDeskInfo?token=${this.$cookie.get('token')}`),
+          method: 'post',
+        }).then(({ data }) => {
+          if (data && data.code === 0) {
+            this.basicList[0].counts = data.data.price
+            this.basicList[1].counts = data.data.emptyBalance
+            this.basicList[2].counts = data.data.emptyWarnNumber
+            this.basicList[3].counts = data.data.mobile
+            this.basicList[4].counts = data.data.email
+            this.customMy[0].counts = data.data.creUserCount
+            this.customMy[1].counts = data.data.rechargeSum
+            this.customMy[2].counts = data.data.consumSum
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      },
+      // 充值记录
+      myRechargeList() {
+        this.$http({
+          url: this.$http.adornUrl(`agent/finance/my/recharge/list?token=${this.$cookie.get('token')}`),
+          method: 'get',
+          params: this.$http.adornParams({
+            'currentPage': 1,
+            'pageSize': 5,
+          })
+        }).then(({ data }) => {
+          if (data && data.code === 0) {
+            this.tableData = data.data.list
+          } else {
+            this.tableData = []
+          }
+        })
+      },
 
 
 
@@ -578,32 +624,6 @@
     color: #fff;
     cursor: pointer;
   }
-  /* .el-dialog {
-    width: 35%;
-  }
-
-  .el-input__inner {
-    width: 98%;
-  }
-
-  .el-textarea__inner {
-    width: 74%;
-  }
-
-  .el-input {
-    width: 75%;
-  }
-
-  #chprice,
-  #curCount ,
-  #emailInput
-  {
-    border: none
-  }
-
-  .el-dialog__body {
-    border-top: 1px solid #e5e5e5;
-  } */
   /* 二维码 */
 
   #qrcodeCon {
@@ -657,4 +677,11 @@
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }
+  .basic-mess li button:hover{
+    background-color: #4680FF;
+    color: #fff;
+    border-color:#4680FF;
+    cursor: pointer
+  }
+
 </style>

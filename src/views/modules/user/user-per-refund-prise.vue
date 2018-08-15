@@ -3,7 +3,7 @@
         <el-dialog title="退款" :visible.sync="refundVisible" width="52%">
             <el-form :model="refundDataForm" :rules="refunddatarules" ref="refundDataFormRef" label-width="150px" :label-position="labelPosition">
                 <el-form-item label="手机号码：" prop="mobile">
-                    <el-input v-model="refundDataForm.mobile" placeholder="手机号码" id="mobile" readonly ></el-input>
+                    <el-input v-model="refundDataForm.mobile" placeholder="手机号码" id="mobile" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="客户名称：" prop="custNanme">
                     <el-input v-model="refundDataForm.custNanme" placeholder="客户名称" id="custNanme" readonly></el-input>
@@ -12,7 +12,7 @@
                     <el-input v-model="refundDataForm.refunCounts" placeholder="剩余条数" id="refunCounts" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="退款条数：" prop="refunNumber">
-                    <el-input v-model="refundDataForm.refunNumber" placeholder="退款条数"></el-input>
+                    <el-input v-model="refundDataForm.refunNumber" placeholder="退款条数不能大于剩余条数"></el-input>
                     <span>条</span>
                 </el-form-item>
                 <el-form-item label="单价：" prop="refunPrice">
@@ -20,7 +20,7 @@
                     <span>元/条</span>
                 </el-form-item>
                 <el-form-item label="退款金额：" prop="refunMoney">
-                    <el-input v-model="refundDataForm.refunMoney" placeholder="退款金额"></el-input>
+                    <el-input v-model="refundDataForm.refunMoney" placeholder="根据条数和单价，自动计算退款金额"></el-input>
                     <span>元</span>
                 </el-form-item>
                 <el-form-item label="备注：" prop="desc">
@@ -40,15 +40,15 @@
         data() {
             return {
                 refundVisible: false,
-                labelPosition:'right',
+                labelPosition: 'right',
                 refundDataForm: {
-                    mobile:'',
-                    custNanme:'',
-                    refunCounts:'',
-                    refunNumber:'',
-                    refunPrice:'',
-                    refunMoney:'',
-                    desc:''
+                    mobile: '',
+                    custNanme: '',
+                    refunCounts: '',
+                    refunNumber: '',
+                    refunPrice: '',
+                    refunMoney: '',
+                    desc: ''
                 },
                 refunddatarules: {
                     mobile: [
@@ -62,42 +62,106 @@
                     ],
                     refunNumber: [
                         { required: true, message: '请输入退款条数', trigger: 'blur' }
-                      
+
                     ],
                     refunPrice: [
                         { required: true, message: '请输入单价', trigger: 'blur' }
-                       
+
                     ],
                     refunMoney: [
-                        { required: true, message: '请输入退款金额', trigger: 'blur' }
-                     
+                        { required: true, message: '根据条数和单价，自动计算退款金额', trigger: 'blur' }
+
                     ],
                 },
 
             }
         },
+        watch: {
+            refundDataForm: {
+                handler: function (val, oldval) {
+                    if (this.refundDataForm.refunNumber !== "" && this.refundDataForm.refunPrice !== "") {
+                        this.refundDataForm.refunMoney = Number(this.refundDataForm.refunNumber) * (this.refundDataForm.refunPrice);
+                    } else {
+                        this.refundDataForm.refunMoney = ""
+                    }
+                    if (this.refundDataForm.refunNumber > this.refundDataForm.refunCounts) {
+                        this.$message.error('退款条数不能大于剩余条数')
+                    }
+                },
+                deep: true
+            }
+        },
         methods: {
+            packagePro() {
+                this.$http({
+                    url: this.$http.adornUrl(`agent/cust/getCustInfo?token=${this.$cookie.get('token')}`),
+                    method: 'post',
+                    params: this.$http.adornParams({
+                        'creUserId': this.refundDataForm.creUserId,
+                        'custName': this.refundDataForm.userName
+                    })
+                }).then(({ data }) => {
+                    if (data && data.code === 0) {
+                        this.refundDataForm.mobile = data.data.mobile
+                        this.refundDataForm.custNanme = data.data.custName
+                        this.refundDataForm.refunCounts = data.data.account
+
+                    } else {
+                        this.$message.error(data.msg)
+                    }
+                })
+            },
             refundInit(arr) {
                 console.log(arr[0])
                 console.log(arr[1])
-                this.refundVisible=true
-                // if (arr[1] == 1) {  //个人
-                //     this.perVisible = true
-                //     this.$nextTick(() => {
-                //         this.$refs['perDataForm'].resetFields()
-                //     })
-                // } else { //企业
-                //     this.priseurl = this.$http.adornUrl(`agent/agentInfo/license/upload?token=${this.$cookie.get('token')}`)
-                //     this.entriseVisible = true
-                //     this.$nextTick(() => {
-                //         this.$refs['priseDataFormref'].resetFields()
-                //     })
-                // }
+
+                this.refundDataForm.creUserId = arr[2]
+                this.refundDataForm.userName = arr[3]
+                console.log(this.refundDataForm.userName)
+                console.log(this.refundDataForm.creUserId)
+                if (arr[1] == 0 || arr[1] == null) {  //个人
+                    this.refundVisible = true
+                    this.packagePro()
+                    this.$nextTick(() => {
+                        this.$refs['refundDataFormRef'].resetFields()
+                    })
+                } else { //企业
+                    this.refundVisible = true
+                    this.packagePro()
+                    this.$nextTick(() => {
+                        this.$refs['refundDataFormRef'].resetFields()
+                    })
+                }
             },
-            refundDataFormTrue(){
+            refundDataFormTrue() {
                 this.$refs['refundDataFormRef'].validate((valid) => {
                     if (valid) {
                         console.log('表单验证通过')
+                        this.$http({
+                            url: this.$http.adornUrl(`agent/cust/refunds?token=${this.$cookie.get('token')}`),
+                            method: 'post',
+                            params: this.$http.adornParams({
+                                'creUserId': this.refundDataForm.creUserId,
+                                'number': this.refundDataForm.refunCounts,
+                                'amount': this.refundDataForm.refunMoney,
+                                'remark': this.refundDataForm.desc
+                            })
+                        }).then(({ data }) => {
+                            if (data && data.code === 0) {
+                                this.$message({
+                                    message: '操作成功',
+                                    type: 'success',
+                                    duration: 1500,
+                                    onClose: () => {
+                                        this.refundVisible = false
+                                        this.$emit('refreshDataList')
+                                    }
+                                })
+                            } else {
+                                this.$message.error(data.msg)
+                            }
+                        })
+
                     }
                 })
             }
@@ -106,7 +170,9 @@
 
 </script>
 <style>
-    #mobile,#custNanme ,#refunCounts{
-        border:none
+    #mobile,
+    #custNanme,
+    #refunCounts {
+        border: none
     }
 </style>

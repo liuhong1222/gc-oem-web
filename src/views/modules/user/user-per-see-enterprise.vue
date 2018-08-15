@@ -133,22 +133,23 @@
                     this.perseeDataForm.id = arr[0]
                     this.perseeDataForm.creUserId = arr[2]
                     this.$http({
-                        url: this.$http.adornUrl(`agent/cust/findPersonById?token=${this.$cookie.get('token')}&id=${this.perseeDataForm.id}&creUserId=${this.perseeDataForm.creUserId}`),
+                        url: this.$http.adornUrl(`agent/cust/findPersonById?token=${this.$cookie.get('token')}&id=${this.perseeDataForm.id === null ? "" :this.perseeDataForm.id }&creUserId=${this.perseeDataForm.creUserId}`),
                         method: 'get',
                         params: this.$http.adornParams()
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
                             console.log(data)
+                            this.perseeDataForm.mobile=data.mobile
+                            this.perseeDataForm.peremail = data.mail
                             this.imageUrlFace = data.idCardInfo.faceUrl
                             this.imageUrlback = data.idCardInfo.backUrl
-                            this.perseeDataForm.mobile=data.mobile.
                             this.perseeDataForm.custNum = data.idCardInfo.creUserId
                             this.perseeDataForm.custNanme = data.idCardInfo.username
                             this.perseeDataForm.perIdno = data.idCardInfo.idno
                             this.perseeDataForm.peraddress = data.idCardInfo.address
                             this.perseeDataForm.pertimelimit1 = data.idCardInfo.effectdate
                             this.perseeDataForm.pertimelimit2 = data.idCardInfo.expiredate
-                            this.perseeDataForm.peremail = data.mail
+                           
                         } else {
                             this.$message.error(data.msg)
                         }

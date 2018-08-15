@@ -105,9 +105,6 @@
                 },
             }
         },
-        activated() {
-            this.showInit()
-        },
         methods: {
             showInit(id) {
                 this.dialogVisible = true;

@@ -46,7 +46,6 @@
             this.levelList()
         },
         methods: {
-
             levelList() {
                 this.dataListLoading = true
                 this.$http({
