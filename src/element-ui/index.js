@@ -58,8 +58,8 @@ import {
   Badge,
   Card,
   // Rate,
-  // Steps,
-  // Step,
+  Steps,
+  Step,
   // Carousel,
   // CarouselItem,
   // Collapse,
@@ -127,8 +127,8 @@ Vue.use(Upload)
 Vue.use(Badge)
 Vue.use(Card)
 // Vue.use(Rate)
-// Vue.use(Steps)
-// Vue.use(Step)
+Vue.use(Steps)
+Vue.use(Step)
 // Vue.use(Carousel)
 // Vue.use(CarouselItem)
 // Vue.use(Collapse)

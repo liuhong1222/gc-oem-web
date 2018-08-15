@@ -17,7 +17,7 @@
             </el-form>
         </div>
         <div class="userTable">
-            <el-table :data="userTableData" style="width: 100%">
+            <el-table :data="dataList" style="width: 100%">
                 <el-table-column type="index" header-align="center" align="center" width="50" fixed label="序号">
                 </el-table-column>
                 <el-table-column prop="daiId" label=" 代理商序号" width="80" align="center">
@@ -54,15 +54,29 @@
                     <template slot-scope="scope">
                         <el-button type="text" size="small">查看</el-button>
                         <el-button type="text" size="small">修改</el-button>
-                        <el-button type="text" size="small">设置</el-button>
+                        <el-button type="text" size="small" @click="seetingDialog(scope.row)">设置</el-button>
                     </template>
                 </el-table-column>
             </el-table>
+            <el-pagination
+                @size-change="sizeChangeHandle"
+                @current-change="currentChangeHandle"
+                :current-page="dataForm.page"
+                :page-sizes="[10, 20, 50, 100]"
+                :page-size="dataForm.size"
+                :total="totalPage"
+                layout="total, sizes, prev, pager, next, jumper">
+            </el-pagination>
+
         </div>
+        <!-- 设置 -->
+        <agent-setting-dialog v-if="agentSettingDialogVisible" ref="agentSettingDialog" @seetingData="seetingData"></agent-setting-dialog>
     </div>
 </template>
 
 <script>
+    import AgentSettingDialog from './agent-setting-dialog.vue'
+
     export default {
         data() {
             return {
@@ -73,26 +87,62 @@
                     custName: '',
                     mobile: ""
                 },
-                userTableData: [
-                    {
-                        mchId: '51254',
-                        daiId: '525125',
-                        mchname: '上海创蓝文化传播有限公司 ',
-                        createTime: '2018.06.22 08:44  ',
-                        logo: 'LOGO.PNG',
-                        icon: 'ICON.PNG',
-                        duanxin: '[]',
-                        dayuming: 'www.253.com',
-                        beian: '返回就是的好烦看电视播放',
-                        kefy: '客服热线：400-200-000,<br> 客服热线：400-200-000',
-                        zbInfo: '支付调用地址：此处为支付调用地址',
-                        weiinfo: '微信调用地址：此处为支付调用地址',
-                        ht: '名称',
-                        qianzi: 'qianzi.png',
-                        gz: 'gz.png'
-                    }
-                ],
+                dataForm:{
+                    page: 1,
+                    size: 10,
+                },
+                totalPage: null,
+                dataList:[],
+                agentSettingDialogVisible:false,
             }
+        },
+        components:{
+            AgentSettingDialog
+        },
+        activated() {
+            this.getDataList();
+        },
+        methods:{
+            // 获取数据列表
+            getDataList() {
+                this.dataListLoading = true;
+                this.$http({
+                    url: this.$http.adornUrl("agent/agentInfo/list"),
+                    method: "get",
+                    params: this.$http.adornParams(this.dataForm)
+                }).then(({ data }) => {
+                    if (data && data.code === 0) {
+                        console.log(data.data)
+                        this.dataList = data.data.list;
+                        this.totalPage = data.data.total;
+                    } else {
+                        this.dataList = [];
+                        this.totaloage = 0;
+                    }
+                    this.dataListLoading = false;
+                });
+            },
+            seetingDialog(e){
+                this.agentSettingDialogVisible = true
+                this.$nextTick(() =>{
+                    this.$refs.agentSettingDialog.init(e)
+                })
+            },
+            seetingData(){
+                console.log('seetingData  ')
+            },
+            // 每页数
+            sizeChangeHandle(val) {
+                this.dataForm.size = val;
+                this.dataForm.page = 1;
+                this.getDataList();
+            },
+            // 当前页
+            currentChangeHandle(val) {
+                this.dataForm.page = val;
+                this.page = val;
+                this.getDataList();
+            },
         }
     }
 
