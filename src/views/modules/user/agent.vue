@@ -58,10 +58,10 @@
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="165" align="center">
                     <template slot-scope="scope">
-                        <el-button @click="handleClick(scope.row.agentId)" type="text" size="small">查看</el-button>
+                        <el-button @click="seeClick(scope.row.agentId)" type="text" size="small">查看</el-button>
                         <el-button type="text" size="small" @click="addUpdateAgent(scope.row.agentId)">修改</el-button>
-                        <el-button type="text" size="small" @click="chdataBtn(scope.row.agentId)">充值</el-button>
-                        <el-button type="text" size="small" @click="disableAndEnabled(scope.row)">禁用</el-button>
+                        <el-button type="text" size="small" @click="chdataBtn(scope.row.agentId,scope.row.companyName)">充值</el-button>
+                        <el-button type="text" size="small" @click="disableAndEnabled(scope.row)">{{scope.row.status == 0 ? '启用': '禁用'}}</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -78,10 +78,10 @@
                     <el-input style="border:none" v-model="chdataForm.accnumber" placeholder="" readonly id="chprice"></el-input>
                 </el-form-item>
                 <el-form-item label="充值单价" prop="chPrice">
-                    <el-input v-model.number="chdataForm.chPrice" placeholder="充值单价"></el-input>
+                    <el-input v-model.number="chdataForm.chPrice" placeholder="输入充值单价，自动计算条数"></el-input>
                 </el-form-item>
                 <el-form-item label="充值金额" prop="chMoney">
-                    <el-input v-model.number="chdataForm.chMoney" placeholder="充值金额"></el-input>
+                    <el-input v-model.number="chdataForm.chMoney" placeholder="输入充值金额，自动计算条数"></el-input>
                     <span>元</span>
                 </el-form-item>
                 <el-form-item label="充值条数" prop="chCounts">
@@ -107,31 +107,34 @@
 
         <!-- 禁用，启用 -->
         <el-dialog :title="disableTitlt" :visible.sync="disableVisible" width="30%">
-            <p v-show="jinShow">您将禁用账号<input type="text" value="*****" style="border:none;width:30px">，禁用后该账户将不可登录该系统</p>
-            <p v-show="qiShow">您将启用账号<input type="text" value="*****" style="border:none;width:30px">，启用后该账户将恢复正常使用。</p>
+            <p v-show="jinShow">您将禁用账号<input type="text" value="*****" style="border:none; color:#3E8EF7" v-model="account">，禁用后该账户将不可登录该系统</p>
+            <p v-show="qiShow">您将启用账号<input type="text" value="*****" style="border:none;" v-model="account">，启用后该账户将恢复正常使用。</p>
             <span slot="footer" class="dialog-footer">
             <el-button @click="disableVisible = false">取 消</el-button>
-            <el-button type="primary" @click="disableVisible = false">确 定</el-button>
+            <el-button type="primary" @click="ddd">确 定</el-button>
         </span>
         </el-dialog>
         <!-- 修改,新增 -->
         <add-or-update v-if="addSeeUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
         <!--查看 对话框 -->
-        <see-dialog v-if="seeVisible" ref="seecon"></see-dialog>
+        <see-dia-data v-if="agentseeVisible" ref="agentseecon"></see-dia-data>
     </div>
 </template>
 <script>
     import AddOrUpdate from './agent-add-or-update'
-    import seeDialog from './agent-see-dialog'
+    import seeDiaData from './agent-see-dia-data'
     export default {
         data() {
             return {
-                jinShow:false,
-                qiShow:false,
+                account: '',
+                cdAgentId: '',
+                jinorQiId: '',
+                agentseeVisible: false,
+                jinShow: false,
+                qiShow: false,
                 disableTitlt: "",
                 disableVisible: false,
                 addSeeUpdateVisible: false,
-                seeVisible: false,
                 searchData: {
                     dateTime: [],
                     agentName: "",
@@ -149,7 +152,7 @@
                 dataListLoading: false,
                 chdataFormVisible: false,
                 chdataForm: {
-                    accnumber: '上海创蓝传播有限公司',
+                    accnumber: '',
                     chPrice: '',
                     chCounts: '',
                     type: '',
@@ -176,9 +179,21 @@
                 },
             }
         },
+        watch: {
+            chdataForm: {
+                handler: function (val, oldval) {
+                    if (this.chdataForm.chMoney !== "" && this.chdataForm.chPrice !== "") {
+                        this.chdataForm.chCounts = Number(this.chdataForm.chMoney) / (this.chdataForm.chPrice);
+                    } else {
+                        this.chdataForm.chCounts = ""
+                    }
+                },
+                deep: true
+            }
+        },
         components: {
             AddOrUpdate,
-            seeDialog
+            seeDiaData
         },
         activated() {
             this.getDataList()
@@ -232,7 +247,9 @@
                 }
             },
             exporTable() {
-
+                window.open(this.$http.adornUrl(`agent/agentInfo/list/export?token=${this.$cookie.get('token')}
+                &currentPage=${this.pageIndex}&pageSize=${this.pageSize}&companyName=${this.searchData.agentName}&status=${this.searchData.status}
+                &mobile=${this.searchData.mobile}&startTime=${'' || this.searchData.dateTime == null ? '' : this.searchData.dateTime[0]}&endTime=${'' || this.searchData.dateTime == null ? '' : this.searchData.dateTime[1]}`))
             },
             addUpdateAgent(id) {
                 this.addSeeUpdateVisible = true
@@ -240,36 +257,105 @@
                     this.$refs.addOrUpdate.showInit(id)
                 })
             },
-            handleClick(id) {
-                this.seeVisible = true
+            seeClick(id) {
+                this.agentseeVisible = true
                 this.$nextTick(() => {
-                    this.$refs.seecon.showInit(id)
+                    this.$refs.agentseecon.showInit(id)
                 })
             },
-            chdataBtn() {
+            chdataBtn(agentId, companyName) {
                 this.chdataFormVisible = true
+                this.cdAgentId = agentId
+                this.chdataForm.accnumber = companyName
                 this.$nextTick(() => {
                     this.$refs['chdataFormref'].resetFields();
                 })
             },
             // 禁用启用
             disableAndEnabled(v) {
+                this.account = v.companyName
+                this.jinorQiId = v.agentId
                 if (v.status == 1) {
                     this.disableTitlt = '禁用'
-                    this.jinShow=true
+                    this.jinShow = true
                     // 分别调用确定提交按钮
                 } else if (v.status == 0) {
                     this.disableTitlt = '启用'
-                    this.qiShow=true
-                     // 分别调用确定提交按钮
+                    this.qiShow = true
+                    // 分别调用确定提交按钮
                 }
                 this.disableVisible = true
+            },
+
+            ddd() {
+                if (this.disableTitlt == "禁用") {
+                    this.$http({
+                        url: this.$http.adornUrl(`agent/agentInfo/pause?token=${this.$cookie.get('token')}`),
+                        method: 'post',
+                        params: this.$http.adornParams({
+                            'agentId': this.jinorQiId
+                        })
+                    }).then(({ data }) => {
+                        if (data && data.code === 0) {
+                            this.disableVisible = false
+                            this.jinShow = false
+                            this.qiShow = false
+                            this.getDataList()
+                        } else {
+                            this.$message.error(data.msg)
+                        }
+                    })
+                } else if (this.disableTitlt == '启用') {
+                    this.$http({
+                        url: this.$http.adornUrl(`agent/agentInfo/resume?token=${this.$cookie.get('token')}`),
+                        method: 'post',
+                        params: this.$http.adornParams({
+                            'agentId': this.jinorQiId
+                        })
+                    }).then(({ data }) => {
+                        if (data && data.code === 0) {
+                            this.disableVisible = false
+                            this.qiShow = false
+                            this.jinShow = false
+                            this.getDataList()
+                        } else {
+                            this.$message.error(data.msg)
+                        }
+
+                    })
+                }
+
             },
             // 提交充值
             chsubmit() {
                 this.$refs['chdataFormref'].validate((valid) => {
                     if (valid) {
-                        console.log(3333)
+                        this.$http({
+                            url: this.$http.adornUrl(`agent/agentInfo/recharge?token=${this.$cookie.get('token')}`),
+                            method: 'post',
+                            params: this.$http.adornParams({
+                                'agentId': this.cdAgentId,
+                                'price': this.chdataForm.chPrice,
+                                'number': this.chdataForm.chCounts,
+                                'money': this.chdataForm.chMoney,
+                                'payType': this.chdataForm.type,
+                            })
+                        }).then(({ data }) => {
+                            console.log(data)
+                            if (data && data.code === 0) {
+                                this.$message({
+                                    message: '操作成功',
+                                    type: 'success',
+                                    duration: 1500,
+                                    onClose: () => {
+                                        this.chdataFormVisible = false
+                                        this.getDataList()
+                                    }
+                                })
+                            } else {
+                                this.$message.error(data.msg)
+                            }
+                        })
                     }
                 })
             },
@@ -285,5 +371,4 @@
         margin-bottom: 24px;
         box-shadow: 0px 7px 9px 0px rgba(153, 153, 153, 0.05);
     }
-
 </style>

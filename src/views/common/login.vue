@@ -21,7 +21,7 @@
             <el-input v-model="dataForm.password" type="password" placeholder="请输入密码" class="account"></el-input>
           </el-form-item>
           <span style="color:#999;font-size:14px">如需开户请联系管理员</span>
-          <el-button type="text" class="forgetPwd">忘记密码</el-button>
+          <el-button type="text" class="forgetPwd" @click="forgetPwd">忘记密码</el-button>
           <el-form-item>
             <el-button class="login-btn-submit loginBtn" type="primary" @click="dataFormSubmit()">登录</el-button>
           </el-form-item>
@@ -78,6 +78,9 @@
             })
           }
         })
+      },
+      forgetPwd() {
+        this.$router.replace({ name: 'forget' })
       }
     }
   }
@@ -112,7 +115,7 @@
     padding: 26px 31px 0px 39px;
     min-height: 100%;
     background-color: #eee;
-    
+
     >img {
       float: right;
     }
@@ -153,9 +156,9 @@
     margin-left: -3px;
   }
 
-  /* .el-input__inner {
+  .account .el-input__inner {
     border: none !important;
-  } */
+  }
 
   .loginBtn {
     width: 334px;
@@ -173,8 +176,18 @@
   .icon {
     margin-top: -2px;
   }
-  .el-button--text:focus, .el-button--text:hover{
-    color:$lbc !important;
+
+  .el-button--text:focus,
+  .el-button--text:hover {
+    color: $lbc !important;
   }
-  .forgetPwd{float:right;color:$bc;;font-size:14px; margin-top: -15px; margin-bottom: 20px;}
+
+  .forgetPwd {
+    float: right;
+    color: $bc;
+    ;
+    font-size: 14px;
+    margin-top: -15px;
+    margin-bottom: 20px;
+  }
 </style>

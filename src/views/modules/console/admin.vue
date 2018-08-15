@@ -16,8 +16,8 @@
             <el-col :span="12">
                 <div class="grid-content bg-purple">
                     <div class="cf">
-                        <h2>退款审核</h2>
-                        <el-button type="text" style="float:right">查看详情</el-button>
+                        <h2>OEM充值记录</h2>
+                        <el-button type="text" style="float:right" @click="showDetails()">查看详情</el-button>
                     </div>
                     <el-table :data="tableData" height="250" style="width: 100%" :highlight-current-row="false">
                         <el-table-column prop="comName" label="公司名称">
@@ -110,32 +110,32 @@
                     ],
                 },
                 tableData: [
-                    {
-                        comName: '上海创蓝文化传播有限公司',
-                        date: '2018-07-12 09:01:08',
-                        money: '1000',
-                        counts: '2000'
-                    }, {
-                        comName: '上海创蓝文化传播有限公司',
-                        date: '2018-07-12 09:01:08',
-                        money: '1000',
-                        counts: '2000'
-                    }, {
-                        comName: '上海创蓝文化传播有限公司',
-                        date: '2018-07-12 09:01:08',
-                        money: '1000',
-                        counts: '2000'
-                    }, {
-                        comName: '上海创蓝文化传播有限公司',
-                        date: '2018-07-12 09:01:08',
-                        money: '1000',
-                        counts: '2000'
-                    }, {
-                        comName: '上海创蓝文化传播有限公司',
-                        date: '2018-07-12 09:01:08',
-                        money: '1000',
-                        counts: '2000'
-                    }
+                    // {
+                    //     comName: '上海创蓝文化传播有限公司',
+                    //     date: '2018-07-12 09:01:08',
+                    //     money: '1000',
+                    //     counts: '2000'
+                    // }, {
+                    //     comName: '上海创蓝文化传播有限公司',
+                    //     date: '2018-07-12 09:01:08',
+                    //     money: '1000',
+                    //     counts: '2000'
+                    // }, {
+                    //     comName: '上海创蓝文化传播有限公司',
+                    //     date: '2018-07-12 09:01:08',
+                    //     money: '1000',
+                    //     counts: '2000'
+                    // }, {
+                    //     comName: '上海创蓝文化传播有限公司',
+                    //     date: '2018-07-12 09:01:08',
+                    //     money: '1000',
+                    //     counts: '2000'
+                    // }, {
+                    //     comName: '上海创蓝文化传播有限公司',
+                    //     date: '2018-07-12 09:01:08',
+                    //     money: '1000',
+                    //     counts: '2000'
+                    // }
                 ],
                 oemAgent: [
                     { title: '客户数量', counts: '10000' },
@@ -148,6 +148,9 @@
             userName: {
                 get() { return this.$store.state.user.name }
             }
+        },
+        activated() {
+            this.oemRegRecode()
         },
         methods: {
             basicInfoBtn(arrindex, con) {
@@ -185,6 +188,26 @@
                     }
                 })
             },
+            // 查看详情
+            showDetails() {
+                this.$router.push({ name: 'finance-agentrecharge' })
+            },
+            oemRegRecode() {
+                this.$http({
+                    url: this.$http.adornUrl(`agent/finance/agent/recharge/list?token=${this.$cookie.get('token')}`),
+                    method: 'get',
+                    params: this.$http.adornParams({
+                        'currentPage': 1,
+                        'pageSize': 5,
+                    })
+                }).then(({ data }) => {
+                    if (data && data.code === 0) {
+                        this.tableData = data.data.list
+                    } else {
+                        this.tableData = []
+                    }
+                })
+            }
         }
     }
 

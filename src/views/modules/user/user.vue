@@ -57,8 +57,8 @@
           <template slot-scope="scope">
             <el-button @click="perPriseSee(scope.row)" type="text" size="small">查看</el-button>
             <el-button type="text" size="small" @click="perEnterEditBtn(scope.row)">修改</el-button>
-            <el-button type="text" size="small" @click="rechargedataBtn()">充值</el-button>
-            <el-button type="text" size="small" @click="refundBtn()">退款</el-button>
+            <el-button type="text" size="small" @click="rechargedataBtn(scope.row)">充值</el-button>
+            <el-button type="text" size="small" @click="refundBtn(scope.row)">退款</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -74,9 +74,9 @@
     <!-- 个人，企业查看 -->
     <per-see-enterprise v-if="seeVisible" ref="seecon"></per-see-enterprise>
     <!-- 个人，企业充值 -->
-    <per-recharge-prise v-if="chargeVisible" ref="rechargecon"></per-recharge-prise>
+    <per-recharge-prise v-if="chargeVisible" ref="rechargecon" @refreshDataList="getCustomList"></per-recharge-prise>
     <!-- 个人，企业退款 -->
-    <per-refund-prise v-if="refundVisible" ref="refundcon"></per-refund-prise>
+    <per-refund-prise v-if="refundVisible" ref="refundcon" @refreshDataList="getCustomList"></per-refund-prise>
   </div>
 </template>
 <script>
@@ -104,19 +104,7 @@
           number: "",
           account: ""
         },
-        userTableData: [
-          // {
-          //   mchId: '51254',
-          //   mobile: '17612163551',
-          //   userType: '个人',
-          //   companyName: '上海创蓝文化传播有限公司',
-          //   statusName: '******公司',
-          //   createTime: '2018.06.22 08:44  ',
-          //   totalRechargeMoney: '1,000,000   ',
-          //   totalRechargeNumber: '1,000,000   ',
-          //   emptyBalance: '1,000,000   ',
-          // }
-        ],
+        userTableData: [],
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0,
@@ -204,17 +192,25 @@
         })
       },
       // 充值个人，企业
-      rechargedataBtn() {
+      rechargedataBtn(row) {
         let arr = this.arr; //传id和当前修改的是企业还是个人
         this.chargeVisible = true
+        this.arr[0] = row.id
+        this.arr[1] = row.user_type
+        this.arr[2] = row.creUserId
+        this.arr[3] = row.custName
         this.$nextTick(() => {
           this.$refs.rechargecon.rechargeInit(arr)
         })
       },
       // 退款 个人，企业
-      refundBtn() {
+      refundBtn(row) {
         let arr = this.arr; //传id和当前修改的是企业还是个人
         this.refundVisible = true
+        this.arr[0] = row.id
+        this.arr[1] = row.user_type
+        this.arr[2] = row.creUserId
+        this.arr[3] = row.custName
         this.$nextTick(() => {
           this.$refs.refundcon.refundInit(arr)
         })

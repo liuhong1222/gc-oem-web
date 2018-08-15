@@ -216,7 +216,7 @@
                     this.perDataForm.id = arr[0]
                     this.perDataForm.creUserId = arr[2]
                     this.$http({
-                        url: this.$http.adornUrl(`agent/cust/findPersonById?token=${this.$cookie.get('token')}&id=${this.perDataForm.id}&creUserId=${this.perDataForm.creUserId}`),
+                        url: this.$http.adornUrl(`agent/cust/findPersonById?token=${this.$cookie.get('token')}&id=${this.perDataForm.id === null ? "" : this.perDataForm.id}&creUserId=${this.perDataForm.creUserId}`),
                         method: 'get',
                         params: this.$http.adornParams()
                     }).then(({ data }) => {
@@ -224,8 +224,8 @@
                             console.log(data)
                             this.perfaceimageUrl = data.idCardInfo.faceUrl
                             this.perbackimageUrl = data.idCardInfo.backUrl
-                            this.perDataForm.mobile=data.mobile,
-                            this.perDataForm.custNum = data.idCardInfo.creUserId
+                            this.perDataForm.mobile = data.mobile,
+                                this.perDataForm.custNum = data.idCardInfo.creUserId
                             this.perDataForm.custNanme = data.idCardInfo.username
                             this.perDataForm.perIdno = data.idCardInfo.idno
                             this.perDataForm.peraddress = data.idCardInfo.address
@@ -245,7 +245,7 @@
                     this.priseDataForm.id = arr[0]
                     this.priseDataForm.creUserId = arr[2]
                     this.$http({
-                        url: this.$http.adornUrl(`agent/cust/findCompanyById?token=${this.$cookie.get('token')}&id=${this.priseDataForm.id}&creUserId=${this.priseDataForm.creUserId}`),
+                        url: this.$http.adornUrl(`agent/cust/findCompanyById?token=${this.$cookie.get('token')}&id=${this.priseDataForm.id === null ? "" : this.priseDataForm.id}&creUserId=${this.priseDataForm.creUserId}`),
                         method: 'get',
                         params: this.$http.adornParams()
                     }).then(({ data }) => {
