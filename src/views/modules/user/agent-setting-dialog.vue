@@ -32,12 +32,15 @@
               <el-upload
                 class="upload-demo"
                 drag
-                :show-file-list="false"
+                :show-file-list="true"
+                name="file"
+                :action="actionLogo()"
                 :on-success="handleAvatarSuccessLogo"
                 :on-error="errorLogo"
+                :on-progress="onProgressLogo"
                 :before-upload="beforeAvatarUploadLogo"
-                :action="actionLogo"
                 :data="logoQueryParams"
+                enctype="multipart/form-data"
                 multiple>
               <img v-if="imageUrlLogo" :src="imageUrlLogo" class="avatar">
                <i class="el-icon-upload"></i>
@@ -46,20 +49,21 @@
             </el-upload>
             </el-form-item><br />
           <el-form-item label="icon">
-            <el-upload
+            <!-- <el-upload
                 class="upload-demo"
                 drag
                 :show-file-list="false"
                 :on-success="handleAvatarSuccessIcon"
                 :before-upload="beforeAvatarUploadIcon"
-                :action="actionLogo"
+                action="open/file/image/upload"
                 :data="logoQueryParams"
                 multiple>
               <img v-if="imageUrlIcon" :src="imageUrlIcon" class="avatar">
                <i class="el-icon-upload"></i>
               <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
               <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M，长40px，宽40px</div>
-            </el-upload></el-form-item><br />
+            </el-upload> -->
+            </el-form-item><br />
           <el-form-item label="代表签字"></el-form-item><br />
           <el-form-item label="公司红章"></el-form-item><br />
           <el-form-item label="短信签名">
@@ -68,7 +72,7 @@
           <el-form-item label="代理商域名">
             <el-input placeholder="单行输入"></el-input> 
           </el-form-item><br />
-          <el-button style="margin-top: 12px;" @click="next">下一步</el-button> 
+          <el-button style="margin-top: 12px;" @click="next" >下一步</el-button> 
         </el-form>
       </div>
       <!-- 域名备案信息 -->
@@ -198,13 +202,13 @@ export default {
       visible: false,
       agentId: null,
       active: 0,
-      actionLogo: "file/image/upload",
       dataList: [],
       imageUrlIcon: "",
       imageUrlLogo: "",
       logoQueryParams: {
         imageType: 3,
-        agentId: null
+        agentId: null,
+        file: null
       }
     };
   },
@@ -233,6 +237,22 @@ export default {
     },
     closeDialog() {},
     //上传 执行顺序：beforeAvatarUpload ---执行action提交----执行handleAvatarSuccess or uploadError
+    actionLogo() {
+      let url = this.$http.adornUrl("file/image/upload");
+      return url;
+    },
+    beforeAvatarUploadLogo(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
     handleAvatarSuccessLogo(res, file) {
       console.log("xxxx");
       this.imageUrlLogo = URL.createObjectURL(file.raw);
@@ -240,40 +260,8 @@ export default {
     errorLogo() {
       console.log("yyyyyy");
     },
-    // actionLogo() {
-    //   let xx = `http://localhost:8001/`;
-    //   let url = xx + this.$http.adornUrl("file/image/upload");
-    //   // console.log(url);
-    //   return url;
-    // },
-    handleAvatarSuccessIcon(res, file) {
-      this.imageUrlIcon = URL.createObjectURL(file.raw);
-    },
-    beforeAvatarUploadLogo(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isPNG = file.type === "image/png";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isJPG && !isPNG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isPNG && isLt2M;
-    },
-    beforeAvatarUploadIcon(file) {
-      console.log(file);
-      const isJPG = file.type === "image/jpeg";
-      const isPNG = file.type === "image/png";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG && !isPNG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isPNG && isLt2M;
+    onProgressLogo() {
+      console.log("上传中");
     }
   }
 };
@@ -315,10 +303,10 @@ export default {
 }
 .essentialInformation,
 .domainNameFiling,
-.customerInformation ,
+.customerInformation,
 .contractInformation,
 .alipayIInformation,
-.weixinInformation{
+.weixinInformation {
   min-width: 350px;
   min-height: 500px;
   margin: 0 auto;
