@@ -184,7 +184,8 @@
     <!-- button 可以放入内容区 -->
     <div>
       <div v-if="active != 0 && active !=5">
-       
+       <el-button style="margin-top: 12px;" @click="lastStep">上一步</el-button> 
+        <el-button style="margin-top: 12px;" @click="next">下一步</el-button> 
       </div>
       <div v-if="active === 5 ">
         <el-button style="margin-top: 12px;" @click="lastStep">上一步</el-button> 
