@@ -15,8 +15,8 @@
                     <el-input v-model="customerSearchData.custName" placeholder="客户名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item style="margin-left:6px">
-                    <el-button type="primary">查询</el-button>
-                    <el-button type="primary">导出</el-button>
+                    <el-button type="primary" @click="uerRechargeList">查询</el-button>
+                    <el-button type="primary" @click="regExport()" :disabled="disabled">导出</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -61,6 +61,7 @@
         data() {
             return {
                 dataListLoading: false,
+                disabled:false,
                 customerSearchData: {
                     dateTime: [],
                     agentName: "",
@@ -78,6 +79,7 @@
         methods: {
             uerRechargeList() {
                 this.dataListLoading = true;
+                disabled:false,
                 this.$http({
                     url: this.$http.adornUrl(`agent/finance/user/recharge/list?token=${this.$cookie.get('token')}`),
                     method: 'get',
@@ -93,7 +95,11 @@
                     if (data && data.code === 0) {
                         this.customerTableData = data.data.list
                         this.totalPage = data.data.total
-
+                        if (data.data.list.length == 0) {
+                            this.disabled = true
+                        } else {
+                            this.disabled = false
+                        }
                     } else {
                         this.customerTableData = []
                         this.totalPage = 0
@@ -142,6 +148,23 @@
                     return ''
                 }
             },
+            regExport() {
+                let startTime;
+                let endTime;
+                if (this.customerSearchData.dateTime == null) {
+                    startTime = ""
+                    endTime = ""
+                } else {
+                    if (this.customerSearchData.dateTime.length == 0) {
+                        startTime = ""
+                        endTime = ""
+                    } else {
+                        startTime = this.customerSearchData.dateTime[0]
+                        endTime = this.customerSearchData.dateTime[1]
+                    }
+                }
+                window.open(this.$http.adornUrl(`agent/finance/user/recharge/list/export?token=${this.$cookie.get('token')}&currentPage=${this.pageIndex}&pageSize=${this.pageSize}&userName=${this.customerSearchData.custName}&companyName=${this.customerSearchData.agentName}&startTime=${startTime}&endTime=${endTime}`))
+            }
         }
     }
 

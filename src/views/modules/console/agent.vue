@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div class="main">
     <el-row :gutter="20">
       <el-col :span="12">
@@ -60,7 +60,7 @@
         </div>
       </el-col>
     </el-row>
- 
+    <!-- 充值弹框-->
     <el-dialog title="充值" :visible.sync="chdataFormVisible">
       <el-form :model="chdataForm" ref="chdataFormref" :rules="chdataFormrefRule" label-width="100px">
         <el-form-item label="充值单价">
@@ -83,8 +83,7 @@
         <button>请打开支付宝扫描二维码</button>
       </div>
     </el-dialog>
- 
-
+    <!-- 预警值弹窗 -->
     <el-dialog title="预警值" :visible.sync="warnFormVisible">
       <el-form :model="warinform" :rules="warnRule" ref="warinform">
         <el-form-item label="当前预警值">
@@ -100,7 +99,7 @@
       </div>
     </el-dialog>
 
-  
+    <!-- 修改套餐 -->
     <el-dialog title="套餐修改" :visible.sync="editmealVisible" id="mealDialog">
       <div>
         <div class="divInput" v-for="(item,i) in mealList" :key="i">
@@ -117,17 +116,16 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="editmealChange()">修改套餐</el-button>
-      </span>
+            <el-button type="primary" @click="editmealChange()">修改套餐</el-button>
+            </span>
     </el-dialog>
-  
-
+    <!-- 复制链接 -->
     <el-dialog title="复制推广链接" :visible.sync="copyVisible" width="30%">
       <el-input v-model="copyinput" id="copyInput"></el-input>
       <el-button type="primary" id="copyBtn" v-clipboard:copy="copyinput" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</el-button>
     </el-dialog>
 
-   
+    <!-- 添加邮箱 -->
     <el-dialog title="添加邮箱" :visible.sync="addEmailVisible">
       <el-form :model="addemailform" :rules="addemailrules" ref="addemailruleForm">
         <el-form-item label="新邮箱" prop="email">
@@ -138,8 +136,7 @@
         <el-button type="primary" @click="addEmailBtn()">确 定</el-button>
       </div>
     </el-dialog>
-  
-
+    <!-- 更改邮箱 -->
     <el-dialog title="重新绑定邮箱" :visible.sync="reEmailVisible">
       <el-form :model="reemailform" :rules="reemailrules" ref="reemailruleForm">
         <el-form-item label="原邮箱">
@@ -154,11 +151,12 @@
       </div>
     </el-dialog>
 
+    <!-- 重新绑定手机号 -->
     <re-bind-phone v-if="reBindVisible" ref="reBindPhoneCon"></re-bind-phone>
   </div>
-</template> -->
+</template>
 
-<!-- <script>
+<script>
   import reBindPhone from './re-bind-phone'
   import { isEmail, isMobile } from '@/utils/validate'
   export default {
@@ -253,26 +251,36 @@
     components: {
       reBindPhone
     },
+    computed: {
+
+      // chCounts: function () {	//默认调用get
+      //   // return (this.chdataForm.chMoney !== "" && this.chdataForm.chPrice !== "") ? (Number(this.chdataForm.chMoney) / (this.chdataForm.chPrice)) : ""
+      //   return 1
+      // },
+      userName: {
+        get() { return this.$store.state.user.name }
+      }
+
+    },
     watch: {
       chdataForm: {
         handler: function (val, oldval) {
           // let searchMoney = this.$refs.inputMoney.value;
           if (this.chdataForm.chMoney !== "" && this.chdataForm.chPrice !== "") {
             this.chdataForm.chCounts = Number(this.chdataForm.chMoney) / (this.chdataForm.chPrice);
+            console.log('获取充值二维码')
           } else {
             this.chdataForm.chCounts = ""
           }
-
-          // 获取验证码
         },
         deep: true
       }
     },
-    computed: {
-      userName: {
-        get() { return this.$store.state.user.name }
-      }
-    },
+    // computed: {
+    //   userName: {
+    //     get() { return this.$store.state.user.name }
+    //   }
+    // },
     activated() {
       this.getAgentDeskInfo(),
         this.myRechargeList(),
@@ -506,9 +514,9 @@
     }
   }
 
-</script> -->
+</script>
 
-<!-- <style lang="scss">
+<style lang="scss">
   .el-row {
     margin-bottom: 20px;
     &:last-child {
@@ -735,4 +743,4 @@
     border-color: #4680FF;
     cursor: pointer
   }
-</style> -->
+</style>

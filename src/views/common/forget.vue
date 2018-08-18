@@ -11,17 +11,18 @@
                     <h3 class="login-title">找回密码</h3>
                 </div>
                 <el-form :model="dataForm" :rules="dataRule" ref="dataForm" status-icon style="position:relative;margin-top:60px" v-show="getCodeForm">
-                    <el-form-item prop="mobile" style="margin-bottom:35px">
+                    <el-form-item prop="mobile" style="margin-bottom:50px">
                         <img src="~@/assets/img/phoneUser.jpg" alt="" class="icon">
                         <el-input v-model="dataForm.mobile" placeholder="请输入手机号" class="account"></el-input>
+                        <!-- <span style="display:block;height:41px" v-show="errTextVisible">{{errText}}</span> -->
                     </el-form-item>
                     <el-form-item prop="code">
                         <img src="~@/assets/img/pwdImg.jpg" alt="" class="icon">
                         <el-input v-model="dataForm.code" type="password" placeholder="请输入验证码" class="getcode" style="width:50%;"></el-input>
                     </el-form-item>
                     <el-form-item style="position: absolute;right:0px;top:79px">
-                        <el-button @click="codeBtn" style="position: absolute;top:0px;right:0;width:100px;z-index:100;height:44px" v-text="btntext"
-                            id="codeBtn"></el-button>
+                        <el-button @click="codeBtn" style="position: absolute;top:14px;right:0;width:110px;z-index:100;height:44px" v-text="btntext"
+                            id="codeBtn" :disabled="disabled"></el-button>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" style="display:block;margin:60px auto 0;width:120px" @click="nextOpr">下一步</el-button>
@@ -68,8 +69,12 @@
             }
             return {
                 btntext: '获取验证码',
+                disabled: false,
+                time: 0,
                 getCodeForm: true,
                 rulePwdForm: false,
+                errText: '',
+                errTextVisible: true,
                 dataForm: {
                     mobile: '',
                     code: '',
@@ -134,13 +139,31 @@
             },
             // 点击获取验证码
             codeBtn() {
-                console.log('请输入手机号')
+                if (this.dataForm.mobile == "") {
+                    this.$message.warning('手机号不能为空!');
+                } else if (!reg.test(this.dataForm.mobile)) {
+                    this.$message.warning('手机格式不正确!');
+                } else {
+                    this.time = 60;
+                    this.disabled = true;
+                    this.timer();
+                }
+            },
+            timer() {
+                if (this.time > 0) {
+                    this.time--;
+                    this.btntext = this.time + "s后重新获取";
+                    setTimeout(this.timer, 1000);
+                } else {
+                    this.time = 0;
+                    this.btntext = "获取验证码";
+                    this.disabled = false;
+                }
             },
             // 点击下一步
             nextOpr() {
                 this.$refs['dataForm'].validate((valid) => {
                     if (valid) {
-                        console.log(333333333)
                         this.getCodeForm = false
                         this.rulePwdForm = true
                     }

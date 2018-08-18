@@ -21,7 +21,7 @@
                 </el-form-item>
                 <el-form-item style="margin-left:6px">
                     <el-button type="primary" @click="agentRechargeList()">查询</el-button>
-                    <el-button type="primary" @click="exportxsl()">导出</el-button>
+                    <el-button type="primary" @click="exportxsl()" :disabled="disabled">导出</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -62,6 +62,7 @@
     export default {
         data() {
             return {
+                disabled:false,
                 dataListLoading: false,
                 OEMSearchData: {
                     dateTime: [],
@@ -97,6 +98,11 @@
                         // console.log(data)
                         this.agentOemTableData = data.data.list
                         this.totalPage = data.data.total
+                        if (data.data.list.length == 0) {
+                            this.disabled = true
+                        } else {
+                            this.disabled = false
+                        }
                     } else {
                         this.agentOemTableData = []
                         this.totalPage = 0
@@ -156,9 +162,21 @@
                 }
             },
             exportxsl() {
-                window.open(this.$http.adornUrl(`agent/finance/agent/recharge/list/export?token=${this.$cookie.get('token')}
-                &currentPage=${this.pageIndex}&pageSize=${this.pageSize}&companyName=${this.OEMSearchData.agentName}&payType=${this.OEMSearchData.type}
-                &startTime=${'' || this.OEMSearchData.dateTime == null ? '' : this.OEMSearchData.dateTime[0]}&endTime=${'' || this.OEMSearchData.dateTime == null ? '' : this.OEMSearchData.dateTime[1]}`))
+                let startTime;
+                let endTime;
+                if (this.OEMSearchData.dateTime == null) {
+                    startTime = ""
+                    endTime = ""
+                } else {
+                    if (this.OEMSearchData.dateTime.length == 0) {
+                        startTime = ""
+                        endTime = ""
+                    } else {
+                        startTime = this.OEMSearchData.dateTime[0]
+                        endTime = this.OEMSearchData.dateTime[1]
+                    }
+                }
+                window.open(this.$http.adornUrl(`agent/finance/agent/recharge/list/export?token=${this.$cookie.get('token')}&currentPage=${this.pageIndex}&pageSize=${this.pageSize}&companyName=${this.OEMSearchData.agentName}&payType=${this.OEMSearchData.type}&startTime=${startTime}&endTime=${endTime}`))
             }
         }
     }

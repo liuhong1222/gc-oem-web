@@ -20,13 +20,13 @@
                         <el-button type="text" style="float:right" @click="showDetails()">查看详情</el-button>
                     </div>
                     <el-table :data="tableData" height="250" style="width: 100%" :highlight-current-row="false">
-                        <el-table-column prop="comName" label="公司名称">
+                        <el-table-column prop="companyName" label="代理商名称">
                         </el-table-column>
-                        <el-table-column prop="date" label="充值时间">
+                        <el-table-column prop="payTime" label="充值时间">
                         </el-table-column>
                         <el-table-column prop="money" label="充值金额">
                         </el-table-column>
-                        <el-table-column prop="counts" label="充值条数">
+                        <el-table-column prop="number" label="充值条数">
                         </el-table-column>
                     </el-table>
                 </div>
@@ -57,20 +57,23 @@
         <!-- 更改邮箱 -->
         <el-dialog title="重新绑定邮箱" :visible.sync="reEmailVisible">
             <el-form :model="reemailform" :rules="reemailrules" ref="reemailruleForm">
-                <el-form-item label="原邮箱" prop="oldemail">
-                    <el-input v-model="reemailform.oldemail" auto-complete="off" id="emailInput" readonly></el-input>
+                <el-form-item label="原邮箱">
+                    <el-input v-model="reemailform.oldemail" id="emailInput" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="新邮箱" prop="newemail">
-                    <el-input v-model="reemailform.newemail" auto-complete="off"></el-input>
+                    <el-input v-model="reemailform.newemail"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="reEmailBtn()">确 定</el-button>
             </div>
         </el-dialog>
+        <!-- 重新绑定手机号 -->
+        <re-bind-phone v-if="reBindVisible" ref="reBindPhoneCon"></re-bind-phone>
     </div>
 </template>
 <script>
+    import reBindPhone from './re-bind-phone'
     import { isEmail, isMobile } from '@/utils/validate'
     export default {
         data() {
@@ -84,6 +87,7 @@
             return {
                 addEmailVisible: false,
                 reEmailVisible: false,
+                reBindVisible: false,
                 addemailform: {
                     email: ''
                 },
@@ -97,11 +101,11 @@
                     oldemail: '',
                     newemail: ''
                 },
-                basicInfoList: [
-                    { title: '我的代办', data: '10', flag: false },
-                    { title: '职位', data: '产品专员', flag: false },
-                    { title: '手机号', data: '17612163551', flag: true, btnText: '更改' },
-                    { title: '邮箱', data: '984459368@qq.com', flag: true, btnText: '更改' }
+                basicInfoList: [  //基本信息
+                    { title: '我的代办', data: '', flag: false },
+                    // { title: '职位', data: '产品专员', flag: false },
+                    { title: '手机号', data: '', flag: true, btnText: '更改' },
+                    { title: '邮箱', data: '', flag: true, btnText: '更改' }
                 ],
                 reemailrules: {
                     newemail: [
@@ -109,39 +113,13 @@
                         { validator: validateEmail, trigger: 'blur' }
                     ],
                 },
-                tableData: [
-                    // {
-                    //     comName: '上海创蓝文化传播有限公司',
-                    //     date: '2018-07-12 09:01:08',
-                    //     money: '1000',
-                    //     counts: '2000'
-                    // }, {
-                    //     comName: '上海创蓝文化传播有限公司',
-                    //     date: '2018-07-12 09:01:08',
-                    //     money: '1000',
-                    //     counts: '2000'
-                    // }, {
-                    //     comName: '上海创蓝文化传播有限公司',
-                    //     date: '2018-07-12 09:01:08',
-                    //     money: '1000',
-                    //     counts: '2000'
-                    // }, {
-                    //     comName: '上海创蓝文化传播有限公司',
-                    //     date: '2018-07-12 09:01:08',
-                    //     money: '1000',
-                    //     counts: '2000'
-                    // }, {
-                    //     comName: '上海创蓝文化传播有限公司',
-                    //     date: '2018-07-12 09:01:08',
-                    //     money: '1000',
-                    //     counts: '2000'
-                    // }
-                ],
+                tableData: [], //oem充值记录
                 oemAgent: [
-                    { title: '客户数量', counts: '10000' },
-                    { title: '客户充值总计', counts: '1000' },
-                    { title: '客户消费条数', counts: '1000,000' }
-                ],
+                    { title: '客户数量', counts: '' },
+                    { title: '客户充值总计', counts: '' },
+                    { title: '客户消费条数', counts: '' }
+                ], //oem代理
+
             }
         },
         computed: {
@@ -150,12 +128,22 @@
             }
         },
         activated() {
-            this.oemRegRecode()
+            this.oemRegRecode(),
+                this.getAdminDeskInfo(),
+                this.myAgent()
+        },
+        components: {
+            reBindPhone
         },
         methods: {
+
             basicInfoBtn(arrindex, con) {
-                if (arrindex == 2) {  //概更改手机号
-                } else if (arrindex == 3) {
+                if (arrindex == 1) {  //概更改手机号
+                    this.reBindVisible = true;
+                    this.$nextTick(() => {
+                        this.$refs.reBindPhoneCon.showInit()
+                    })
+                } else if (arrindex == 2) {
                     if (con == "") {
                         console.log("添加弹出框");
                         this.addEmailVisible = true
@@ -164,7 +152,7 @@
                         })
                     } else {
                         console.log("修改弹出框");
-                        this.reemailform.oldemail = this.basicInfoList[3].data
+                        this.reemailform.oldemail = this.basicInfoList[2].data
                         this.reEmailVisible = true;
                         this.$nextTick(() => {
                             this.$refs['reemailruleForm'].resetFields();
@@ -172,11 +160,56 @@
                     }
                 }
             },
+            // 我的代办
+            myAgent() {
+                this.$http({
+                    url: this.$http.adornUrl(`agent/stats/agentCanUpgrade/count?token=${this.$cookie.get('token')}`),
+                    method: 'get',
+                }).then(({ data }) => {
+                    if (data && data.code === 0) {
+                        this.basicInfoList[0].data = data.data.countAgentCanUpgrade
+                    } else {
+                        this.$message.error(data.msg)
+                    }
+                })
+            },
+
+            // 管理员基本信息
+            getAdminDeskInfo() {
+                this.$http({
+                    url: this.$http.adornUrl(`agent/desk/getAdminDeskInfo?token=${this.$cookie.get('token')}`),
+                    method: 'post',
+                }).then(({ data }) => {
+                    if (data && data.code === 0) {
+                        this.basicInfoList[1].data = data.data.mobile
+                        this.basicInfoList[2].data = data.data.email
+                        this.oemAgent[0].counts = data.data.agentCount
+                        this.oemAgent[1].counts = data.data.rechargeSum
+                        this.oemAgent[2].counts = data.data.consumSum
+                    } else {
+                        this.$message.error(data.msg)
+                    }
+                })
+            },
             // 添加邮箱
             addEmailBtn() {
                 this.$refs['addemailruleForm'].validate((valid) => {
                     if (valid) {
-                        console.log(3333)
+                        this.$http({
+                            url: this.$http.adornUrl(`agent/desk/updateMail?token=${this.$cookie.get('token')}`),
+                            method: 'post',
+                            params: this.$http.adornParams({
+                                'mail': this.addemailform.email,
+                            })
+                        }).then(({ data }) => {
+                            if (data && data.code === 0) {
+                                this.addEmailVisible = false
+                                this.basicInfoList[2].data = this.addemailform.email
+                                this.$message.success('成功!')
+                            } else {
+                                this.$message.error(data.msg)
+                            }
+                        })
                     }
                 })
             },
@@ -184,7 +217,21 @@
             reEmailBtn() {
                 this.$refs['reemailruleForm'].validate((valid) => {
                     if (valid) {
-                        console.log(2222222)
+                        this.$http({
+                            url: this.$http.adornUrl(`agent/desk/updateMail?token=${this.$cookie.get('token')}`),
+                            method: 'post',
+                            params: this.$http.adornParams({
+                                'mail': this.reemailform.newemail,
+                            })
+                        }).then(({ data }) => {
+                            if (data && data.code === 0) {
+                                this.reEmailVisible = false
+                                this.basicInfoList[2].data = this.reemailform.newemail
+                                this.$message.success('成功!')
+                            } else {
+                                this.$message.error(data.msg)
+                            }
+                        })
                     }
                 })
             },

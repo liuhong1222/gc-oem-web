@@ -396,12 +396,14 @@ li {
 
 // 控制台公共
 .customerList li {
-  width: 31%;
+  width: 33%;
   text-align: center;
   float: left;
   color: #666;
 }
-
+.customerList {
+  margin-left: -60px
+}
 .customerList,
 .mealPackage {
   margin-top: 80px;

@@ -5,7 +5,7 @@
             <el-form :inline="true" :model="searchData">
                 <el-form-item label="创建时间：">
                     <el-date-picker v-model="searchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd">
+                        value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="代理商名称：" style="margin-left:25px;">
@@ -42,7 +42,7 @@
                 </el-table-column>
                 <el-table-column prop="createTime" label="日期" width="150" align="center">
                 </el-table-column>
-                <el-table-column prop="canUpgradeName" label="是否升级" width="80" align="center">
+                <el-table-column prop="canUpgradeName" label="能否升级" width="80" align="center">
                 </el-table-column>
                 <el-table-column prop="levelName" label="代理等级" width="120" align="center">
                 </el-table-column>
@@ -177,6 +177,11 @@
                     ],
 
                 },
+                pickerOptions0: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now() - 8.64e6
+                    }
+                }
             }
         },
         watch: {
@@ -199,6 +204,7 @@
             this.getDataList()
         },
         methods: {
+
             // 获取代理商列表
             getDataList() {
                 console.log(this.searchData.dateTime)

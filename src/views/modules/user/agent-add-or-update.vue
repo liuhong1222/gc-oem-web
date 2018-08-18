@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="visible">
+    <el-dialog :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="visible" :before-close="closeDialog">
         <el-form :model="dataForm" :rules="datarules" ref="dataForm" label-width="150px" class="demo-ruleForm" :label-position="labelPosition">
             <h3>基本信息</h3>
             <el-form-item label="代理商编号：" prop="agentNumber">
@@ -30,8 +30,8 @@
                 <el-input v-model="dataForm.businNum" placeholder="营业执照号"></el-input>
             </el-form-item>
             <el-form-item label="营业期限：" prop="busindate">
-                <el-input v-model="dataForm.busindate1" placeholder="营业执照号" style="width:35%;"></el-input>至
-                <el-input v-model="dataForm.busindate2" placeholder="营业执照号" style="width:35%;"></el-input>
+                <el-input v-model="dataForm.busindate1" placeholder="2018-08-18" style="width:35%;"></el-input>至
+                <el-input v-model="dataForm.busindate2" placeholder="2020-12-25" style="width:35%;"></el-input>
             </el-form-item>
             <h3>联系人信息</h3>
             <el-form-item label="联系人姓名：" prop="username">
@@ -56,8 +56,8 @@
             <h3>代理商级别</h3>
             <el-form-item label="代理级别：" prop="agencylevel">
                 <el-select v-model="dataForm.agencylevel" placeholder="请选择代理级别">
-                    <el-option label="一级" value="1"></el-option>
-                    <el-option label="二级" value="2"></el-option>
+                    <el-option :value="item.id" :label="item.name" v-for="(item,index) in agencylevelArr" :key="index">
+                    </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="单价：" prop="price">
@@ -91,6 +91,7 @@
                 licensePicNo: '',
                 visible: false,
                 labelPosition: 'right',
+                agencylevelArr: [],  //级别数组
                 dataForm: {
                     id: 0,
                     agentNumber: '',
@@ -107,7 +108,7 @@
                     work: '',
                     loginAcc: '',
                     pwd: '',
-                    agencylevel: [],  //级别
+                    agencylevel: '',  //级别
                     price: '',
                     allowCounts: ''
 
@@ -159,24 +160,44 @@
                 }
             }
         },
+        watch: {
+            dataForm: {
+                handler: function (val, oldVal) {
+                    this.dataForm.loginAcc = this.dataForm.mobile
+                },
+                deep: true
+            }
+        },
         methods: {
             showInit(id) {
                 this.dataForm.id = id || 0
                 this.visible = true
                 console.log('id' + id)
                 console.log(this.$http.adornParams())
+                this.$http({
+                    url: this.$http.adornUrl(`agent/level/list?token=${this.$cookie.get('token')}`),
+                    method: 'get',
+                }).then(({ data }) => {
+                    if (data && data.code === 0) {
+
+                        this.agencylevelArr = data.data
+                    } else {
+                        this.agencylevelArr = []
+                    }
+                })
                 this.$nextTick(() => {
                     this.$refs['dataForm'].resetFields()
                 })
                 this.priseurl = this.$http.adornUrl(`agent/agentInfo/license/upload?token=${this.$cookie.get('token')}`)
                 if (this.dataForm.id) {
+
                     this.$http({
                         url: this.$http.adornUrl(`agent/agentInfo/detail?token=${this.$cookie.get('token')}&agentId=${this.dataForm.id}`),
                         method: 'get',
                         params: this.$http.adornParams()
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
-                            this.priseimageUrl=data.data.licenseUrl
+                            this.priseimageUrl = data.data.licenseUrl
                             this.dataForm.agentNumber = data.data.agentNo
                             this.dataForm.businNumber = data.data.mchId
                             this.dataForm.companyName = data.data.companyName
@@ -199,9 +220,9 @@
 
             },
             dataFormSubmit() {
-                console.log(this.dataForm.busindate1)
-                console.log(this.dataForm.busindate2)
-                console.log(this.dataForm.allowCounts)
+                // console.log(this.dataForm.busindate1)
+                // console.log(this.dataForm.busindate2)
+                // console.log(this.dataForm.allowCounts)
                 this.$refs['dataForm'].validate((valid) => {
                     if (valid) {
                         this.$http({
@@ -209,7 +230,7 @@
                             method: 'post',
                             params: this.$http.adornParams({
                                 'agentId': this.dataForm.id || undefined,
-                                'licensePicNo':this.licensePicNo,
+                                'licensePicNo': this.licensePicNo,
                                 'companyName': this.dataForm.companyName,
                                 'mchId': this.dataForm.businNumber,
                                 'address': this.dataForm.bussicAdress,
@@ -262,6 +283,12 @@
                 console.log(res.data.licensePicNo)
                 this.priseimageUrl = URL.createObjectURL(file.raw);
                 this.licensePicNo = res.data.licensePicNo
+            },
+            closeDialog(done) {
+                done();
+                this.priseimageUrl = ""
+                this.dataForm.busindate1 = ""
+                this.dataForm.busindate2 = ""
             }
         }
     }

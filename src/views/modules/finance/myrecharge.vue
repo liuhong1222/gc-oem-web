@@ -18,7 +18,7 @@
                 </el-form-item>
                 <el-form-item style="margin-left:6px">
                     <el-button type="primary" @click="myRechargeList()">查询</el-button>
-                    <el-button type="primary" @click="exportMyReg()">导出</el-button>
+                    <el-button type="primary" @click="exportMyReg()" :disabled="disabled">导出</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -35,7 +35,7 @@
                 </el-table-column>
                 <el-table-column prop="number" label="充值条数" align="center" width="150">
                 </el-table-column>
-                <el-table-column prop="money" label="充值金额" width="120" align="center" >
+                <el-table-column prop="money" label="充值金额" width="120" align="center">
                 </el-table-column>
                 <el-table-column prop="payTypeName" label="方式" width="100" align="center">
                 </el-table-column>
@@ -54,6 +54,7 @@
         data() {
             return {
                 dataListLoading: false,
+                disabled: false,
                 agentSearchData: {
                     dateTime: [],
                     type: '',
@@ -85,6 +86,11 @@
                         // console.log(data)
                         this.agentRegTableData = data.data.list
                         this.totalPage = data.data.total
+                        if (data.data.list.length == 0) {
+                            this.disabled = true
+                        } else {
+                            this.disabled = false
+                        }
                     } else {
                         this.agentRegTableData = []
                         this.totalPage = 0
@@ -146,9 +152,22 @@
 
             // 导出 
             exportMyReg() {
-                window.open(this.$http.adornUrl(`agent/finance/my/recharge/list/export?token=${this.$cookie.get('token')}
-                &currentPage=${this.pageIndex}&pageSize=${this.pageSize}&payType=${this.agentSearchData.type}
-                &startTime=${'' || this.agentSearchData.dateTime == null ? '' : this.agentSearchData.dateTime[0]}&endTime=${'' || this.agentSearchData.dateTime == null ? '' : this.agentSearchData.dateTime[1]}`))
+                let startTime;
+                let endTime;
+                if (this.agentSearchData.dateTime == null) {
+                    startTime = ""
+                    endTime = ""
+                } else {
+                    if (this.agentSearchData.dateTime.length == 0) {
+                        startTime = ""
+                        endTime = ""
+                    } else {
+                        startTime = this.agentSearchData.dateTime[0]
+                        endTime = this.agentSearchData.dateTime[1]
+                    }
+                }
+
+                window.open(this.$http.adornUrl(`agent/finance/my/recharge/list/export?token=${this.$cookie.get('token')}&currentPage=${this.pageIndex}&pageSize=${this.pageSize}&payType=${this.agentSearchData.type}&startTime=${startTime}&endTime=${endTime}`))
             }
 
         }

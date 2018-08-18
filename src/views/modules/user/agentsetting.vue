@@ -12,71 +12,103 @@
                     <el-input v-model="searchData.agentName" placeholder="代理商名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary">查询</el-button>
+                    <el-button type="primary" @click="getDataList()">查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
-        <div class="userTable">
-            <el-table :data="dataList" style="width: 100%">
+        <div class="agentTable">
+            <el-table :data="dataList" style="width: 100%" :header-cell-style="getRowClass">
                 <el-table-column type="index" header-align="center" align="center" width="50" fixed label="序号">
                 </el-table-column>
-                <el-table-column prop="daiId" label=" 代理商序号" width="80" align="center">
+                <el-table-column prop="agentId" label=" 代理商序号" width="80" align="center">
                 </el-table-column>
-                <el-table-column prop="mchId" label=" 客户编号" width="70" align="center">
+                <el-table-column prop="mch_id" label=" 客户编号" width="70" align="center">
                 </el-table-column>
-                <el-table-column prop="mchname" label=" 代理商名称" width="80" align="center">
+                <el-table-column prop="company_name" label=" 代理商名称" width="80" align="center">
                 </el-table-column>
-                <el-table-column prop="createTime" label="创建时间" align="center">
+                <el-table-column prop="create_time" label="创建时间" align="center" width="150">
                 </el-table-column>
-                <el-table-column prop="logo" label="LOGO" align="center">
+                <el-table-column prop="logo_url" label="LOGO" align="center">
                 </el-table-column>
-                <el-table-column prop="icon" label="ICON" align="center">
+                <el-table-column prop="icon_url" label="ICON" align="center">
                 </el-table-column>
-                <el-table-column prop="duanxin" label="短信签名" align="center">
+                <el-table-column prop="sms_sign" label="短信签名" align="center">
                 </el-table-column>
                 <el-table-column prop="dayuming" label="代理商域名" align="center">
                 </el-table-column>
-                <el-table-column prop="beian" label="域名备案信息" align="center">
-                </el-table-column>
-                <el-table-column prop="kefy" label="客服资料" align="center">
-                </el-table-column>
-                <el-table-column prop="zbInfo" label="支付宝资料" align="center">
-                </el-table-column>
-                <el-table-column prop="weiinfo" label="支付宝资料" align="center">
-                </el-table-column>
-                <el-table-column prop="ht" label="合同信息" align="center">
-                </el-table-column>
-                <el-table-column prop="qianzi" label="代理商签字" align="center">
-                </el-table-column>
-                <el-table-column prop="gz" label="公章" align="center">
-                </el-table-column>
-                <el-table-column fixed="right" label="操作" align="center">
+                <el-table-column prop="beian" label="域名备案信息" align="center" width="150">
                     <template slot-scope="scope">
-                        <el-button type="text" size="small">查看</el-button>
-                        <el-button type="text" size="small">修改</el-button>
-                        <el-button type="text" size="small" @click="seetingDialog(scope.row)">设置</el-button>
+                        <div>{{scope.row.licence}}</div>
+                        <div>{{scope.icp_record}}</div>
+                        <div>{{scope.row.police_record}}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="kefy" label="客服资料" align="center" width="150">
+                    <template slot-scope="scope">
+                        <div>QQ:{{scope.row.qq}}</div>
+                        <div>客服热线:{{scope.row.hotline}}</div>
+                        <div>商务合作:{{scope.row.biz_no}}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="zbInfo" label="支付宝资料" align="center" width="250">
+                    <template slot-scope="scope">
+                        <div>api id:{{scope.row.aliAppid}}</div>
+                        <div>支付调用地址:{{scope.row.alicall_url}}</div>
+                        <div>支付回调地址:{{scope.row.alicallback_url}}</div>
+                        <div>公匙:{{scope.row.alipublic_key}}</div>
+                        <div>私匙:{{scope.row.aliprivate_key}}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="weiinfo" label="微信资料" align="center" width="250">
+                    <template slot-scope="scope">
+                        <div>mchid:{{scope.row.wxMchid}}</div>
+                        <div>支付调用地址:{{scope.row.wxcall_url}}</div>
+                        <div>支付回调地址:{{scope.row.wxcallback_url}}</div>
+                        <div>api id:{{scope.row.wxappid}}</div>
+                        <div>key:{{scope.row.wxKey}}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="ht" label="合同信息" align="center" width="250">
+                    <template slot-scope="scope">
+                        <div>名称:{{scope.row.htcompany_name}}</div>
+                        <div>地址:{{scope.row.htcompany_address}}</div>
+                        <div>账户:{{scope.row.htaccount_no}}</div>
+                        <div>开户行:{{scope.row.htbank_name}}</div>
+                        <div>邮编:{{scope.row.htpostcode}}</div>
+                        <div>电话:{{scope.row.htmobile}}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="sign_url" label="代理商签字" align="center">
+                </el-table-column>
+                <el-table-column prop="seal_url" label="公章" align="center">
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" align="center" width="130">
+                    <template slot-scope="scope">
+                        <el-button type="text" size="small" @click=seedialog(scope.row)>查看</el-button>
+                        <el-button type="text" size="small" @click="seetingDialog(scope.row)">修改</el-button>
+                        <el-button type="text" size="small" @click="del(scope.row.agentId)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination
-                @size-change="sizeChangeHandle"
-                @current-change="currentChangeHandle"
-                :current-page="dataForm.page"
-                :page-sizes="[10, 20, 50, 100]"
-                :page-size="dataForm.size"
-                :total="totalPage"
-                layout="total, sizes, prev, pager, next, jumper">
-            </el-pagination>
+            <div class="agentPage">
+                <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex" :page-sizes="[3, 5]"
+                    :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
+                </el-pagination>
+            </div>
 
         </div>
-        <!-- 设置 -->
-        <agent-setting-dialog v-if="agentSettingDialogVisible" ref="agentSettingDialog" @seetingData="seetingData"></agent-setting-dialog>
+        <!-- 修改 -->
+        <agent-setting-dialog v-if="agentSettingDialogVisible" ref="agentSettingDialog" @refreshDataList="getDataList"></agent-setting-dialog>
+
+        <!-- 查看 -->
+        <agent-see-dialog v-if="agentSeeDialogVisible" ref="agentSeeDialog"></agent-see-dialog>
+
     </div>
 </template>
 
 <script>
     import AgentSettingDialog from './agent-setting-dialog.vue'
-
+    import agentSeeDialog from './agent-see-dialog.vue'
     export default {
         data() {
             return {
@@ -87,29 +119,44 @@
                     custName: '',
                     mobile: ""
                 },
-                dataForm:{
-                    page: 1,
-                    size: 10,
-                },
-                totalPage: null,
-                dataList:[],
-                agentSettingDialogVisible:false,
+
+                dataList: [],
+                agentSettingDialogVisible: false,
+                agentSeeDialogVisible: false,
+                pageIndex: 1,
+                pageSize: 3,
+                totalPage: 0,
             }
         },
-        components:{
-            AgentSettingDialog
+        components: {
+            AgentSettingDialog,
+            agentSeeDialog
         },
         activated() {
             this.getDataList();
         },
-        methods:{
+        methods: {
+            getRowClass({ row, column, rowIndex, columnIndex }) {
+                if (rowIndex == 0) {
+                    return 'background-color: #f8f8f8;color:#666;'
+                } else {
+                    return ''
+                }
+            },
             // 获取数据列表
             getDataList() {
                 this.dataListLoading = true;
                 this.$http({
-                    url: this.$http.adornUrl("agent/agentInfo/list"),
+                    url: this.$http.adornUrl("agent/set/agentSetList"),
                     method: "get",
-                    params: this.$http.adornParams(this.dataForm)
+                    params: this.$http.adornParams({
+                        'currentPage': this.pageIndex,
+                        'pageSize': this.pageSize,
+                        'agentName': this.searchData.agentName,
+                        'startTimeStr': '' || this.searchData.dateTime == null ? '' : this.searchData.dateTime[0],
+                        'endTimeStr': '' || this.searchData.dateTime == null ? '' : this.searchData.dateTime[1]
+
+                    })
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
                         console.log(data.data)
@@ -122,27 +169,63 @@
                     this.dataListLoading = false;
                 });
             },
-            seetingDialog(e){
+            // 修改
+            seetingDialog(e) {
                 this.agentSettingDialogVisible = true
-                this.$nextTick(() =>{
+                this.$nextTick(() => {
                     this.$refs.agentSettingDialog.init(e)
                 })
             },
-            seetingData(){
-                console.log('seetingData  ')
+            // 查看
+            seedialog(e) {
+                this.agentSeeDialogVisible = true
+                this.$nextTick(() => {
+                    this.$refs.agentSeeDialog.seeInit(e)
+                })
             },
+            // seetingData() {
+            //     console.log('seetingData  ')
+            // },
             // 每页数
             sizeChangeHandle(val) {
-                this.dataForm.size = val;
-                this.dataForm.page = 1;
-                this.getDataList();
+                this.pageSize = val
+                this.pageIndex = 1
+                this.getDataList()
             },
             // 当前页
             currentChangeHandle(val) {
-                this.dataForm.page = val;
-                this.page = val;
-                this.getDataList();
+                this.pageIndex = val
+                this.getDataList()
             },
+            // 点击删除
+            del(id) {
+                this.$confirm(`是否删除代理商序号为${id}的代理商以及相关信息？`, '删除代理商', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$http({
+                        url: this.$http.adornUrl(`agent/set/delAgent?token=${this.$cookie.get('token')}`),
+                        method: 'post',
+                        params: this.$http.adornParams({
+                            'agentId': id
+                        })
+                    }).then(({ data }) => {
+                        if (data && data.code === 0) {
+                            this.$message({
+                                message: '操作成功',
+                                type: 'success',
+                                duration: 1000,
+                                onClose: () => {
+                                    this.getDataList()
+                                }
+                            })
+                        } else {
+                            this.$message.error(data.msg)
+                        }
+                    })
+                }).catch(() => { })
+            }
         }
     }
 
@@ -159,5 +242,9 @@
     .el-table .cell {
         /* word-break:break-all; */
         white-space: pre-wrap;
+    }
+
+    .main .el-table .cell {
+        line-height: 13px;
     }
 </style>

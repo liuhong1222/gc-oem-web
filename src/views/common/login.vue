@@ -69,6 +69,7 @@
               })
             }).then(({ data }) => {
               if (data && data.code === 0) {
+                console.log(data)
                 this.$cookie.set('token', data.token)
                 // 判断哪个，进入不同的工作台
                 this.$router.replace({ name: 'console-admin' })

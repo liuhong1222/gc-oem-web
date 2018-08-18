@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
     <el-dialog title="重新绑定手机号" :visible.sync="dialogVisible" width="38%">
         <el-form :model="rePhoneForm" ref="rePhoneRef" label-width="150px" class="demo-ruleForm" :label-position="labelPosition">
             <el-form-item label="原手机号：">
@@ -63,4 +63,4 @@
     #getCode:hove {
         background-color: #559AF3;
     }
-</style> -->
+</style>
