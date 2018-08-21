@@ -77,6 +77,7 @@
 
 </template>
 <script>
+    import md5 from 'js-md5';
     import { isEmail, isMobile } from '@/utils/validate'
     import imgUrl from '@/utils/imgUrl'
     export default {
@@ -251,7 +252,7 @@
                                 'position': this.dataForm.work,
                                 'mobile': this.dataForm.mobile,
                                 'email': this.dataForm.email,
-                                'password': this.dataForm.pwd,
+                                'password': md5(this.dataForm.pwd),
                                 'levelId': this.dataForm.agencylevel,
                                 'price': this.dataForm.price,
                                 'emptyWarnNumber': this.dataForm.allowCounts

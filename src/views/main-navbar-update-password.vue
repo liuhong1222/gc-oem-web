@@ -1,8 +1,5 @@
 <template>
-  <el-dialog
-    title="修改密码"
-    :visible.sync="visible"
-    :append-to-body="true">
+  <el-dialog title="修改密码" :visible.sync="visible" :append-to-body="true">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
       <el-form-item label="账号">
         <span>{{ userName }}</span>
@@ -25,8 +22,9 @@
 </template>
 
 <script>
+  import md5 from 'js-md5';
   export default {
-    data () {
+    data() {
       var validateConfirmPassword = (rule, value, callback) => {
         if (this.dataForm.newPassword !== value) {
           callback(new Error('确认密码与新密码不一致'))
@@ -57,33 +55,33 @@
     },
     computed: {
       userName: {
-        get () { return this.$store.state.user.name }
+        get() { return this.$store.state.user.name }
       },
       mainTabs: {
-        get () { return this.$store.state.common.mainTabs },
-        set (val) { this.$store.commit('common/updateMainTabs', val) }
+        get() { return this.$store.state.common.mainTabs },
+        set(val) { this.$store.commit('common/updateMainTabs', val) }
       }
     },
     methods: {
       // 初始化
-      init () {
+      init() {
         this.visible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].resetFields()
         })
       },
       // 表单提交
-      dataFormSubmit () {
+      dataFormSubmit() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
               url: this.$http.adornUrl('/sys/user/password'),
               method: 'post',
               data: this.$http.adornData({
-                'password': this.dataForm.password,
-                'newPassword': this.dataForm.newPassword
+                'password': md5(this.dataForm.password),
+                'newPassword': md5(this.dataForm.newPassword)
               })
-            }).then(({data}) => {
+            }).then(({ data }) => {
               if (data && data.code === 0) {
                 this.$message({
                   message: '操作成功',
@@ -107,5 +105,5 @@
       }
     }
   }
-</script>
 
+</script>
