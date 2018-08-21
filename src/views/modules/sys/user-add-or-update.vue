@@ -10,7 +10,7 @@
       <el-form-item label="确认密码" prop="comfirmPassword" :class="{ 'is-required': !dataForm.id }">
         <el-input v-model="dataForm.comfirmPassword" type="password" placeholder="确认密码"></el-input>
       </el-form-item>
-      <el-form-item label="邮箱">
+      <el-form-item label="邮箱" prop="email">
         <el-input v-model="dataForm.email" placeholder="邮箱"></el-input>
       </el-form-item>
       <el-form-item label="姓名" prop="realName">
@@ -72,6 +72,7 @@
       return {
         visible: false,
         roleList: [],
+        parmroleList: [],
         dataForm: {
           id: 0,
           userName: '',
@@ -85,7 +86,7 @@
         },
         dataRule: {
           userName: [
-            { required: true, message: '用户名不能为空', trigger: 'blur' },
+            { required: true, message: '手机号不能为空', trigger: 'blur' },
             { validator: validateMobile, trigger: 'blur' }
           ],
           password: [
@@ -94,10 +95,13 @@
           comfirmPassword: [
             { validator: validateComfirmPassword, trigger: 'blur' }
           ],
-          // email: [
-          //   { required: true, message: '邮箱不能为空', trigger: 'blur' },
-          //   { validator: validateEmail, trigger: 'blur' }
-          // ],
+          realName: [
+          { required: true, message: '姓名不能为空', trigger: 'blur' },
+          ],
+          email: [
+            { required: true, message: '邮箱不能为空', trigger: 'blur' },
+            { validator: validateEmail, trigger: 'blur' }
+          ],
         }
       }
     },
@@ -137,6 +141,8 @@
       },
       // 表单提交
       dataFormSubmit() {
+        this.parmroleList = []
+        this.parmroleList.push(this.dataForm.roleIdList)
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
@@ -151,7 +157,7 @@
                 'mobile': this.dataForm.userName,
                 'status': this.dataForm.status,
                 'realName': this.dataForm.realName,
-                'roleIdList': this.dataForm.roleIdList
+                'roleIdList': this.parmroleList
               })
             }).then(({ data }) => {
               if (data && data.code === 0) {

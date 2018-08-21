@@ -29,6 +29,9 @@
                 <el-table-column prop="create_time" label="创建时间" align="center" width="150">
                 </el-table-column>
                 <el-table-column prop="logo_url" label="LOGO" align="center">
+                    <!-- <template slot-scope="scope">
+                        <div>{{scope.row.logo_url}}</div>
+                    </template> -->
                 </el-table-column>
                 <el-table-column prop="icon_url" label="ICON" align="center">
                 </el-table-column>
