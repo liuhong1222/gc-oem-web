@@ -8,7 +8,7 @@
                         <li v-for="(item,i) in basicInfoList" :key="i">
                             <p>{{item.title}}</p>
                             <input type="text" v-model="item.data" :value="item.data" readonly>
-                            <button v-show="item.flag" @click="basicInfoBtn(i,item.data)">{{item.title === '邮箱' && item.data === '' ? '添加' : item.btnText}}</button>
+                            <button v-show="item.flag" @click="basicInfoBtn(i,item.data)">{{item.title === '邮箱' && item.data === '' || item.data === null ? '添加' : item.btnText}}</button>
                         </li>
                     </ul>
                 </div>
@@ -115,9 +115,9 @@
                 },
                 tableData: [], //oem充值记录
                 oemAgent: [
-                    { title: '客户数量', counts: '' },
-                    { title: '客户充值总计', counts: '' },
-                    { title: '客户消费条数', counts: '' }
+                    { title: '代理商数量', counts: '' },
+                    { title: '充值总金额（元）', counts: '' },
+                    { title: '消耗总计（条）', counts: '' }
                 ], //oem代理
 
             }
@@ -141,10 +141,11 @@
                 if (arrindex == 1) {  //概更改手机号
                     this.reBindVisible = true;
                     this.$nextTick(() => {
-                        this.$refs.reBindPhoneCon.showInit()
+                        let mobile = this.basicInfoList[1].data
+                        this.$refs.reBindPhoneCon.showInit(mobile)
                     })
                 } else if (arrindex == 2) {
-                    if (con == "") {
+                    if (con == "" || con == null) {
                         console.log("添加弹出框");
                         this.addEmailVisible = true
                         this.$nextTick(() => {

@@ -10,7 +10,7 @@
                 </el-table-column>
                 <el-table-column prop="price" label=单价（元/条） align="center">
                 </el-table-column>
-                <el-table-column prop="creditNumber" label="允许超出条数（万条）" align="center">
+                <el-table-column prop="emptyWarnNumber" label="预警条数(万条) " align="center">
                 </el-table-column>
                 <el-table-column prop="minRecharge" label=" 最小充值金额（元） " align="center">
                 </el-table-column>
@@ -18,7 +18,7 @@
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" size="small" @click="del(scope.row.id)">删除</el-button>
+                        <el-button type="text" size="small" @click="del(scope.row.id,scope.row.name)">删除</el-button>
                         <el-button type="text" size="small" @click="addUpdateLevel(scope.row.id)">修改</el-button>
                     </template>
                 </el-table-column>
@@ -76,8 +76,8 @@
                 })
             },
             // 点击删除
-            del(id) {
-                this.$confirm(`是否删除${id}级代理商以及相关信息？`, '删除代理商等级', {
+            del(id,name) {
+                this.$confirm(`是否删除${name}以及相关信息？`, '删除代理商等级', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'

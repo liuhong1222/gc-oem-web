@@ -62,9 +62,11 @@
                 </el-form-item>
                 <el-form-item label="单价：" prop="price">
                     <el-input v-model="dataForm.price" placeholder="单价" readonly></el-input>
+                    <span>元/条</span>
                 </el-form-item>
-                <el-form-item label="允许超出条数：" prop="allowCounts">
-                    <el-input v-model="dataForm.allowCounts" placeholder="允许超出条数" readonly></el-input>
+                <el-form-item label="预警条数：" prop="allowCounts">
+                    <el-input v-model="dataForm.allowCounts" placeholder="预警条数" readonly></el-input>
+                    <span>条</span>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -75,13 +77,13 @@
     </div>
 </template>
 <script>
+    import imgUrl from '@/utils/imgUrl'
     export default {
         data() {
-
             return {
                 dialogVisible: false,
                 labelPosition: 'right',
-                seeImageUrl:'',
+                seeImageUrl: '',
                 dataForm: {
                     id: 0,
                     agentNumber: '',
@@ -115,7 +117,7 @@
                     params: this.$http.adornParams()
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
-                        this.seeImageUrl=data.data.licenseUrl
+                        this.seeImageUrl = imgUrl.imgUrl+data.data.licenseUrl
                         this.dataForm.agentNumber = data.data.agentNo
                         this.dataForm.businNumber = data.data.mchId
                         this.dataForm.companyName = data.data.companyName
@@ -131,7 +133,7 @@
                         this.dataForm.loginAcc = data.data.mobile
                         this.dataForm.agencylevel = data.data.levelId
                         this.dataForm.price = data.data.price
-                        this.dataForm.allowCounts = data.data.emptyCreditNumber
+                        this.dataForm.allowCounts = data.data.emptyWarnNumber
                     }
                 })
             }

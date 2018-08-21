@@ -69,10 +69,14 @@
               })
             }).then(({ data }) => {
               if (data && data.code === 0) {
-                console.log(data)
+                console.log()
                 this.$cookie.set('token', data.token)
                 // 判断哪个，进入不同的工作台
-                this.$router.replace({ name: 'console-admin' })
+                if (data.roleIdList[0] == 1) {
+                  this.$router.replace({ name: 'console-admin' })
+                } else if (data.roleIdList[0] == 2) {
+                  this.$router.replace({ name: 'console-agent' })
+                }
               } else {
                 this.$message.error(data.msg)
               }

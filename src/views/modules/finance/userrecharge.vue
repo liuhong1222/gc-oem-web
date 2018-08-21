@@ -5,7 +5,7 @@
             <el-form :inline="true" :model="customerSearchData">
                 <el-form-item label="创建时间：">
                     <el-date-picker v-model="customerSearchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd">
+                        value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="代理商名称：" style="margin-left:5px;">
@@ -39,13 +39,13 @@
                 </el-table-column>
                 <el-table-column prop="packageName" label="套餐选择" align="center">
                 </el-table-column>
-                <el-table-column prop="price" label="单价（元）" align="center">
+                <el-table-column prop="price" label="单价（元/条）" align="center">
                 </el-table-column>
-                <el-table-column prop="number" label="条数（元）" align="center">
+                <el-table-column prop="number" label="条数" align="center">
                 </el-table-column>
                 <el-table-column prop="money" label="金额（元）" align="center">
                 </el-table-column>
-                <el-table-column prop="payTypeName" label="充值方式（元）" align="center">
+                <el-table-column prop="payTypeName" label="充值方式" align="center">
                 </el-table-column>
                 <el-table-column prop="remark" label="备注" align="center">
                 </el-table-column>
@@ -61,7 +61,7 @@
         data() {
             return {
                 dataListLoading: false,
-                disabled:false,
+                disabled: false,
                 customerSearchData: {
                     dateTime: [],
                     agentName: "",
@@ -71,6 +71,11 @@
                 pageIndex: 1,
                 pageSize: 3,
                 totalPage: 0,
+                pickerOptions0: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now() - 8.64e6
+                    }
+                }
             }
         },
         activated() {
@@ -79,33 +84,33 @@
         methods: {
             uerRechargeList() {
                 this.dataListLoading = true;
-                disabled:false,
-                this.$http({
-                    url: this.$http.adornUrl(`agent/finance/user/recharge/list?token=${this.$cookie.get('token')}`),
-                    method: 'get',
-                    params: this.$http.adornParams({
-                        'currentPage': this.pageIndex,
-                        'pageSize': this.pageSize,
-                        'companyName': this.customerSearchData.agentName,
-                        'userName': this.customerSearchData.custName,
-                        'startTime': '' || this.customerSearchData.dateTime == null ? '' : this.customerSearchData.dateTime[0],
-                        'endTime': '' || this.customerSearchData.dateTime == null ? '' : this.customerSearchData.dateTime[1]
-                    })
-                }).then(({ data }) => {
-                    if (data && data.code === 0) {
-                        this.customerTableData = data.data.list
-                        this.totalPage = data.data.total
-                        if (data.data.list.length == 0) {
-                            this.disabled = true
+                disabled: false,
+                    this.$http({
+                        url: this.$http.adornUrl(`agent/finance/user/recharge/list?token=${this.$cookie.get('token')}`),
+                        method: 'get',
+                        params: this.$http.adornParams({
+                            'currentPage': this.pageIndex,
+                            'pageSize': this.pageSize,
+                            'companyName': this.customerSearchData.agentName,
+                            'userName': this.customerSearchData.custName,
+                            'startTime': '' || this.customerSearchData.dateTime == null ? '' : this.customerSearchData.dateTime[0],
+                            'endTime': '' || this.customerSearchData.dateTime == null ? '' : this.customerSearchData.dateTime[1]
+                        })
+                    }).then(({ data }) => {
+                        if (data && data.code === 0) {
+                            this.customerTableData = data.data.list
+                            this.totalPage = data.data.total
+                            if (data.data.list.length == 0) {
+                                this.disabled = true
+                            } else {
+                                this.disabled = false
+                            }
                         } else {
-                            this.disabled = false
+                            this.customerTableData = []
+                            this.totalPage = 0
                         }
-                    } else {
-                        this.customerTableData = []
-                        this.totalPage = 0
-                    }
-                    this.dataListLoading = false
-                })
+                        this.dataListLoading = false
+                    })
             },
             getTotal(param) {
                 const { columns, data } = param;
@@ -129,7 +134,7 @@
                         if (column.property === 'number') {
                             sums[index] += ' 条';
 
-                            console.log(sums[index])
+                            // console.log(sums[index])
                         } else if (column.property === 'money') {
                             sums[index] += ' 元';
                         }

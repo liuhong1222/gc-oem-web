@@ -69,7 +69,7 @@
     },
     created() {
       this.menuList = JSON.parse(sessionStorage.getItem('menuList') || '[]')
-      console.log(this.menuList)
+      // console.log(this.menuList)
       this.dynamicMenuRoutes = JSON.parse(sessionStorage.getItem('dynamicMenuRoutes') || '[]')
       this.routeHandle(this.$route)
     },

@@ -128,7 +128,7 @@
                 // console.log(arr[2])  //creUserId
                 this.rechargeDataForm.creUserId = arr[2]
                 this.rechargeDataForm.userName = arr[3]
-                console.log(arr[3])
+                // console.log(arr[3]) 
                 if (arr[1] == 0 || arr[1] == null) {  //个人
                     this.chargeVisible = true
                     this.packagePro()

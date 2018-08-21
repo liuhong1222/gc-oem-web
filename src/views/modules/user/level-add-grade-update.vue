@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="levelvisible">
+    <el-dialog :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="levelvisible" @close="closeDialog">
         <el-form :model="dataForm" :rules="dataRule" ref="dataForm" :label-position="labelPosition" label-width="123px" class="cf">
             <el-form-item label="代理商等级：" prop="levelNum">
                 <el-input v-model="dataForm.levelNum" placeholder="代理商等级 如：1"></el-input>
@@ -11,8 +11,8 @@
                 <el-input v-model="dataForm.price" placeholder="单价"></el-input>
                 <span>元/条</span>
             </el-form-item>
-            <el-form-item label="允许超出条数：" prop="moreCounts">
-                <el-input v-model="dataForm.moreCounts" placeholder="允许超出条数"></el-input>
+            <el-form-item label="预警条数：" prop="moreCounts">
+                <el-input v-model="dataForm.moreCounts" placeholder="预警条数"></el-input>
                 <span>万条</span>
             </el-form-item>
             <el-form-item label="充值金额：" prop="minRecharge">
@@ -24,7 +24,7 @@
                     <el-input v-model="dataForm.maxRecharge" style="width:100%" placeholder="最大充值"></el-input>
                 </el-col>
             </el-form-item>
-            
+
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="levelvisible = false">取消</el-button>
@@ -71,7 +71,7 @@
             levelInit(id) {
                 this.dataForm.id = id || 0
                 this.levelvisible = true
-                console.log(id)
+                // console.log(id)
                 this.$nextTick(() => {
                     this.$refs['dataForm'].resetFields()
                 })
@@ -86,7 +86,7 @@
                             this.dataForm.levelName = data.data.name
                             this.dataForm.levelNum = data.data.level
                             this.dataForm.price = data.data.price
-                            this.dataForm.moreCounts = data.data.creditNumber
+                            this.dataForm.moreCounts = data.data.emptyWarnNumber
                             this.dataForm.minRecharge = data.data.minRecharge
                             this.dataForm.maxRecharge = data.data.maxRecharge
                         }
@@ -104,12 +104,12 @@
                                 'name': this.dataForm.levelName,
                                 'level': this.dataForm.levelNum,
                                 'price': this.dataForm.price,
-                                'creditNumber': this.dataForm.moreCounts,
+                                'emptyWarnNumber': this.dataForm.moreCounts,
                                 'minRecharge': this.dataForm.minRecharge,
                                 'maxRecharge': this.dataForm.maxRecharge
                             })
                         }).then(({ data }) => {
-                            console.log(data)
+                            // console.log(data)
                             if (data && data.code === 0) {
                                 this.$message({
                                     message: '操作成功',
@@ -127,7 +127,11 @@
                     }
                 })
 
-            }
+            },
+            closeDialog() {
+                this.dataForm.minRecharge=""
+                this.dataForm.maxRecharge=""
+            },
         }
     }
 

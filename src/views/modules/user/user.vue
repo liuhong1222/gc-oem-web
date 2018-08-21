@@ -5,7 +5,7 @@
       <el-form :inline="true" :model="searchData">
         <el-form-item label="创建时间：">
           <el-date-picker v-model="searchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-            value-format="yyyy-MM-dd">
+            value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="手机号：" style="margin-left:25px;">
@@ -27,7 +27,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="getCustomList()">查询</el-button>
-          <el-button type="primary">导出</el-button>
+          <el-button type="primary" @click="exportUser()" :disabled="disabled">导出</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -37,15 +37,15 @@
         </el-table-column>
         <el-table-column prop="creUserId" label=" 客户编号" width="80" align="center">
         </el-table-column>
-        <el-table-column prop="user_phone" label="手机号码" width="100" align="center">
+        <el-table-column prop="user_phone" label="手机号码" width="110" align="center">
         </el-table-column>
         <el-table-column prop="userType" label="客户类型" width="90" align="center">
         </el-table-column>
         <el-table-column prop="custName" label=" 客户名称" align="center">
         </el-table-column>
-        <el-table-column prop="company_name" label="代理商名称" align="center">
+        <el-table-column prop="company_name" label="代理商名称" align="center" width="150">
         </el-table-column>
-        <el-table-column prop="create_time" label="注册时间" align="center">
+        <el-table-column prop="create_time" label="注册时间" align="center" width="150">
         </el-table-column>
         <el-table-column prop="money" label="充值总计（元）" width="120" align="center">
         </el-table-column>
@@ -53,10 +53,10 @@
         </el-table-column>
         <el-table-column prop="account" label="剩余条数" width="120" align="center">
         </el-table-column>
-        <el-table-column fixed="right" label="操作" align="center">
+        <el-table-column fixed="right" label="操作" align="center" width="150">
           <template slot-scope="scope">
             <el-button @click="perPriseSee(scope.row)" type="text" size="small">查看</el-button>
-            <el-button type="text" size="small" @click="perEnterEditBtn(scope.row)">修改</el-button>
+            <!-- <el-button type="text" size="small" @click="perEnterEditBtn(scope.row)">修改</el-button> -->
             <el-button type="text" size="small" @click="rechargedataBtn(scope.row)">充值</el-button>
             <el-button type="text" size="small" @click="refundBtn(scope.row)">退款</el-button>
           </template>
@@ -70,7 +70,7 @@
     </div>
 
     <!-- 个人，企业修改 -->
-    <per-edit-enterise v-if="updateVisible" ref="updatecon" @refreshDataList="getCustomList"></per-edit-enterise>
+    <!-- <per-edit-enterise v-if="updateVisible" ref="updatecon" @refreshDataList="getCustomList"></per-edit-enterise> -->
     <!-- 个人，企业查看 -->
     <per-see-enterprise v-if="seeVisible" ref="seecon"></per-see-enterprise>
     <!-- 个人，企业充值 -->
@@ -80,13 +80,14 @@
   </div>
 </template>
 <script>
-  import perEditEnterise from './user-per-edit-enterise'
+  // import perEditEnterise from './user-per-edit-enterise'
   import perSeeEnterprise from './user-per-see-enterprise'
   import perRechargePrise from './user-per-recharge-prise'
   import perRefundPrise from './user-per-refund-prise'
   export default {
     data() {
       return {
+        disabled: false,
         seeVisible: false,
         updateVisible: false,
         chargeVisible: false,
@@ -95,23 +96,32 @@
         arr: [],  //保存点击的id和区分个人和企业的id
         searchData: {
           dateTime: [],
-          creUserId: "",
-          user_phone: "",
-          user_type: '',
-          company_name: "",
-          create_time: "",
-          money: "",
-          number: "",
-          account: ""
+          mobile: '',
+          custType: '',
+          custName: '',
+          agentName: ''
+          // creUserId: "",
+          // user_phone: "",
+          // user_type: '',
+          // company_name: "",
+          // create_time: "",
+          // money: "",
+          // number: "",
+          // account: ""
         },
         userTableData: [],
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0,
+        pickerOptions0: {
+          disabledDate(time) {
+            return time.getTime() > Date.now() - 8.64e6
+          }
+        }
       }
     },
     components: {
-      perEditEnterise,
+      // perEditEnterise,
       perSeeEnterprise,
       perRechargePrise,
       perRefundPrise
@@ -145,9 +155,14 @@
           })
         }).then(({ data }) => {
           if (data && data.code === 0) {
-            console.log(data)
+            // console.log(data)
             this.userTableData = data.data.list
             this.totalPage = data.data.total
+            if (data.data.list.length == 0) {
+              this.disabled = true
+            } else {
+              this.disabled = false
+            }
           } else {
             this.userTableData = []
             this.totalPage = 0
@@ -167,17 +182,17 @@
         this.getCustomList()
       },
       // 修改个人、企业
-      perEnterEditBtn(row) {
-        let arr = this.arr; //传id和当前修改的是企业还是个人
-        this.updateVisible = true
-        // console.log(id,type)
-        this.arr[0] = row.id
-        this.arr[1] = row.user_type
-        this.arr[2] = row.creUserId
-        this.$nextTick(() => {
-          this.$refs.updatecon.updateInit(arr)
-        })
-      },
+      // perEnterEditBtn(row) {
+      //   let arr = this.arr; //传id和当前修改的是企业还是个人
+      //   this.updateVisible = true
+      //   // console.log(id,type)
+      //   this.arr[0] = row.id
+      //   this.arr[1] = row.user_type
+      //   this.arr[2] = row.creUserId
+      //   this.$nextTick(() => {
+      //     this.$refs.updatecon.updateInit(arr)
+      //   })
+      // },
       // 查看个人、企业
       perPriseSee(row) {
         let arr = this.arr; //传id和当前修改的是企业还是个人
@@ -214,6 +229,26 @@
         this.$nextTick(() => {
           this.$refs.refundcon.refundInit(arr)
         })
+      },
+
+      // 导出
+      exportUser() {
+        let startTime;
+        let endTime;
+        if (this.searchData.dateTime == null) {
+          startTime = ""
+          endTime = ""
+        } else {
+          if (this.searchData.dateTime.length == 0) {
+            startTime = ""
+            endTime = ""
+          } else {
+            startTime = this.searchData.dateTime[0]
+            endTime = this.searchData.dateTime[1]
+          }
+        }
+
+        window.open(this.$http.adornUrl(`agent/cust/custListExport?token=${this.$cookie.get('token')}&currentPage=${this.pageIndex}&pageSize=${this.pageSize}&custType=${this.searchData.custType}&custName=${this.searchData.custName}&agentName=${this.searchData.agentName}&mobile=${this.searchData.mobile}&startTimeStr=${startTime}&endTimeStr=${endTime}`))
       }
     }
   }

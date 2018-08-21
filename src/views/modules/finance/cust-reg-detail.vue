@@ -66,7 +66,7 @@
         },
         methods: {
             regDetailInit(id) {
-                console.log("id" + id)
+                // console.log("id" + id)
                 this.regMethodsvisible = true
                 
             }

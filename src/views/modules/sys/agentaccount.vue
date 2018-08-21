@@ -21,7 +21,7 @@
                 </el-table-column>
                 <el-table-column prop="realName" label=" 用户名称" align="center">
                 </el-table-column>
-                <el-table-column prop="mobile" label="手机号码" width="100" align="center">
+                <el-table-column prop="mobile" label="手机号码" width="120" align="center">
                 </el-table-column>
                 <!-- <el-table-column prop="password" label="密码" width="90" align="center">
                 </el-table-column> -->

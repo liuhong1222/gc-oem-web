@@ -13,13 +13,13 @@
                         <el-form-item label="代理商名称：">
                             <el-input v-model="basicdataForm.agentName" placeholder="代理商名称" readonly></el-input>
                         </el-form-item>
-                        <el-form-item label="logo：">
+                        <el-form-item label="logo：" id="logoseeImg">
                             <el-upload class="avatar-uploader" action="" :show-file-list="false" disabled>
                                 <img v-if="logoImageUrl" :src="logoImageUrl" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </el-form-item>
-                        <el-form-item label="icon：">
+                        <el-form-item label="icon：" id="iconseeImg">
                             <el-upload class="avatar-uploader" action="" :show-file-list="false" disabled>
                                 <img v-if="iconImageUrl" :src="iconImageUrl" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -144,6 +144,7 @@
 </template>
 
 <script>
+    import imgUrl from '@/utils/imgUrl'
     export default {
         data() {
             return {
@@ -202,7 +203,7 @@
         },
         methods: {
             seeInit({ agentId }) {
-                console.log('查看弹出层')
+                // console.log('查看弹出层')
                 this.dialogVisible = true
                 this.agentId = agentId;
                 // 获取基本信息
@@ -216,11 +217,10 @@
                         this.basicdataForm.ageagentNamentName = data.data[0].company_name
                         this.basicdataForm.dxName = data.data[0].sms_sign
                         this.basicdataForm.domaintName = data.data[0].name
-                        this.logoImageUrl = data.data[0].logo_url
-                        this.iconImageUrl = data.data[0].icon_url
-                        this.dqImageUrl = data.data[0].sign_url
-                        this.gzImageUrl = data.data[0].seal_url
-
+                        this.logoImageUrl = imgUrl.imgUrl + data.data[0].logo_url
+                        this.iconImageUrl = imgUrl.imgUrl + data.data[0].icon_url
+                        this.dqImageUrl = imgUrl.imgUrl + data.data[0].sign_url
+                        this.gzImageUrl = imgUrl.imgUrl + data.data[0].seal_url
                     }
                 })
             },
@@ -245,7 +245,7 @@
                         method: 'post',
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
-                            console.log(data)
+                            // console.log(data)
                             this.customerDataForm.kfLine = data.data.hotline
                             this.customerDataForm.keyqq = data.data.qq
                             this.customerDataForm.businNO = data.data.bizNo
@@ -257,7 +257,7 @@
                         method: 'post',
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
-                            console.log(data)
+                            // console.log(data)
                             this.contractdataForm.comName = data.data.companyName
                             this.contractdataForm.comAdress = data.data.companyAddress
                             this.contractdataForm.comAccount = data.data.accountNo
@@ -272,7 +272,7 @@
                         method: 'post',
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
-                            console.log(data)
+                            // console.log(data)
                             this.alipaydataForm.aliappid = data.data.appid
                             this.alipaydataForm.alicallUrl = data.data.callUrl
                             this.alipaydataForm.alicallbackUrl = data.data.callbackUrl
@@ -301,6 +301,18 @@
 </script>
 
 <style lang="scss">
+    #logoseeImg .el-upload,
+    #logoseeImg .el-upload .avatar {
+        width: 150px;
+        height: 50px;
+    }
+
+    #iconseeImg .el-upload,
+    #iconseeImg .el-upload .avatar {
+        width: 40px;
+        height: 40px;
+    }
+
     .mainAess .el-input__inner {
         border: none
     }

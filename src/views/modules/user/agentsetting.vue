@@ -5,7 +5,7 @@
             <el-form :inline="true" :model="searchData">
                 <el-form-item label="创建时间：">
                     <el-date-picker v-model="searchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd">
+                        value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="代理商名称：" style="margin-left:5px;">
@@ -32,6 +32,10 @@
                 </el-table-column>
                 <el-table-column prop="icon_url" label="ICON" align="center">
                 </el-table-column>
+                <el-table-column prop="sign_url" label="代理商签字" align="center">
+                </el-table-column>
+                <el-table-column prop="seal_url" label="公章" align="center">
+                </el-table-column>
                 <el-table-column prop="sms_sign" label="短信签名" align="center">
                 </el-table-column>
                 <el-table-column prop="dayuming" label="代理商域名" align="center">
@@ -55,8 +59,8 @@
                         <div>api id:{{scope.row.aliAppid}}</div>
                         <div>支付调用地址:{{scope.row.alicall_url}}</div>
                         <div>支付回调地址:{{scope.row.alicallback_url}}</div>
-                        <div>公匙:{{scope.row.alipublic_key}}</div>
-                        <div>私匙:{{scope.row.aliprivate_key}}</div>
+                        <div>支付宝公钥:{{scope.row.alipublic_key}}</div>
+                        <div>应用私钥:{{scope.row.aliprivate_key}}</div>
                     </template>
                 </el-table-column>
                 <el-table-column prop="weiinfo" label="微信资料" align="center" width="250">
@@ -78,10 +82,7 @@
                         <div>电话:{{scope.row.htmobile}}</div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sign_url" label="代理商签字" align="center">
-                </el-table-column>
-                <el-table-column prop="seal_url" label="公章" align="center">
-                </el-table-column>
+
                 <el-table-column fixed="right" label="操作" align="center" width="130">
                     <template slot-scope="scope">
                         <el-button type="text" size="small" @click=seedialog(scope.row)>查看</el-button>
@@ -126,6 +127,11 @@
                 pageIndex: 1,
                 pageSize: 3,
                 totalPage: 0,
+                pickerOptions0: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now() - 8.64e6
+                    }
+                }
             }
         },
         components: {
@@ -159,7 +165,7 @@
                     })
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
-                        console.log(data.data)
+                        // console.log(data.data)
                         this.dataList = data.data.list;
                         this.totalPage = data.data.total;
                     } else {

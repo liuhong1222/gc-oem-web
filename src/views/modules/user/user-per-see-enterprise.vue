@@ -88,6 +88,7 @@
     </div>
 </template>
 <script>
+     import imgUrl from '@/utils/imgUrl'
     export default {
         data() {
             return {
@@ -125,9 +126,9 @@
         },
         methods: {
             seeInit(arr) {
-                console.log(arr[0])  //id
-                console.log(arr[1])  //个人 （0，null） 还是企业（1）
-                console.log(arr[2])  //creUserId
+                // console.log(arr[0])  //id
+                // console.log(arr[1])  //个人 （0，null） 还是企业（1）
+                // console.log(arr[2])  //creUserId
                 if (arr[1] == 0 || arr[1] == null) {  //个人
                     this.perseeVisible = true
                     this.perseeDataForm.id = arr[0]
@@ -138,11 +139,11 @@
                         params: this.$http.adornParams()
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
-                            console.log(data)
+                            // console.log(data)
                             this.perseeDataForm.mobile=data.mobile
                             this.perseeDataForm.peremail = data.mail
-                            this.imageUrlFace = data.idCardInfo.faceUrl
-                            this.imageUrlback = data.idCardInfo.backUrl
+                            this.imageUrlFace = imgUrl.imgUrl+data.idCardInfo.faceUrl
+                            this.imageUrlback = imgUrl.imgUrl+data.idCardInfo.backUrl
                             this.perseeDataForm.custNum = data.idCardInfo.creUserId
                             this.perseeDataForm.custNanme = data.idCardInfo.username
                             this.perseeDataForm.perIdno = data.idCardInfo.idno
@@ -165,9 +166,9 @@
                         params: this.$http.adornParams()
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
-                            console.log(data)
+                            // console.log(data)
                             this.seepriseDataForm.mobile = data.mobile
-                            this.priseimageUrl = data.businessLicenceInfo.pictureUrl
+                            this.priseimageUrl = imgUrl.imgUrl+data.businessLicenceInfo.pictureUrl
                             this.seepriseDataForm.prisecustNum = data.businessLicenceInfo.creUserId
                             this.seepriseDataForm.priseComName = data.businessLicenceInfo.name
                             this.seepriseDataForm.businNum = data.businessLicenceInfo.regnum

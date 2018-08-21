@@ -2,8 +2,8 @@
     <el-dialog :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="visible" :before-close="closeDialog">
         <el-form :model="dataForm" :rules="datarules" ref="dataForm" label-width="150px" class="demo-ruleForm" :label-position="labelPosition">
             <h3>基本信息</h3>
-            <el-form-item label="代理商编号：" prop="agentNumber">
-                <el-input v-model="dataForm.agentNumber" placeholder="代理商编号"></el-input>
+            <el-form-item label="代理商编号：" prop="agentNumber" v-show="agentNumberFlag" id="agentNumberCss">
+                <el-input v-model="dataForm.agentNumber" placeholder="代理商编号" readonly></el-input>
             </el-form-item>
             <el-form-item label="营业执照：" prop="">
                 <el-upload class="avatar-uploader" :action="priseurl" accept="image/jpeg,image/jpg,image/png" :show-file-list="false" :on-success="perisehandleAvatarSuccess"
@@ -15,7 +15,7 @@
             </el-form-item>
 
             <el-form-item label="商户编号：" prop="businNumber">
-                <el-input v-model="dataForm.businNumber" placeholder="商户编号"></el-input>
+                <el-input v-model.number="dataForm.businNumber" placeholder="商户编号" maxlength="6"></el-input>
             </el-form-item>
             <el-form-item label="公司名称：" prop="companyName">
                 <el-input v-model="dataForm.companyName" placeholder="公司名称"></el-input>
@@ -29,7 +29,7 @@
             <el-form-item label="营业执照号：" prop="businNum">
                 <el-input v-model="dataForm.businNum" placeholder="营业执照号"></el-input>
             </el-form-item>
-            <el-form-item label="营业期限：" prop="busindate">
+            <el-form-item label="营业期限：" prop="busindate1">
                 <el-input v-model="dataForm.busindate1" placeholder="2018-08-18" style="width:35%;"></el-input>至
                 <el-input v-model="dataForm.busindate2" placeholder="2020-12-25" style="width:35%;"></el-input>
             </el-form-item>
@@ -38,7 +38,7 @@
                 <el-input v-model="dataForm.username" placeholder="联系人姓名"></el-input>
             </el-form-item>
             <el-form-item label="联系人手机号：" prop="mobile">
-                <el-input v-model="dataForm.mobile" placeholder="联系人手机号"></el-input>
+                <el-input v-model="dataForm.mobile" placeholder="联系人手机号" maxlength="11"></el-input>
             </el-form-item>
             <el-form-item label="联系人邮箱：" prop="email">
                 <el-input v-model="dataForm.email" placeholder="联系人邮箱"></el-input>
@@ -48,23 +48,25 @@
             </el-form-item>
             <h3>账号信息</h3>
             <el-form-item label="登录账号：" prop="loginAcc">
-                <el-input v-model="dataForm.loginAcc" placeholder="登录账号"></el-input>
+                <el-input v-model="dataForm.loginAcc" placeholder="登录账号" readonly></el-input>
             </el-form-item>
             <el-form-item label="初始密码：" prop="pwd">
                 <el-input v-model="dataForm.pwd" placeholder="初始密码"></el-input>
             </el-form-item>
             <h3>代理商级别</h3>
             <el-form-item label="代理级别：" prop="agencylevel">
-                <el-select v-model="dataForm.agencylevel" placeholder="请选择代理级别">
+                <el-select v-model="dataForm.agencylevel" placeholder="请选择代理级别" @change="changeLevel(dataForm.agencylevel)">
                     <el-option :value="item.id" :label="item.name" v-for="(item,index) in agencylevelArr" :key="index">
                     </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="单价：" prop="price">
                 <el-input v-model="dataForm.price" placeholder="单价"></el-input>
+                <span>元/条</span>
             </el-form-item>
-            <el-form-item label="允许超出条数：" prop="allowCounts">
-                <el-input v-model="dataForm.allowCounts" placeholder="允许超出条数"></el-input>
+            <el-form-item label="预警条数 ：" prop="allowCounts">
+                <el-input v-model="dataForm.allowCounts" placeholder="空号预警条数 "></el-input>
+                <span>条</span>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -76,6 +78,7 @@
 </template>
 <script>
     import { isEmail, isMobile } from '@/utils/validate'
+    import imgUrl from '@/utils/imgUrl'
     export default {
         data() {
             var validateMobile = (rule, value, callback) => {
@@ -86,6 +89,7 @@
                 }
             }
             return {
+                agentNumberFlag: false,
                 priseimageUrl: "",
                 priseurl: "",
                 licensePicNo: '',
@@ -114,11 +118,12 @@
 
                 },
                 datarules: {
-                    agentNumber: [
-                        { required: true, message: '请输入代理商编号', trigger: 'blur' }
-                    ],
+                    // agentNumber: [
+                    //     { required: true, message: '请输入代理商编号', trigger: 'blur' }
+                    // ],
                     businNumber: [
-                        { required: true, message: '请输入商家编号', trigger: 'blur' }
+                        { required: true, message: '请输入商家编号', trigger: 'blur' },
+                        { type: 'number', message: '商家编号必须为数字，并且长度最大为6' },
                     ],
                     companyName: [
                         { required: true, message: '请输入公司名称', trigger: 'blur' }
@@ -132,9 +137,9 @@
                     businNum: [
                         { required: true, message: '请输入营业执照号', trigger: 'blur' }
                     ],
-                    // busindate: [
-                    //     { required: true, message: '请输入营业期限', trigger: 'blur' }
-                    // ],
+                    busindate1: [
+                        { required: true, message: '请输入营业期限', trigger: 'blur' }
+                    ],
                     username: [
                         { required: true, message: '请输入联系人姓名', trigger: 'blur' }
                     ],
@@ -171,9 +176,10 @@
         methods: {
             showInit(id) {
                 this.dataForm.id = id || 0
+                this.agentNumberFlag = false
                 this.visible = true
-                console.log('id' + id)
-                console.log(this.$http.adornParams())
+                // console.log('id' + id)
+                // console.log(this.$http.adornParams())
                 this.$http({
                     url: this.$http.adornUrl(`agent/level/list?token=${this.$cookie.get('token')}`),
                     method: 'get',
@@ -190,14 +196,16 @@
                 })
                 this.priseurl = this.$http.adornUrl(`agent/agentInfo/license/upload?token=${this.$cookie.get('token')}`)
                 if (this.dataForm.id) {
-
+                    this.agentNumberFlag = true
                     this.$http({
                         url: this.$http.adornUrl(`agent/agentInfo/detail?token=${this.$cookie.get('token')}&agentId=${this.dataForm.id}`),
                         method: 'get',
                         params: this.$http.adornParams()
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
-                            this.priseimageUrl = data.data.licenseUrl
+                            // console.log(imgUrl.imgUrl)
+                            // console.log(imgUrl.imgUrl + data.data.licenseUrl)
+                            this.priseimageUrl = imgUrl.imgUrl + data.data.licenseUrl
                             this.dataForm.agentNumber = data.data.agentNo
                             this.dataForm.businNumber = data.data.mchId
                             this.dataForm.companyName = data.data.companyName
@@ -213,7 +221,7 @@
                             this.dataForm.loginAcc = data.data.mobile
                             this.dataForm.agencylevel = data.data.levelId
                             this.dataForm.price = data.data.price
-                            this.dataForm.allowCounts = data.data.emptyCreditNumber
+                            this.dataForm.allowCounts = data.data.emptyWarnNumber
                         }
                     })
                 }
@@ -246,10 +254,9 @@
                                 'password': this.dataForm.pwd,
                                 'levelId': this.dataForm.agencylevel,
                                 'price': this.dataForm.price,
-                                'emptyCreditNumber': this.dataForm.allowCounts
+                                'emptyWarnNumber': this.dataForm.allowCounts
                             })
                         }).then(({ data }) => {
-                            console.log(data)
                             if (data && data.code === 0) {
                                 this.$message({
                                     message: '操作成功',
@@ -264,13 +271,14 @@
                                 this.$message.error(data.msg)
                             }
                         })
+                    } else {
+                        this.$message.error('请完善信息!')
                     }
                 })
             },
             beforeAvatarUpload(file) {
                 const isJPG = (file.type === 'image/jpeg') || (file.type == 'image/png') || (file.type == 'image/jpg');
                 const isLt2M = file.size / 1024 / 1024 < 2;
-
                 if (!isJPG) {
                     this.$message.error('上传头像图片只能是 JPG 格式!');
                 }
@@ -280,15 +288,27 @@
                 return isJPG && isLt2M;
             },
             perisehandleAvatarSuccess(res, file) {
-                console.log(res.data.licensePicNo)
+                // console.log(res.data.licensePicNo)
                 this.priseimageUrl = URL.createObjectURL(file.raw);
                 this.licensePicNo = res.data.licensePicNo
+                // console.log(this.priseimageUrl)
             },
             closeDialog(done) {
                 done();
                 this.priseimageUrl = ""
                 this.dataForm.busindate1 = ""
                 this.dataForm.busindate2 = ""
+            },
+            changeLevel(val) {
+                let arr = [];
+                arr = this.agencylevelArr
+                // console.log(arr)
+                for (let i = 0; i < arr.length; i++) {
+                    if (arr[i].id == val) {
+                        this.dataForm.price = arr[i].price
+                        this.dataForm.allowCounts = arr[i].emptyWarnNumber
+                    }
+                }
             }
         }
     }
@@ -320,5 +340,9 @@
         width: 100px;
         height: 100px;
         display: block;
+    }
+
+    #agentNumberCss .el-input__inner {
+        border: none
     }
 </style>

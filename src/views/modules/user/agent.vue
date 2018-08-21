@@ -23,7 +23,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="getDataList()">查询</el-button>
-                    <el-button type="primary" @click="exporTable">导出</el-button>
+                    <el-button type="primary" @click="exporTable" :disabled="disabled">导出</el-button>
                     <el-button v-if="isAuth('sys:user:save')" type="primary" @click="addUpdateAgent()">新增代理商</el-button>
                 </el-form-item>
             </el-form>
@@ -40,7 +40,7 @@
                 </el-table-column>
                 <el-table-column prop="statusName" label=" 代理商状态" width="90" align="center">
                 </el-table-column>
-                <el-table-column prop="createTime" label="日期" width="150" align="center">
+                <el-table-column prop="createTime" label="创建时间" width="150" align="center">
                 </el-table-column>
                 <el-table-column prop="canUpgradeName" label="能否升级" width="80" align="center">
                 </el-table-column>
@@ -52,7 +52,7 @@
                 </el-table-column>
                 <el-table-column prop="emptyBalance" label="剩余条数" width="120" align="center">
                 </el-table-column>
-                <el-table-column prop="emptyCreditNumber" label="允许超出条数" width="120" align="center">
+                <el-table-column prop="emptyWarnNumber" label="预警条数" width="120" align="center">
                 </el-table-column>
                 <el-table-column prop="mobile" label="联系电话" width="120" align="center">
                 </el-table-column>
@@ -67,7 +67,7 @@
             </el-table>
         </div>
         <div class="agentPage">
-            <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex" :page-sizes="[3, 5]"
+            <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex" :page-sizes="[10, 20,30,50]"
                 :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
             </el-pagination>
         </div>
@@ -79,6 +79,7 @@
                 </el-form-item>
                 <el-form-item label="充值单价" prop="chPrice">
                     <el-input v-model.number="chdataForm.chPrice" placeholder="输入充值单价，自动计算条数"></el-input>
+                    <span>元/条</span>
                 </el-form-item>
                 <el-form-item label="充值金额" prop="chMoney">
                     <el-input v-model.number="chdataForm.chMoney" placeholder="输入充值金额，自动计算条数"></el-input>
@@ -86,7 +87,7 @@
                 </el-form-item>
                 <el-form-item label="充值条数" prop="chCounts">
                     <el-input v-model.number="chdataForm.chCounts" placeholder="请输入充值条数"></el-input>
-                    <span>条</span>
+                    <span>万条</span>
                 </el-form-item>
                 <el-form-item label="入账类型" prop="type">
                     <el-select v-model="chdataForm.type" placeholder="入账类型">
@@ -129,6 +130,7 @@
                 account: '',
                 cdAgentId: '',
                 jinorQiId: '',
+                disabled: false,
                 agentseeVisible: false,
                 jinShow: false,
                 qiShow: false,
@@ -147,7 +149,7 @@
                 },
                 agentTableData: [],
                 pageIndex: 1,
-                pageSize: 3,
+                pageSize: 10,
                 totalPage: 0,
                 dataListLoading: false,
                 chdataFormVisible: false,
@@ -193,6 +195,7 @@
                         this.chdataForm.chCounts = ""
                     }
                 },
+
                 deep: true
             }
         },
@@ -207,7 +210,6 @@
 
             // 获取代理商列表
             getDataList() {
-                console.log(this.searchData.dateTime)
                 this.dataListLoading = true
                 this.$http({
                     url: this.$http.adornUrl(`agent/agentInfo/list?token=${this.$cookie.get('token')}`),
@@ -223,9 +225,13 @@
                     })
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
-                        console.log(data)
                         this.agentTableData = data.data.list
                         this.totalPage = data.data.total
+                        if (data.data.list.length == 0) {
+                            this.disabled = true
+                        } else {
+                            this.disabled = false
+                        }
                     } else {
                         this.agentTableData = []
                         this.totalPage = 0
@@ -252,10 +258,25 @@
                     return ''
                 }
             },
+
+            // 导出 
             exporTable() {
-                window.open(this.$http.adornUrl(`agent/agentInfo/list/export?token=${this.$cookie.get('token')}
-                &currentPage=${this.pageIndex}&pageSize=${this.pageSize}&companyName=${this.searchData.agentName}&status=${this.searchData.status}
-                &mobile=${this.searchData.mobile}&startTime=${'' || this.searchData.dateTime == null ? '' : this.searchData.dateTime[0]}&endTime=${'' || this.searchData.dateTime == null ? '' : this.searchData.dateTime[1]}`))
+                let startTime;
+                let endTime;
+                if (this.searchData.dateTime == null) {
+                    startTime = ""
+                    endTime = ""
+                } else {
+                    if (this.searchData.dateTime.length == 0) {
+                        startTime = ""
+                        endTime = ""
+                    } else {
+                        startTime = this.searchData.dateTime[0]
+                        endTime = this.searchData.dateTime[1]
+                    }
+                }
+
+                window.open(this.$http.adornUrl(`agent/agentInfo/list/export?token=${this.$cookie.get('token')}&currentPage=${this.pageIndex}&pageSize=${this.pageSize}&companyName=${this.searchData.agentName}&status=${this.searchData.status}&mobile=${this.searchData.mobile}&startTime=${startTime}&endTime=${endTime}`))
             },
             addUpdateAgent(id) {
                 this.addSeeUpdateVisible = true
@@ -330,7 +351,6 @@
 
                     })
                 }
-
             },
             // 提交充值
             chsubmit() {
@@ -347,7 +367,7 @@
                                 'payType': this.chdataForm.type,
                             })
                         }).then(({ data }) => {
-                            console.log(data)
+                            // console.log(data)
                             if (data && data.code === 0) {
                                 this.$message({
                                     message: '操作成功',

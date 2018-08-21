@@ -5,7 +5,7 @@
             <el-form :inline="true" :model="consumeSearchData">
                 <el-form-item label="创建时间：">
                     <el-date-picker v-model="consumeSearchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd">
+                        value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="客户手机号：" style="margin-left:35px;">
@@ -36,7 +36,7 @@
                 </el-table-column>
                 <el-table-column prop="consumeTime" label="消耗时间" align="center">
                 </el-table-column>
-                <el-table-column prop="number" label="消耗条数" width="120" align="center">
+                <el-table-column prop="number" label="消耗条数（条）" width="120" align="center">
                 </el-table-column>
                 <el-table-column prop="userMobile" label="手机号" width="100" align="center">
                 </el-table-column>
@@ -66,6 +66,11 @@
                 pageIndex: 1,
                 pageSize: 3,
                 totalPage: 0,
+                pickerOptions0: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now() - 8.64e6
+                    }
+                }
             }
         },
         activated() {

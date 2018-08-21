@@ -112,13 +112,13 @@
                 })
             },
             refundInit(arr) {
-                console.log(arr[0])
-                console.log(arr[1])
+                // console.log(arr[0])
+                // console.log(arr[1])
 
                 this.refundDataForm.creUserId = arr[2]
                 this.refundDataForm.userName = arr[3]
-                console.log(this.refundDataForm.userName)
-                console.log(this.refundDataForm.creUserId)
+                // console.log(this.refundDataForm.userName)
+                // console.log(this.refundDataForm.creUserId)
                 if (arr[1] == 0 || arr[1] == null) {  //个人
                     this.refundVisible = true
                     this.packagePro()
@@ -136,7 +136,7 @@
             refundDataFormTrue() {
                 this.$refs['refundDataFormRef'].validate((valid) => {
                     if (valid) {
-                        console.log('表单验证通过')
+                        // console.log('表单验证通过')
                         this.$http({
                             url: this.$http.adornUrl(`agent/cust/refunds?token=${this.$cookie.get('token')}`),
                             method: 'post',

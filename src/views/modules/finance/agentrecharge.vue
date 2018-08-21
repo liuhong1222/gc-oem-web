@@ -5,7 +5,7 @@
             <el-form :inline="true" :model="OEMSearchData">
                 <el-form-item label="创建时间：">
                     <el-date-picker v-model="OEMSearchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd">
+                        value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="代理商名称：" style="margin-left:25px;">
@@ -44,7 +44,7 @@
                 </el-table-column>
                 <el-table-column prop="number" label="条数" align="center">
                 </el-table-column>
-                <el-table-column prop="money" label="金额" align="center">
+                <el-table-column prop="money" label="金额（元）" align="center">
                 </el-table-column>
                 <el-table-column prop="payTypeName" label="方式" width="120" align="center">
                 </el-table-column>
@@ -62,7 +62,7 @@
     export default {
         data() {
             return {
-                disabled:false,
+                disabled: false,
                 dataListLoading: false,
                 OEMSearchData: {
                     dateTime: [],
@@ -73,6 +73,11 @@
                 pageIndex: 1,
                 pageSize: 3,
                 totalPage: 0,
+                pickerOptions0: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now() - 8.64e6
+                    }
+                }
             }
         },
         activated() {

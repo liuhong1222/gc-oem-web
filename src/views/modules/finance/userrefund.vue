@@ -5,11 +5,11 @@
             <el-form :inline="true" :model="refundSearchData">
                 <el-form-item label="申请时间：">
                     <el-date-picker v-model="refundSearchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd">
+                        value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="客户手机号：" style="margin-left:35px;">
-                    <el-input v-model="refundSearchData.mobile" placeholder="客户名称" clearable></el-input>
+                    <el-input v-model="refundSearchData.mobile" placeholder="客户手机号" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="代理商名称：" style="margin-left:-15px;">
                     <el-input v-model="refundSearchData.agentName" placeholder="代理商名称" clearable></el-input>
@@ -72,6 +72,11 @@
                 pageIndex: 1,
                 pageSize: 3,
                 totalPage: 0,
+                pickerOptions0: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now() - 8.64e6
+                    }
+                }
             }
         },
         activated() {

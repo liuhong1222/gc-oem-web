@@ -25,23 +25,23 @@
                             <el-input v-model="basicdataForm.agentName" placeholder="代理商名称" readonly></el-input>
                         </el-form-item>
                         <br />
-                        <el-form-item label="logo：">
+                        <el-form-item label="logo：" id="logoImgSize">
                             <el-upload class="upload-demo" drag :show-file-list="true" name="file" :action="actionLogo()" :on-success="handleAvatarSuccessLogo"
                                 :on-error="errorLogo" :on-progress="onProgressLogo" :before-upload="beforeAvatarUploadLogo" :data="logoQueryParams"
                                 enctype="multipart/form-data" :limit="1">
                                 <img v-if="imageUrlLogo" :src="imageUrlLogo" class="avatar">
-                                <i class="el-icon-upload"></i>
-                                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M，长140px，宽36px</div>
+                                <i class="el-icon-plus "></i>
+                                <!-- <div class="el-upload__text" style="margin-top:-28px"><em>点击上传</em></div> -->
+                                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M，长140px，宽36px（再次上传请删除上一次上传列表）</div>
                             </el-upload>
                         </el-form-item><br />
-                        <el-form-item label="icon：">
+                        <el-form-item label="icon：" id="iconImgSize">
                             <el-upload class="upload-demo" drag :show-file-list="true" :on-success="handleAvatarSuccessIcon" :on-progress="onProgressIcon"
                                 :before-upload="beforeAvatarUploadIcon" :action="actionIcon()" :data="iconQueryParams" :on-error="errorIcon">
                                 <img v-if="imageUrlIcon" :src="imageUrlIcon" class="avatar" :limit="1">
-                                <i class="el-icon-upload"></i>
-                                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M，长40px，宽40px</div>
+                                <i class="el-icon-plus"></i>
+                                <!-- <div class="el-upload__text"><em>点击上传</em></div> -->
+                                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M，长40px，宽40px（再次上传请删除上一次上传列表）</div>
                             </el-upload>
                         </el-form-item><br />
                         <el-form-item label="代表签字：">
@@ -49,9 +49,9 @@
                                 :on-error="errorSignatures" :on-progress="onProgressSignatures" :before-upload="beforeAvatarUploadSignatures"
                                 :data="SignaturesQueryParams" enctype="multipart/form-data" :limit="1">
                                 <img v-if="imageUrlSignatures" :src="imageUrlSignatures" class="avatar">
-                                <i class="el-icon-upload"></i>
-                                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M</div>
+                                <i class="el-icon-plus"></i>
+                                <!-- <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div> -->
+                                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M（再次上传请删除上一次上传列表）</div>
                             </el-upload>
                         </el-form-item><br />
                         <el-form-item label="公司红章：">
@@ -59,9 +59,9 @@
                                 :on-error="errorChapter" :on-progress="onProgressChapter" :before-upload="beforeAvatarUploadChapter"
                                 :data="ChapterQueryParams" enctype="multipart/form-data" :limit="1">
                                 <img v-if="imageUrlChapter" :src="imageUrlChapter" class="avatar">
-                                <i class="el-icon-upload"></i>
-                                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M</div>
+                                <i class="el-icon-plus"></i>
+                                <!-- <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div> -->
+                                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M（再次上传请删除上一次上传列表）</div>
                             </el-upload>
                         </el-form-item><br />
                         <el-form-item label="短信签名：" prop="messSign">
@@ -153,10 +153,10 @@
                         <el-form-item label="支付回调地址">
                             <el-input v-model="alipaydataForm.alicallbackUrl" placeholder="支付回调地址"></el-input>
                         </el-form-item>
-                        <el-form-item label="公钥">
+                        <el-form-item label="支付宝公钥">
                             <el-input type="textarea" v-model="alipaydataForm.alipublicKey" placeholder="公钥" :rows="5"></el-input>
                         </el-form-item>
-                        <el-form-item label="私钥">
+                        <el-form-item label="应用私钥">
                             <el-input type="textarea" v-model="alipaydataForm.aliprivateKey" placeholder="私钥" :rows="5"></el-input>
                         </el-form-item>
                         <el-button style="margin-top: 12px;" @click="lastStep">上一步</el-button>
@@ -191,7 +191,7 @@
         <!-- 查看 -->
         <div v-show="seeflagVisibile" class="seeBasic">
             <el-collapse v-model="activeNames" @change="handleChange" accordion>
-                <el-collapse-item title="基本信息" name="1">
+                <el-collapse-item title="基本信息 ✚" name="1">
                     <el-form :model="basicdataForm" ref="basicdataForm" label-width="150px" class="demo-ruleForm" :label-position="labelPosition">
                         <el-form-item label="代理商序号：">
                             <el-input v-model="basicdataForm.agentId" placeholder="代理商序号" readonly></el-input>
@@ -202,13 +202,13 @@
                         <el-form-item label="代理商名称：">
                             <el-input v-model="basicdataForm.agentName" placeholder="代理商名称" readonly></el-input>
                         </el-form-item>
-                        <el-form-item label="logo：">
+                        <el-form-item label="logo：" id="logoseeImg">
                             <el-upload class="avatar-uploader" action="" :show-file-list="false" disabled>
                                 <img v-if="logoImageUrl" :src="logoImageUrl" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </el-form-item>
-                        <el-form-item label="icon：">
+                        <el-form-item label="icon：" id="iconseeImg">
                             <el-upload class="avatar-uploader" action="" :show-file-list="false" disabled>
                                 <img v-if="iconImageUrl" :src="iconImageUrl" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -235,7 +235,7 @@
                     </el-form>
 
                 </el-collapse-item>
-                <el-collapse-item title="域名备案信息" name="2">
+                <el-collapse-item title="域名备案信息 ✚" name="2">
                     <el-form label-width="180px" :model="domainDataForm" ref="domaindataList" class="demo-ruleForm">
                         <el-form-item label="版权信息：">
                             <el-input v-model="domainDataForm.copyinfo" placeholder="版权信息" readonly></el-input>
@@ -254,7 +254,7 @@
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
-                <el-collapse-item title="客服资料" name="3">
+                <el-collapse-item title="客服资料 ✚" name="3">
                     <el-form label-width="110px" :model="customerDataForm" ref="customerdataList" class="demo-ruleForm">
                         <el-form-item label="客服热线：">
                             <el-input v-model="customerDataForm.kfLine" placeholder="客服热线" readonly></el-input>
@@ -267,7 +267,7 @@
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
-                <el-collapse-item title="合同资料" name="4">
+                <el-collapse-item title="合同资料 ✚" name="4">
                     <el-form :model="contractdataForm" ref="contractdataFormref" label-width="110px" class="demo-ruleForm">
                         <el-form-item label="公司名称">
                             <el-input v-model="contractdataForm.comName" placeholder="公司名称" readonly></el-input>
@@ -289,7 +289,7 @@
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
-                <el-collapse-item title=" 支付宝资料" name="5">
+                <el-collapse-item title="支付宝资料 ✚" name="5">
                     <el-form :model="alipaydataForm" ref="alipaydataFormref" label-width="110px" class="demo-ruleForm">
                         <el-form-item label="appid">
                             <el-input v-model="alipaydataForm.aliappid" placeholder="appid" readonly></el-input>
@@ -308,7 +308,7 @@
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
-                <el-collapse-item title=" 微信资料" name="6">
+                <el-collapse-item title="微信资料 ✚" name="6">
                     <el-form :model="wxdataForm" ref="wxdataFormref" label-width="110px" class="demo-ruleForm">
                         <el-form-item label="微信调用地址">
                             <el-input v-model="wxdataForm.wxcallUrl" placeholder="微信调用地址" readonly></el-input>
@@ -334,11 +334,12 @@
 </template>
 
 <script>
+    import imgUrl from '@/utils/imgUrl'
     export default {
         data() {
             return {
                 flagVisibile: false,
-                seeflagVisibile: true,
+                seeflagVisibile: false,
                 labelPosition: 'right',
                 logoImageUrl: '',
                 iconImageUrl: '',
@@ -348,6 +349,10 @@
                 activeNames: ['1'],
                 active: 0,
                 dataList: [],
+                logoUrl: '',
+                iconUrl: '',
+                signUrl: '',
+                sealUrl: '',
                 basicdataForm: { //基本信息
                     agentId: '',
                     busicId: '',
@@ -400,7 +405,8 @@
                 customerDataForm: {  //客服资料信息
                     kfLine: '',
                     keyqq: '',
-                    businNO: ''
+                    businNO: '',
+                    id: ''  //后端返回的id
                 },
                 customerDatarules: {
                     kfLine: [
@@ -420,6 +426,7 @@
                     openBank: '',
                     zipcode: '',
                     phone: '',
+                    id: ''  //后端返回的id
                 },
                 contractdatarules: {
                     comName: [
@@ -446,14 +453,16 @@
                     alicallUrl: '',
                     alicallbackUrl: '',
                     alipublicKey: '',
-                    aliprivateKey: ''
+                    aliprivateKey: '',
+                    id: ''  //后端返回的id
                 },
                 wxdataForm: {
                     wxkey: '',
                     wxappid: '',
                     wxmchid: '',
                     wxcallbackUrl: '',
-                    wxcallUrl: ''
+                    wxcallUrl: '',
+                    id: ''  //后端返回的id
                 },
                 imageUrlIcon: "",
                 imageUrlLogo: "",
@@ -492,14 +501,20 @@
                     method: 'post',
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
-                        console.log(data)
+                        if (data.data[0].setStatus == 'true') {
+                            this.seeflagVisibile = true
+                            this.flagVisibile = false
+                        } else if (data.data[0].setStatus == 'false') {
+                            this.flagVisibile = true
+                            this.seeflagVisibile = false
+                        }
                         this.basicdataForm.agentId = data.data[0].agentId
                         this.basicdataForm.busicId = data.data[0].agent_no
                         this.basicdataForm.agentName = data.data[0].company_name
-                        this.imageUrlLogo = data.data[0].logo_url
-                        this.imageUrlIcon = data.data[0].icon_url
-                        this.imageUrlSignatures = data.data[0].sign_url
-                        this.imageUrlChapter = data.data[0].seal_url
+                        this.logoImageUrl = imgUrl.imgUrl + data.data[0].logo_url
+                        this.iconImageUrl = imgUrl.imgUrl + data.data[0].icon_url
+                        this.dqImageUrl = imgUrl.imgUrl + data.data[0].sign_url
+                        this.gzImageUrl = imgUrl.imgUrl + data.data[0].seal_url
                         this.basicdataForm.messSign = data.data[0].sms_sign
                         this.basicdataForm.agentDomain = data.data[0].name
                         this.agentId = data.data[0].agentId
@@ -515,15 +530,15 @@
                             method: 'post',
                             params: this.$http.adornParams({
                                 'agentId': this.agentId,
-                                'logo_url': this.imageUrlLogo,
-                                'icon_url': this.imageUrlIcon,
-                                'sign_url': this.imageUrlSignatures,
-                                'seal_url': this.imageUrlChapter,
+                                'logo_url': this.logoUrl,
+                                'icon_url': this.iconUrl,
+                                'sign_url': this.signUrl,
+                                'seal_url': this.sealUrl,
                                 'sms_sign': this.basicdataForm.messSign,
                                 'name': this.basicdataForm.agentDomain
                             })
                         }).then(({ data }) => {
-                            console.log(data)
+                            // console.log(data)
                             if (data && data.code === 0) {
                                 this.getDomain()  //获取域名备案信息
                                 if (this.active++ > 5) this.active = 0;
@@ -543,7 +558,7 @@
                     method: 'post',
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
-                        console.log(data)
+                        // console.log(data)
                         this.domainDataForm.copyinfo = data.data.copyright
                         this.domainDataForm.compAdress = data.data.address
                         this.domainDataForm.telservice = data.data.licence
@@ -572,7 +587,7 @@
                                 'address': this.domainDataForm.compAdress
                             })
                         }).then(({ data }) => {
-                            console.log(data)
+                            // console.log(data)
                             if (data && data.code === 0) {
                                 this.getkfinfo()//获取客服资料
                                 if (this.active++ > 5) this.active = 0;
@@ -592,10 +607,11 @@
                     method: 'post',
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
-                        console.log(data)
+                        // console.log(data)
                         this.customerDataForm.kfLine = data.data.hotline
                         this.customerDataForm.keyqq = data.data.qq
                         this.customerDataForm.businNO = data.data.bizNo
+                        this.customerDataForm.id = data.data.id
                     }
                 })
             },
@@ -609,13 +625,13 @@
                             method: 'post',
                             params: this.$http.adornParams({
                                 'agentId': this.agentId,
-                                'id': this.domainDataForm.id,
+                                'id': this.customerDataForm.id,
                                 'bizNo': this.customerDataForm.businNO,
                                 'qq': this.customerDataForm.keyqq,
                                 'hotline': this.customerDataForm.kfLine
                             })
                         }).then(({ data }) => {
-                            console.log(data)
+                            // console.log(data)
                             if (data && data.code === 0) {
                                 this.getcontractinfo()//获取合同信息
                                 if (this.active++ > 5) this.active = 0;
@@ -634,13 +650,14 @@
                     method: 'post',
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
-                        console.log(data)
+                        // console.log(data)
                         this.contractdataForm.comName = data.data.companyName
                         this.contractdataForm.comAdress = data.data.companyAddress
                         this.contractdataForm.comAccount = data.data.accountNo
                         this.contractdataForm.openBank = data.data.bankName
                         this.contractdataForm.zipcode = data.data.postcode
-                        this.contractdataForm.phone = data.data.mobile
+                        this.contractdataForm.phone = data.data.mobile,
+                            this.contractdataForm.id = data.data.id
                     }
                 })
             },
@@ -653,7 +670,7 @@
                             method: 'post',
                             params: this.$http.adornParams({
                                 'agentId': this.agentId,
-                                'id': this.domainDataForm.id,
+                                'id': this.contractdataForm.id,
                                 'companyName': this.contractdataForm.comName,
                                 'companyAddress': this.contractdataForm.comAdress,
                                 'accountNo': this.contractdataForm.comAccount,
@@ -662,7 +679,7 @@
                                 'mobile': this.contractdataForm.phone
                             })
                         }).then(({ data }) => {
-                            console.log(data)
+                            // console.log(data)
                             if (data && data.code === 0) {
                                 this.getalipay()//支付宝信息
                                 if (this.active++ > 5) this.active = 0;
@@ -682,12 +699,13 @@
                     method: 'post',
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
-                        console.log(data)
+                        // console.log(data)
                         this.alipaydataForm.aliappid = data.data.appid
                         this.alipaydataForm.alicallUrl = data.data.callUrl
                         this.alipaydataForm.alicallbackUrl = data.data.callbackUrl
                         this.alipaydataForm.alipublicKey = data.data.publicKey
                         this.alipaydataForm.aliprivateKey = data.data.privateKey
+                        this.alipaydataForm.id = data.data.id
                     }
                 })
             },
@@ -698,7 +716,7 @@
                     method: 'post',
                     params: this.$http.adornParams({
                         'agentId': this.agentId,
-                        'id': this.domainDataForm.id,
+                        'id': this.alipaydataForm.id,
                         'appid': this.alipaydataForm.aliappid,
                         'callUrl': this.alipaydataForm.alicallUrl,
                         'callbackUrl': this.alipaydataForm.alicallbackUrl,
@@ -727,6 +745,7 @@
                         this.wxdataForm.wxmchid = data.data.mchid
                         this.wxdataForm.wxcallbackUrl = data.data.callbackUrl
                         this.wxdataForm.wxcallUrl = data.data.callUrls
+                        this.wxdataForm.id = data.data.id
                     }
                 })
             },
@@ -739,7 +758,7 @@
                     method: 'post',
                     params: this.$http.adornParams({
                         'agentId': this.agentId,
-                        'id': this.domainDataForm.id,
+                        'id': this.wxdataForm.id,
                         'appid': this.wxdataForm.wxappid,
                         'callUrl': this.wxdataForm.wxcallUrl,
                         'callbackUrl': this.wxdataForm.wxcallbackUrl,
@@ -774,19 +793,42 @@
                 return url;
             },
             beforeAvatarUploadLogo(file) {
-                const isJPG = file.type === "image/jpeg";
+                const isJPG = (file.type === 'image/jpeg') || (file.type == 'image/png') || (file.type == 'image/jpg');
                 const isLt2M = file.size / 1024 / 1024 < 2;
-
                 if (!isJPG) {
-                    this.$message.error("上传头像图片只能是 JPG 格式!");
+                    this.$message.error("上传头像图片只能是 JPG/png 格式!");
                 }
                 if (!isLt2M) {
                     this.$message.error("上传头像图片大小不能超过 2MB!");
                 }
-                return isJPG && isLt2M;
+
+                var _this = this;
+                const imgSize = new Promise(function (resolve, reject) {
+                    var reader = new FileReader();
+                    reader.onload = function (event) {
+                        var image = new Image();
+                        image.onload = function () {
+                            var width = this.width;
+                            var height = this.height;
+                            if (width !== 140) {
+                                _this.$alert('图片宽必须为140!', '提示', { confirmButtonText: '确定' });
+                                reject();
+                            }
+                            if (height !== 36) {
+                                _this.$alert('图片高必须为36!', '提示', { confirmButtonText: '确定' });
+                                reject();
+                            }
+                            resolve();
+                        };
+                        image.src = event.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                });
+
+                return isJPG && isLt2M && imgSize;
             },
             handleAvatarSuccessLogo(res, file) {
-                console.log("xxxx");
+                this.logoUrl = res.data.licenseUrl
                 this.imageUrlLogo = URL.createObjectURL(file.raw);
             },
             errorLogo() {
@@ -801,19 +843,41 @@
                 return url;
             },
             beforeAvatarUploadIcon(file) {
-                const isJPG = file.type === "image/jpeg";
+                const isJPG = (file.type === 'image/jpeg') || (file.type == 'image/png') || (file.type == 'image/jpg');
                 const isLt2M = file.size / 1024 / 1024 < 2;
-
                 if (!isJPG) {
-                    this.$message.error("上传头像图片只能是 JPG 格式!");
+                    this.$message.error("上传头像图片只能是 JPG/png 格式!");
                 }
                 if (!isLt2M) {
                     this.$message.error("上传头像图片大小不能超过 2MB!");
                 }
-                return isJPG && isLt2M;
+                var _this = this;
+                const imgSize = new Promise(function (resolve, reject) {
+                    var reader = new FileReader();
+                    reader.onload = function (event) {
+                        var image = new Image();
+                        image.onload = function () {
+                            var width = this.width;
+                            var height = this.height;
+                            if (width !== 40) {
+                                _this.$alert('图片宽必须为40!', '提示', { confirmButtonText: '确定' });
+                                reject();
+                            }
+                            if (height !== 40) {
+                                _this.$alert('图片高必须为40!', '提示', { confirmButtonText: '确定' });
+                                reject();
+                            }
+                            resolve();
+                        };
+                        image.src = event.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                });
+
+                return isJPG && isLt2M && imgSize;
             },
             handleAvatarSuccessIcon(res, file) {
-                console.log("xxxx");
+                this.iconUrl = res.data.licenseUrl
                 this.imageUrlIcon = URL.createObjectURL(file.raw);
             },
             errorIcon() {
@@ -829,7 +893,7 @@
                 return url;
             },
             beforeAvatarUploadSignatures(file) {
-                const isJPG = file.type === "image/jpeg";
+                const isJPG = (file.type === 'image/jpeg') || (file.type == 'image/png') || (file.type == 'image/jpg');
                 const isLt2M = file.size / 1024 / 1024 < 2;
 
                 if (!isJPG) {
@@ -841,7 +905,7 @@
                 return isJPG && isLt2M;
             },
             handleAvatarSuccessSignatures(res, file) {
-                console.log("xxxx");
+                this.signUrl = res.data.licenseUrl
                 this.imageUrlSignatures = URL.createObjectURL(file.raw);
             },
             errorSignatures() {
@@ -858,7 +922,7 @@
                 return url;
             },
             beforeAvatarUploadChapter(file) {
-                const isJPG = file.type === "image/jpeg";
+                const isJPG = (file.type === 'image/jpeg') || (file.type == 'image/png') || (file.type == 'image/jpg');
                 const isLt2M = file.size / 1024 / 1024 < 2;
 
                 if (!isJPG) {
@@ -870,7 +934,7 @@
                 return isJPG && isLt2M;
             },
             handleAvatarSuccessChapter(res, file) {
-                console.log("xxxx");
+                this.sealUrl = res.data.licenseUrl
                 this.imageUrlChapter = URL.createObjectURL(file.raw);
             },
             errorChapter() {
@@ -1039,5 +1103,49 @@
 
     .seeBasic .el-collapse-item__wrap {
         padding-left: 20px
+    }
+
+    #iconImgSize .el-upload-dragger {
+        width: 40px;
+        height: 40px;
+        font-size: 24px;
+        line-height: 40px;
+    }
+
+    #iconImgSize .el-upload-dragger .avatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    #logoImgSize .el-upload-dragger {
+        width: 150px;
+        height: 50px;
+        line-height: 50px;
+        font-size: 24px;
+    }
+
+    #logoImgSize .el-upload-dragger .avatar {
+        width: 150px;
+        height: 50px;
+    }
+
+    .el-upload-dragger {
+        width: 174px;
+        height: 182px;
+        font-size: 24px;
+        color: #999;
+        line-height: 182px;
+    }
+
+    #logoseeImg .el-upload,
+    #logoseeImg .el-upload .avatar {
+        width: 150px;
+        height: 50px;
+    }
+
+    #iconseeImg .el-upload,
+    #iconseeImg .el-upload .avatar {
+        width: 40px;
+        height: 40px;
     }
 </style>

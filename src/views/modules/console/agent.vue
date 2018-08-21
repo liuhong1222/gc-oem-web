@@ -8,7 +8,7 @@
             <li v-for="(item,index) in basicList" :key="index">
               <p>{{item.title}}</p>
               <input type="text" v-model="item.counts" :value="item.counts" readonly>
-              <button v-show="item.flag" @click="basicBtn(index,item.counts)">{{item.title === '邮箱' && item.counts === '' ? '添加' : item.btnText}}</button>
+              <button v-show="item.flag" @click="basicBtn(index,item.counts)">{{item.title === '邮箱' && item.counts === '' ||  item.counts === null  ? '添加' : item.btnText}}</button>
             </li>
             <li>
               <button class="copyLink" @click="copyLink">复制推广链接</button>
@@ -61,25 +61,27 @@
       </el-col>
     </el-row>
     <!-- 充值弹框-->
-    <el-dialog title="充值" :visible.sync="chdataFormVisible">
+    <el-dialog title="充值" :visible.sync="chdataFormVisible" @close='closeDialog' :close-on-click-modal="false">
       <el-form :model="chdataForm" ref="chdataFormref" :rules="chdataFormrefRule" label-width="100px">
         <el-form-item label="充值单价">
           <el-input style="border:none" v-model="chdataForm.chPrice" placeholder="" readonly id="chprice"></el-input>
+          <span>元/条</span>
         </el-form-item>
         <el-form-item label="充值金额" prop="chMoney">
-          <el-input v-model.number="chdataForm.chMoney" placeholder="充值金额"></el-input>
-          <span>元</span>
+          <el-input v-model.number="chdataForm.chMoney" placeholder="请输入整数，最低充值金额1万元……"></el-input>
+          <span>万元</span>
         </el-form-item>
         <el-form-item label="充值条数">
           <el-input v-model.number="chdataForm.chCounts" placeholder="请输入充值条数" ref="inputVal" readonly></el-input>
-          <span>条</span>
+          <span>万条</span>
         </el-form-item>
         <el-form-item label="备注">
           <el-input type="textarea" v-model="chdataForm.remark" placeholder="请输入备注..."></el-input>
         </el-form-item>
       </el-form>
       <div id="qrcodeCon">
-        <div id="qrcode">二维码位置</div>
+        <div id="qrcode">
+        </div>
         <button>请打开支付宝扫描二维码</button>
       </div>
     </el-dialog>
@@ -88,6 +90,7 @@
       <el-form :model="warinform" :rules="warnRule" ref="warinform">
         <el-form-item label="当前预警值">
           <el-input v-model="warinform.curcounts" id="curCount" readonly></el-input>
+          <span>万条</span>
         </el-form-item>
         <el-form-item label="修改预警值" prop="counts">
           <el-input v-model="warinform.counts"></el-input>
@@ -146,18 +149,19 @@
           <el-input v-model="reemailform.newemail"></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer">
         <el-button type="primary" @click="reEmailBtn()">确 定</el-button>
       </div>
     </el-dialog>
 
     <!-- 重新绑定手机号 -->
-    <re-bind-phone v-if="reBindVisible" ref="reBindPhoneCon"></re-bind-phone>
+    <re-bind-phone v-if="reBindVisible" ref="reBindPhoneCon" @refreshDataList="getAgentDeskInfo"></re-bind-phone>
   </div>
 </template>
 
 <script>
   import reBindPhone from './re-bind-phone'
+  import QRCode from 'qrcodejs2'
   import { isEmail, isMobile } from '@/utils/validate'
   export default {
     data() {
@@ -176,7 +180,9 @@
         }
       }
       return {
-        copyinput: '地址地址地址地址地址地址',
+        copyinput: '',
+        payUrl: '',
+        orderNo: '',
         dat: {
           count: [],
           mealMoney: [],
@@ -187,13 +193,13 @@
         tableData: [], //充值记录
         customMy: [  //我的客户
           { title: '客户数量', counts: '' },
-          { title: '客户充值总计', counts: '' },
-          { title: '客户消费条数', counts: '' }
+          { title: '客户充值总计（元）', counts: '' },
+          { title: '客户消费条数（条）', counts: '' }
         ],
         basicList: [ //基本信息
           { title: '我的代理价（元/条）', counts: '', btnText: '', flag: false },
-          { title: '我的余额（条）', counts: '', btnText: '充值', flag: true },
-          { title: '预警值（条）', counts: '', btnText: '修改', flag: true },
+          { title: '我的余额（万条）', counts: '', btnText: '充值', flag: true },
+          { title: '预警值（万条）', counts: '', btnText: '修改', flag: true },
           { title: '手机号', counts: '', btnText: '更改', flag: true },
           { title: '邮箱', counts: '', btnText: '更改', flag: true }
         ],
@@ -225,7 +231,7 @@
         warnFormVisible: false,
         editmealVisible: false,
         chdataForm: {
-          chPrice: '0.2',
+          chPrice: '',
           chCounts: '',
           chMoney: '',
           remark: ''
@@ -251,41 +257,75 @@
     components: {
       reBindPhone
     },
+    watch: {
+      'chdataForm.chMoney'() {
+        if (this.chdataForm.chMoney !== "" && this.chdataForm.chPrice !== "") {
+          this.chdataForm.chCounts = Math.ceil((Number(this.chdataForm.chMoney) / (this.chdataForm.chPrice)) * 10000) / 10000
+          // console.log('获取充值二维码')
+          document.getElementById('qrcode').innerHTML = "";
+          let time = null
+          let that = this
+          this.$http({
+            url: this.$http.adornUrl(`agent/fund/recharge?token=${this.$cookie.get('token')}`),
+            method: 'post',
+            params: this.$http.adornParams({
+              'price': this.chdataForm.chPrice,
+              'number': this.chdataForm.chCounts,
+              'money': this.chdataForm.chMoney,
+              'remark': this.chdataForm.remark
+            })
+          }).then(({ data }) => {
+            if (data && data.code === 0) {
+              document.getElementById('qrcode').innerHTML = "";
+              this.getQrcode()
+              this.payUrl = data.data.payUrl
+              this.orderNo = data.data.orderNo
+              clearInterval(window.time);
+              window.time = setInterval(function () {
+                // console.log('定时器')
+                that.$http({
+                  url: that.$http.adornUrl(`agent/fund/findOrderStatus?token=${that.$cookie.get('token')}`),
+                  method: 'post',
+                  params: that.$http.adornParams({
+                    'orderNo': that.orderNo,
+                  })
+                }).then(({ data }) => {
+                  if (data && data.code === 0) {
+                    if (data.data.orderStatus == "Success") {
+                      this.$message.succcess('充值成功')
+                      clearInterval(window.time);
+                      that.closeDialog = false
+                      that.getAgentDeskInfo()
+                    }
+                  }
+                })
+              }, 10000)
+            } else {
+              document.getElementById('qrcode').innerHTML = "";
+              this.$message.error(data.msg)
+            }
+          })
+        } else {
+          this.chdataForm.chCounts = ""
+          document.getElementById('qrcode').innerHTML = '';
+        }
+      }
+    },
     computed: {
-
-      // chCounts: function () {	//默认调用get
-      //   // return (this.chdataForm.chMoney !== "" && this.chdataForm.chPrice !== "") ? (Number(this.chdataForm.chMoney) / (this.chdataForm.chPrice)) : ""
-      //   return 1
-      // },
       userName: {
         get() { return this.$store.state.user.name }
       }
-
     },
-    watch: {
-      chdataForm: {
-        handler: function (val, oldval) {
-          // let searchMoney = this.$refs.inputMoney.value;
-          if (this.chdataForm.chMoney !== "" && this.chdataForm.chPrice !== "") {
-            this.chdataForm.chCounts = Number(this.chdataForm.chMoney) / (this.chdataForm.chPrice);
-            console.log('获取充值二维码')
-          } else {
-            this.chdataForm.chCounts = ""
-          }
-        },
-        deep: true
-      }
-    },
-    // computed: {
-    //   userName: {
-    //     get() { return this.$store.state.user.name }
-    //   }
-    // },
     activated() {
       this.getAgentDeskInfo(),
         this.myRechargeList(),
         this.findAgentPackage()
     },
+    // created: function () {
+    //   // `this` 指向 vm 实例
+    //   console.log(QRCode)
+
+    // },
     methods: {
       basicBtn(arrindex, btnCount) {
         // console.log(arrindex)
@@ -303,10 +343,11 @@
         } else if (arrindex == 3) {  //修改手机号
           this.reBindVisible = true;
           this.$nextTick(() => {
-            this.$refs.reBindPhoneCon.showInit()
+            let mobile = this.basicList[3].counts
+            this.$refs.reBindPhoneCon.showInit(mobile)
           })
         } else if (arrindex == 4) {
-          if (btnCount == "") {
+          if (btnCount == "" || btnCount == null) {
             // console.log("添加弹出框");
             this.addEmailVisible = true
             this.$nextTick(() => {
@@ -322,6 +363,23 @@
         }
       },
 
+      getQrcode() {
+        this.$nextTick(() => {
+          let qrcode = new QRCode('qrcode', {
+            width: 160,
+            height: 160, // 高度
+          })
+          qrcode.clear(); // 清除二维码
+          qrcode.makeCode(this.payUrl);
+        })
+      },
+      closeDialog() {
+        document.getElementById('qrcode').innerHTML = "";
+        if (window.time) {
+          clearInterval(window.time);
+        }
+        //  
+      },
       copyLink() {
         this.copyVisible = true;
       },
@@ -424,6 +482,8 @@
           method: 'post',
         }).then(({ data }) => {
           if (data && data.code === 0) {
+            this.copyinput = data.data.referralLink
+            this.chdataForm.chPrice = data.data.price
             this.basicList[0].counts = data.data.price
             this.basicList[1].counts = data.data.emptyBalance
             this.basicList[2].counts = data.data.emptyWarnNumber
@@ -638,7 +698,9 @@
     float: left;
     width: 33%;
     margin-bottom: 10px;
-    text-align: center
+    text-align: center;
+    word-break: break-all;
+    word-wrap: break-word;
   }
 
   .basic-mess li:nth-child(3) input {
@@ -700,6 +762,10 @@
       position: absolute;
       bottom: 0
     }
+  }
+
+  #qrcode {
+    padding: 10px
   }
 
   .el-dialog__footer {

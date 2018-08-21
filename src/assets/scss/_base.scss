@@ -400,6 +400,8 @@ li {
   text-align: center;
   float: left;
   color: #666;
+  word-break: break-all; 
+  word-wrap:break-word;
 }
 .customerList {
   margin-left: -60px
@@ -413,8 +415,6 @@ li {
   font-size: 24px;
   font-weight: 700;
 }
-
-
 .agentTable {
   width: 100%;
   padding: 20px 23px 10px;
