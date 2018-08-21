@@ -42,13 +42,14 @@
 </template>
 
 <script>
+   
     import addAgentUpdate from './acc-add-agent-update'
     export default {
         data() {
             return {
                 paramArr: [],
                 accountVisible: false,
-                disabled:false,
+                disabled: false,
                 accountData: {
                     mobile: ""
                 },

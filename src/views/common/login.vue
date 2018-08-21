@@ -32,6 +32,7 @@
 </template>
 
 <script>
+  import md5 from 'js-md5';
   export default {
     data() {
       return {
@@ -63,7 +64,7 @@
               method: 'post',
               data: this.$http.adornData({
                 'username': this.dataForm.userName,
-                'password': this.dataForm.password,
+                'password': md5(this.dataForm.password),
                 'uuid': this.dataForm.uuid,
                 'captcha': '1111'
               })

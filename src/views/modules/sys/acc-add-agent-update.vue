@@ -23,6 +23,7 @@
 </template>
 
 <script>
+    import md5 from 'js-md5';
     import { isEmail, isMobile } from '@/utils/validate'
     export default {
         data() {
@@ -88,7 +89,7 @@
                                 'userId': this.accountdataForm.id || undefined,
                                 'realName': this.accountdataForm.name,
                                 'mobile': this.accountdataForm.mobile,
-                                'password': this.accountdataForm.password
+                                'password': md5(this.accountdataForm.password)
                             })
                         }).then(({ data }) => {
                             console.log(data)

@@ -36,6 +36,7 @@
 </template>
 
 <script>
+  import md5 from 'js-md5';
   import { isEmail, isMobile } from '@/utils/validate'
   export default {
     data() {
@@ -96,7 +97,7 @@
             { validator: validateComfirmPassword, trigger: 'blur' }
           ],
           realName: [
-          { required: true, message: '姓名不能为空', trigger: 'blur' },
+            { required: true, message: '姓名不能为空', trigger: 'blur' },
           ],
           email: [
             { required: true, message: '邮箱不能为空', trigger: 'blur' },
@@ -151,7 +152,7 @@
               data: this.$http.adornData({
                 'userId': this.dataForm.id || undefined,
                 'username': this.dataForm.userName,
-                'password': this.dataForm.password,
+                'password': md5(this.dataForm.password),
                 'salt': this.dataForm.salt,
                 'email': this.dataForm.email,
                 'mobile': this.dataForm.userName,

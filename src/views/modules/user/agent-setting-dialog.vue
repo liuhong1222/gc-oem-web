@@ -29,8 +29,6 @@
               enctype="multipart/form-data" :limit="1">
               <img v-if="imageUrlLogo" :src="imageUrlLogo" class="avatar">
               <i class="el-icon-plus"></i>
-              <!-- <i class="el-icon-upload"></i>
-              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div> -->
               <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M，长140px，宽36px，（再次上传请删除上一次上传）</div>
             </el-upload>
           </el-form-item><br />
@@ -39,8 +37,6 @@
               :before-upload="beforeAvatarUploadIcon" :action="actionIcon()" :data="iconQueryParams" :on-error="errorIcon">
               <img v-if="imageUrlIcon" :src="imageUrlIcon" class="avatar" :limit="1">
               <i class="el-icon-plus"></i>
-              <!-- <i class="el-icon-upload"></i>
-              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div> -->
               <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M，长40px，宽40px，（再次上传请删除上一次上传）</div>
             </el-upload>
           </el-form-item><br />
@@ -50,8 +46,6 @@
               :data="SignaturesQueryParams" enctype="multipart/form-data" :limit="1">
               <img v-if="imageUrlSignatures" :src="imageUrlSignatures" class="avatar">
               <i class="el-icon-plus"></i>
-              <!-- <i class="el-icon-upload"></i>
-              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div> -->
               <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M，（再次上传请删除上一次上传）</div>
             </el-upload>
           </el-form-item><br />
@@ -61,8 +55,6 @@
               enctype="multipart/form-data" :limit="1">
               <img v-if="imageUrlChapter" :src="imageUrlChapter" class="avatar">
               <i class="el-icon-plus"></i>
-              <!-- <i class="el-icon-upload"></i>
-              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div> -->
               <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M，（再次上传请删除上一次上传）</div>
             </el-upload>
           </el-form-item><br />
@@ -357,9 +349,6 @@
     },
     methods: {
       init({ agentId }) {
-        // this.$nextTick(() => {
-        //   this.$refs['dataForm'].resetFields()
-        // })
         this.visible = true;
         this.agentId = agentId;
         this.logoQueryParams.agentId = agentId;
@@ -386,6 +375,7 @@
         })
       },
       next() {  //点击基本信息
+
         this.$refs['basicdataList'].validate((valid) => {
           if (valid) {
             // 提交基本信息
@@ -404,6 +394,7 @@
             }).then(({ data }) => {
               // console.log(data)
               if (data && data.code === 0) {
+                this.$refs['basicdataList'].resetFields()
                 this.getDomain()  //获取域名备案信息
                 if (this.active++ > 5) this.active = 0;
               } else {
@@ -453,6 +444,7 @@
             }).then(({ data }) => {
               // console.log(data)
               if (data && data.code === 0) {
+                this.$refs['domaindataList'].resetFields()
                 this.getkfinfo()//获取客服资料
                 if (this.active++ > 5) this.active = 0;
               } else {
@@ -497,6 +489,7 @@
             }).then(({ data }) => {
               // console.log(data)
               if (data && data.code === 0) {
+                this.$refs['customerdataList'].resetFields()
                 this.getcontractinfo()//获取合同信息
                 if (this.active++ > 5) this.active = 0;
               } else {
@@ -545,6 +538,7 @@
             }).then(({ data }) => {
               // console.log(data)
               if (data && data.code === 0) {
+                this.$refs['contractdataFormref'].resetFields()
                 this.getalipay()//支付宝信息
                 if (this.active++ > 5) this.active = 0;
               } else {
@@ -649,17 +643,7 @@
       lastStep() {
         this.active--;
       },
-      // submit() {
-      //   this.$message({
-      //     message: "操作成功",
-      //     type: "success",
-      //     duration: 1500,
-      //     onClose: () => {
-      //       this.visible = false;
-      //       // this.$emit("refreshDataList");
-      //     }
-      //   });
-      // },
+
       closeDialog() { },
       //上传 执行顺序：beforeAvatarUpload ---执行action提交----执行handleAvatarSuccess or uploadError
       actionLogo() {
@@ -824,7 +808,7 @@
 
 </script>
 <style lang="scss">
-  .avatar-uploader .el-upload {
+  /* .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
     cursor: pointer;
@@ -876,7 +860,7 @@
     >.el-form {
       padding: 30px 30px;
     }
-  }
+  } */
   /* 
 
   #iconImgSize .el-upload-dragger {
