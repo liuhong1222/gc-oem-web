@@ -394,7 +394,7 @@
             }).then(({ data }) => {
               // console.log(data)
               if (data && data.code === 0) {
-                this.$refs['basicdataList'].resetFields()
+                // this.$refs['basicdataList'].resetFields()
                 this.getDomain()  //获取域名备案信息
                 if (this.active++ > 5) this.active = 0;
               } else {
@@ -444,7 +444,7 @@
             }).then(({ data }) => {
               // console.log(data)
               if (data && data.code === 0) {
-                this.$refs['domaindataList'].resetFields()
+                // this.$refs['domaindataList'].resetFields()
                 this.getkfinfo()//获取客服资料
                 if (this.active++ > 5) this.active = 0;
               } else {
@@ -489,7 +489,7 @@
             }).then(({ data }) => {
               // console.log(data)
               if (data && data.code === 0) {
-                this.$refs['customerdataList'].resetFields()
+                // this.$refs['customerdataList'].resetFields()
                 this.getcontractinfo()//获取合同信息
                 if (this.active++ > 5) this.active = 0;
               } else {
@@ -538,7 +538,7 @@
             }).then(({ data }) => {
               // console.log(data)
               if (data && data.code === 0) {
-                this.$refs['contractdataFormref'].resetFields()
+                // this.$refs['contractdataFormref'].resetFields()
                 this.getalipay()//支付宝信息
                 if (this.active++ > 5) this.active = 0;
               } else {
@@ -808,7 +808,7 @@
 
 </script>
 <style lang="scss">
-  /* .avatar-uploader .el-upload {
+  .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
     cursor: pointer;
@@ -860,15 +860,15 @@
     >.el-form {
       padding: 30px 30px;
     }
-  } */
-  /* 
+  }
+
 
   #iconImgSize .el-upload-dragger {
     width: 40px;
     height: 40px;
   }
 
-   */
+
 
   #iconImgSize .el-upload-dragger {
     width: 40px;
