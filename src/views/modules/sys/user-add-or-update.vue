@@ -16,11 +16,14 @@
       <el-form-item label="姓名" prop="realName">
         <el-input v-model="dataForm.realName" placeholder="请输入姓名"></el-input>
       </el-form-item>
-      <el-form-item label="角色" size="mini" prop="roleIdList">
+      <el-form-item label="角色" size="mini" prop="roleId">
+        <el-radio v-model="dataForm.roleId" :label="1">管理员</el-radio>
+      </el-form-item>
+      <!-- <el-form-item label="角色" size="mini" prop="roleIdList">
         <el-radio-group v-model="dataForm.roleIdList">
           <el-radio v-for="role in roleList" :key="role.roleId" :label="role.roleId">{{ role.roleName }}</el-radio>
         </el-radio-group>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="状态" size="mini" prop="status">
         <el-radio-group v-model="dataForm.status">
           <el-radio :label="0">禁用</el-radio>
@@ -82,8 +85,9 @@
           salt: '',
           email: '',
           realName: '',
-          roleIdList: [],
-          status: 1
+          // roleIdList: [],
+          status: 1,
+          roleId:1
         },
         dataRule: {
           userName: [
@@ -109,41 +113,45 @@
     methods: {
       init(id) {
         this.dataForm.id = id || 0
-        this.$http({
-          url: this.$http.adornUrl('/sys/role/select'),
-          method: 'get',
-          params: this.$http.adornParams()
-        }).then(({ data }) => {
-          this.roleList = data && data.code === 0 ? data.list : []
-        }).then(() => {
-          this.visible = true
-          this.$nextTick(() => {
-            this.$refs['dataForm'].resetFields()
-          })
-        }).then(() => {
-          if (this.dataForm.id) {
-            console.log(this.roleList)
-            this.$http({
-              url: this.$http.adornUrl(`/sys/user/info/${this.dataForm.id}`),
-              method: 'get',
-              params: this.$http.adornParams()
-            }).then(({ data }) => {
-              if (data && data.code === 0) {
-                this.dataForm.userName = data.user.username
-                this.dataForm.salt = data.user.salt
-                this.dataForm.email = data.user.email
-                this.dataForm.realName = data.user.realName
-                this.dataForm.roleIdList = data.user.roleIdList[0]
-                this.dataForm.status = data.user.status
-              }
-            })
-          }
+        this.visible = true
+        this.$nextTick(() => {
+          this.$refs['dataForm'].resetFields()
         })
+        // this.$http({
+        //   url: this.$http.adornUrl('/sys/role/select'),
+        //   method: 'get',
+        //   params: this.$http.adornParams()
+        // }).then(({ data }) => {
+        //   this.roleList = data && data.code === 0 ? data.list : []
+        // }).then(() => {
+        //   this.visible = true
+        //   this.$nextTick(() => {
+        //     this.$refs['dataForm'].resetFields()
+        //   })
+        // }).then(() => {
+        if (this.dataForm.id) {
+          console.log(this.roleList)
+          this.$http({
+            url: this.$http.adornUrl(`/sys/user/info/${this.dataForm.id}`),
+            method: 'get',
+            params: this.$http.adornParams()
+          }).then(({ data }) => {
+            if (data && data.code === 0) {
+              this.dataForm.userName = data.user.username
+              this.dataForm.salt = data.user.salt
+              this.dataForm.email = data.user.email
+              this.dataForm.realName = data.user.realName
+              // this.dataForm.roleIdList = data.user.roleIdList[0]
+              this.dataForm.status = data.user.status
+            }
+          })
+        }
+        // })
       },
       // 表单提交
       dataFormSubmit() {
         this.parmroleList = []
-        this.parmroleList.push(this.dataForm.roleIdList)
+        this.parmroleList.push(this.dataForm.roleId)
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
@@ -158,7 +166,8 @@
                 'mobile': this.dataForm.userName,
                 'status': this.dataForm.status,
                 'realName': this.dataForm.realName,
-                'roleIdList': this.parmroleList
+                'roleId':this.parmroleList
+                // 'roleIdList': this.parmroleList
               })
             }).then(({ data }) => {
               if (data && data.code === 0) {
