@@ -102,7 +102,7 @@
                     newemail: ''
                 },
                 basicInfoList: [  //基本信息
-                    { title: '我的代办', data: '', flag: false },
+                    { title: '我的待办', data: '', flag: false },
                     // { title: '职位', data: '产品专员', flag: false },
                     { title: '手机号', data: '', flag: true, btnText: '更改' },
                     { title: '邮箱', data: '', flag: true, btnText: '更改' }

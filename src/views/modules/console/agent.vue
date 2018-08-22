@@ -112,7 +112,8 @@
           </div>
           <span>元</span>
           <div class="mealinput">
-            <input type="text" v-model="dat.count[i]">
+            <input type="text" v-if="i == '3'" v-model="dat.count[i]" readonly>
+            <input type="text" v-else v-model="dat.count[i]">
           </div>
           <span class="label" v-if="i == '3'">条</span>
           <span class="label" v-else>万条</span>

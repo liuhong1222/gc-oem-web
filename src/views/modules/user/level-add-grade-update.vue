@@ -13,7 +13,7 @@
             </el-form-item>
             <el-form-item label="预警条数：" prop="moreCounts">
                 <el-input v-model="dataForm.moreCounts" placeholder="预警条数"></el-input>
-                <span>万条</span>
+                <span>条</span>
             </el-form-item>
             <el-form-item label="充值金额：" prop="minRecharge">
                 <el-col :span="8">

@@ -2,9 +2,9 @@
     <el-dialog :title="!accountdataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="visible" @close='closeDialog'>
         <el-form :model="accountdataForm" :rules="accdatarules" ref="accountdataFormref" label-width="150px" class="demo-ruleForm"
             :label-position="labelPosition">
-            <el-form-item label="用户编号：" prop="agentNumber" id="agentNumberAcc">
+            <!-- <el-form-item label="用户编号：" prop="agentNumber" id="agentNumberAcc">
                 <el-input v-model="accountdataForm.agentNumber" placeholder="用户编号" :readonly="readonly"></el-input>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="姓名：" prop="name">
                 <el-input v-model="accountdataForm.name" placeholder="姓名"></el-input>
             </el-form-item>
@@ -40,15 +40,15 @@
                 labelPosition: 'right',
                 accountdataForm: {
                     id: '',
-                    agentNumber: '',
+                    // agentNumber: '',
                     name: '',
                     mobile: '',
                     password: ''
                 },
                 accdatarules: {
-                    agentNumber: [
-                        { required: true, message: '请输入用户编号', trigger: 'blur' }
-                    ],
+                    // agentNumber: [
+                    //     { required: true, message: '请输入用户编号', trigger: 'blur' }
+                    // ],
                     name: [
                         { required: true, message: '请输入姓名', trigger: 'blur' }
                     ],
@@ -71,7 +71,7 @@
                 if (paramArr !== "") {
                     this.readonly = true
                     this.accountdataForm.id = paramArr[0] || 0
-                    this.accountdataForm.agentNumber = paramArr[0]
+                    // this.accountdataForm.agentNumber = paramArr[0]
                     this.accountdataForm.name = paramArr[1]
                     this.accountdataForm.mobile = paramArr[2]
                 }
@@ -115,7 +115,7 @@
             },
             closeDialog() {
                 this.accountdataForm.id = ""
-                this.accountdataForm.agentNumber = ""
+                // this.accountdataForm.agentNumber = ""
                 this.accountdataForm.name = ""
                 this.accountdataForm.mobile = ""
                 this.accountdataForm.password = ""

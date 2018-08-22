@@ -166,8 +166,7 @@
                 'mobile': this.dataForm.userName,
                 'status': this.dataForm.status,
                 'realName': this.dataForm.realName,
-                'roleId':this.parmroleList
-                // 'roleIdList': this.parmroleList
+                'roleIdList':this.parmroleList
               })
             }).then(({ data }) => {
               if (data && data.code === 0) {

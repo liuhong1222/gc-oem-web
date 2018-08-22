@@ -10,7 +10,7 @@
                 </el-table-column>
                 <el-table-column prop="price" label=单价（元/条） align="center">
                 </el-table-column>
-                <el-table-column prop="emptyWarnNumber" label="预警条数(万条) " align="center">
+                <el-table-column prop="emptyWarnNumber" label="预警条数(条) " align="center">
                 </el-table-column>
                 <el-table-column prop="minRecharge" label=" 最小充值金额（元） " align="center">
                 </el-table-column>

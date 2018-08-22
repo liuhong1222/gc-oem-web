@@ -50,8 +50,8 @@
             <el-form-item label="登录账号：" prop="loginAcc">
                 <el-input v-model="dataForm.loginAcc" placeholder="登录账号" readonly></el-input>
             </el-form-item>
-            <el-form-item label="初始密码：" prop="pwd">
-                <el-input v-model="dataForm.pwd" placeholder="初始密码"></el-input>
+            <el-form-item label="密码："  :prop="!dataForm.id ? 'pwd' : ''">
+                <el-input v-model="dataForm.pwd" placeholder="密码"></el-input>
             </el-form-item>
             <h3>代理商级别</h3>
             <el-form-item label="代理级别：" prop="agencylevel">
@@ -70,7 +70,7 @@
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
-                <el-button @click="visible = false">取消</el-button>
+                <el-button @click="clearAgent()">取消</el-button>
                 <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
         </span>
     </el-dialog>
@@ -154,9 +154,12 @@
                     pwd: [
                         { required: true, message: '请输入初始密码', trigger: 'blur' }
                     ],
-                    // agencylevel: [
-                    //     { required: true, message: '请选择代理商级别', trigger: 'blur' }
-                    // ],
+                    email: [
+                        { required: true, message: '请输入邮箱', trigger: 'blur' }
+                    ],
+                    work: [
+                        { required: true, message: '请输入职务', trigger: 'blur' }
+                    ],
                     price: [
                         { required: true, message: '请输入单价', trigger: 'blur' }
                     ],
@@ -276,6 +279,12 @@
                         this.$message.error('请完善信息!')
                     }
                 })
+            },
+            clearAgent() {
+                this.visible = false
+                this.priseimageUrl = ""
+                this.dataForm.busindate1 = ""
+                this.dataForm.busindate2 = ""
             },
             beforeAvatarUpload(file) {
                 const isJPG = (file.type === 'image/jpeg') || (file.type == 'image/png') || (file.type == 'image/jpg');

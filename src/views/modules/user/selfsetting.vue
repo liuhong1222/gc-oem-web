@@ -552,7 +552,7 @@
 
             // 获取下一步里面的内容（域名备案信息）
             getDomain() {
-                alert('获取域名信息');
+
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findDomainInfo?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                     method: 'post',
@@ -573,7 +573,7 @@
             nextDomain() {
                 this.$refs['domaindataList'].validate((valid) => {
                     if (valid) {
-                        alert('点击的域名信息')
+
                         this.$http({
                             url: this.$http.adornUrl(`agent/set/updateDomainInfo?token=${this.$cookie.get('token')}`),
                             method: 'post',
@@ -601,7 +601,7 @@
 
             // 获取客服资料
             getkfinfo() {
-                alert('获取客服信息')
+
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findCustService?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                     method: 'post',
@@ -619,7 +619,7 @@
             nextcustomer() {
                 this.$refs['customerdataList'].validate((valid) => {
                     if (valid) {
-                        alert('通过--提交客服资料')
+
                         this.$http({
                             url: this.$http.adornUrl(`agent/set/updateCustService?token=${this.$cookie.get('token')}`),
                             method: 'post',
@@ -644,7 +644,7 @@
             },
             // 获取合同信息
             getcontractinfo() {
-                alert('获取合同信息')
+
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findContract?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                     method: 'post',
@@ -664,7 +664,7 @@
             nextcontract() {
                 this.$refs['contractdataFormref'].validate((valid) => {
                     if (valid) {
-                        alert('点击的是提交同意合同')
+
                         this.$http({
                             url: this.$http.adornUrl(`agent/set/updateContract?token=${this.$cookie.get('token')}`),
                             method: 'post',
@@ -693,7 +693,7 @@
 
             // 获取支付宝信息
             getalipay() {
-                alert('获取支付宝信息')
+
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findAlipay?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                     method: 'post',
@@ -710,7 +710,7 @@
                 })
             },
             nextalipay() {
-                alert('点击的是支付宝资料')
+
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/updateAlipay?token=${this.$cookie.get('token')}`),
                     method: 'post',
@@ -734,7 +734,7 @@
             },
             //获取微信信息
             getweixinInfo() {
-                alert('获取微信信息')
+
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findWeixinpay?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                     method: 'post',
@@ -752,7 +752,7 @@
 
             // 提交微信信息
             submitweixin() {
-                alert('点击的是微信提交')
+
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/updateWeixinpay?token=${this.$cookie.get('token')}`),
                     method: 'post',

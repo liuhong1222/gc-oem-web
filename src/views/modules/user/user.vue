@@ -13,10 +13,10 @@
         </el-form-item>
         <el-form-item label="客户类型：" style="margin-left:-25px;">
           <el-select v-model="searchData.custType" placeholder="客户类型">
-            <el-option label="全部" value="0"></el-option>
-            <el-option label="个人" value="1"></el-option>
-            <el-option label="企业" value="2"></el-option>
-            <el-option label="其他" value="3"></el-option>
+            <el-option label="全部" value="-1"></el-option>
+            <el-option label="个人" value="0"></el-option>
+            <el-option label="企业" value="1"></el-option>
+            <el-option label="其他" value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="客户名称：" style="margin-left:0px;">

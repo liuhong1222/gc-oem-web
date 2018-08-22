@@ -17,8 +17,8 @@
             <el-table :data="accountTableData" style="width: 100%" :header-cell-style="getRowClass">
                 <el-table-column type="index" header-align="center" align="center" width="80" fixed label="序号">
                 </el-table-column>
-                <el-table-column prop="userId" label=" 用户编号" width="80" align="center">
-                </el-table-column>
+                <!-- <el-table-column prop="userId" label=" 用户编号" width="80" align="center">
+                </el-table-column> -->
                 <el-table-column prop="realName" label=" 用户名称" align="center">
                 </el-table-column>
                 <el-table-column prop="mobile" label="手机号码" width="120" align="center">
@@ -30,7 +30,7 @@
                 <el-table-column fixed="right" label="操作" align="center">
                     <template slot-scope="scope">
                         <el-button type="text" size="small" @click="addUpdateAgent(scope.row)">修改</el-button>
-                        <el-button type="text" size="small" @click="delAcc(scope.row.userId)">删除</el-button>
+                        <el-button type="text" size="small" @click="delAcc(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -108,8 +108,9 @@
                 })
             },
             // 删除
-            delAcc(id) {
-                this.$confirm(`是否删除用户编号为${id}的用户以及相关信息？`, '删除账号', {
+            delAcc(row) {
+
+                this.$confirm(`是否删除用户${row.realName}？删除后此用户将无法登录系统。`, '删除账号', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -118,7 +119,7 @@
                         url: this.$http.adornUrl(`agent/agentSysUser/delete?token=${this.$cookie.get('token')}`),
                         method: 'post',
                         params: this.$http.adornParams({
-                            'userId': id
+                            'userId': row.userId
                         })
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
