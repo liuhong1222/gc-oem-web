@@ -93,7 +93,8 @@
           <span>万条</span>
         </el-form-item>
         <el-form-item label="修改预警值" prop="counts">
-          <el-input v-model="warinform.counts"></el-input>
+          <el-input v-model="warinform.counts" style="width:70%"></el-input>
+          <span>万条</span>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -407,7 +408,7 @@
             }).then(({ data }) => {
               if (data && data.code === 0) {
                 this.warnFormVisible = false
-                this.basicList[2].counts = (this.warinform.counts) / 10000
+                this.basicList[2].counts = (this.warinform.counts)
                 this.$message.success('预警值修改成功!')
               } else {
                 this.$message.error(data.msg)
