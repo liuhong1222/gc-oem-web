@@ -84,7 +84,6 @@
                         this.$http({
                             url: this.$http.adornUrl(`agent/agentSysUser/${!this.accountdataForm.id ? 'save' : 'update'}?token=${this.$cookie.get('token')}`),
                             method: 'post',
-                            // data: this.$http.adornData({
                             params: this.$http.adornParams({
                                 'userId': this.accountdataForm.id || undefined,
                                 'realName': this.accountdataForm.name,
@@ -102,9 +101,6 @@
                                         this.visible = false
                                         this.$emit('refreshDataList')
                                     }
-                                })
-                                this.$nextTick(() => {
-                                    this.$refs['accountdataFormref'].resetFields()
                                 })
                             } else {
                                 this.$message.error(data.msg)

@@ -49,7 +49,7 @@
             </el-table>
         </div>
         <div class="agentPage">
-            <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex" :page-sizes="[3, 5]"
+            <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex" :page-sizes="[10,20,30,50]"
                 :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
             </el-pagination>
         </div>
@@ -70,7 +70,7 @@
                 },
                 refundTableData: [],
                 pageIndex: 1,
-                pageSize: 3,
+                pageSize: 10,
                 totalPage: 0,
                 pickerOptions0: {
                     disabledDate(time) {
@@ -179,7 +179,7 @@
                         endTime = this.refundSearchData.dateTime[1]
                     }
                 }
-                window.open(this.$http.adornUrl(`agent/finance/user/refund/list/export?token=${this.$cookie.get('token')}&currentPage=${this.pageIndex}&pageSize=${this.pageSize}&companyName=${this.refundSearchData.agentName}&userMobile=${this.refundSearchData.mobile}&startTime=${strartTime}&endTime=${endTime}`))
+                window.open(this.$http.adornUrl(`agent/finance/user/refund/list/export?token=${this.$cookie.get('token')}&currentPage=${this.pageIndex}&pageSize=${this.pageSize}&companyName=${this.refundSearchData.agentName}&userMobile=${this.refundSearchData.mobile}&startTime=${startTime}&endTime=${endTime}`))
             }
         }
     }

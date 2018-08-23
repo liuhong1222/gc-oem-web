@@ -42,7 +42,7 @@
             </el-table>
         </div>
         <div class="agentPage">
-            <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex" :page-sizes="[3, 5]"
+            <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex" :page-sizes="[10,20,30,50]"
                 :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
             </el-pagination>
         </div>
@@ -61,7 +61,7 @@
                 },
                 agentRegTableData: [],
                 pageIndex: 1,
-                pageSize: 3,
+                pageSize: 10,
                 totalPage: 0,
                 pickerOptions0: {
                     disabledDate(time) {

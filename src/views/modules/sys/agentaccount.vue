@@ -29,8 +29,10 @@
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" size="small" @click="addUpdateAgent(scope.row)">修改</el-button>
-                        <el-button type="text" size="small" @click="delAcc(scope.row)">删除</el-button>
+                        <el-button type="text" size="small" @click="addUpdateAgent(scope.row)"  v-if="scope.row.flag == '0'" disabled>修改</el-button>
+                        <el-button type="text" size="small" @click="addUpdateAgent(scope.row)"  v-else >修改</el-button>
+                        <el-button type="text" size="small" @click="delAcc(scope.row)" v-if="scope.row.flag == '0'" disabled>删除</el-button>
+                        <el-button type="text" size="small" @click="delAcc(scope.row)"  v-else>删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
