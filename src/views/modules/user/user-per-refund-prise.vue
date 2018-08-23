@@ -142,7 +142,7 @@
                             method: 'post',
                             params: this.$http.adornParams({
                                 'creUserId': this.refundDataForm.creUserId,
-                                'number': this.refundDataForm.refunCounts,
+                                'number': this.refundDataForm.refunNumber,
                                 'amount': this.refundDataForm.refunMoney,
                                 'remark': this.refundDataForm.desc
                             })

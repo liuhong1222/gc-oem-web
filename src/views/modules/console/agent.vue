@@ -68,7 +68,7 @@
           <span>元/条</span>
         </el-form-item>
         <el-form-item label="充值金额" prop="chMoney">
-          <el-input v-model.number="chdataForm.chMoney" placeholder="请输入整数，最低充值金额1万元……"></el-input>
+          <el-input v-model.number="chdataForm.chMoney" placeholder="请输入整数，最低充值金额1万元……" @keyup.native="proving1"></el-input>
           <span>万元</span>
         </el-form-item>
         <el-form-item label="充值条数">
@@ -241,7 +241,7 @@
         chdataFormrefRule: {
           chMoney: [
             { required: true, message: '请输入充值金额', trigger: 'blur' },
-            { type: 'number', message: '金额必须为数字' }
+            { type: 'number', message: '金额必须为正整数' }
           ],
           chCounts: [
             { required: true, message: '请输入充值金额，自动计算条数', trigger: 'blur' },
@@ -261,7 +261,7 @@
     },
     watch: {
       'chdataForm.chMoney'() {
-        if (this.chdataForm.chMoney !== "" && this.chdataForm.chPrice !== "") {
+        if (this.chdataForm.chMoney !== "" && this.chdataForm.chPrice !== "" && this.chdataForm.chMoney !== 0) {
           this.chdataForm.chCounts = Math.ceil((Number(this.chdataForm.chMoney) / (this.chdataForm.chPrice)) * 10000) / 10000
           // console.log('获取充值二维码')
           document.getElementById('qrcode').innerHTML = "";
@@ -364,7 +364,15 @@
           }
         }
       },
-
+      // 必须输入正整数
+      proving1() {
+        let moneyType = (this.chdataForm.chMoney).toString()
+        this.chdataForm.chMoney = Number(moneyType.replace(/[^\.\d]/g, ''));
+        this.chdataForm.chMoney = Number(moneyType.replace('.', ''));
+        if (this.chdataForm.chMoney == 0) {
+          this.chdataForm.chMoney = ""
+        }
+      },
       getQrcode() {
         this.$nextTick(() => {
           let qrcode = new QRCode('qrcode', {

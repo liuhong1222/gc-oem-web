@@ -112,12 +112,12 @@
             sizeChangeHandle(val) {
                 this.pageSize = val
                 this.pageIndex = 1
-                this.agentRechargeList()
+                this.consumeList()
             },
             // 当前页
             currentChangeHandle(val) {
                 this.pageIndex = val
-                this.agentRechargeList()
+                this.consumeList()
             },
             getTotal(param) {
                 const { columns, data } = param;
