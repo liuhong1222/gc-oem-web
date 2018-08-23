@@ -57,8 +57,10 @@
           <template slot-scope="scope">
             <el-button @click="perPriseSee(scope.row)" type="text" size="small">查看</el-button>
             <!-- <el-button type="text" size="small" @click="perEnterEditBtn(scope.row)">修改</el-button> -->
-            <el-button type="text" size="small" @click="rechargedataBtn(scope.row)">充值</el-button>
-            <el-button type="text" size="small" @click="refundBtn(scope.row)">退款</el-button>
+            <el-button type="text" size="small" @click="rechargedataBtn(scope.row)" v-if="scope.row.canRefundFlag == 'false'" disabled>充值</el-button>
+            <el-button type="text" size="small" @click="rechargedataBtn(scope.row)" v-else>充值</el-button>
+            <el-button type="text" size="small" @click="refundBtn(scope.row)" v-if="scope.row.canRefundFlag == 'false'" disabled>退款</el-button>
+            <el-button type="text" size="small" @click="refundBtn(scope.row)" v-else>退款</el-button>
           </template>
         </el-table-column>
       </el-table>

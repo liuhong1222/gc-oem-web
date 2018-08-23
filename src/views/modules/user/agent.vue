@@ -60,7 +60,7 @@
                     <template slot-scope="scope">
                         <el-button @click="seeClick(scope.row.agentId)" type="text" size="small">查看</el-button>
                         <el-button type="text" size="small" @click="addUpdateAgent(scope.row.agentId)">修改</el-button>
-                        <el-button type="text" size="small" @click="chdataBtn(scope.row.agentId,scope.row.companyName)">充值</el-button>
+                        <el-button type="text" size="small" @click="chdataBtn(scope.row.agentId,scope.row.companyName,scope.row.price)">充值</el-button>
                         <el-button type="text" size="small" @click="disableAndEnabled(scope.row)">{{scope.row.status == 0 ? '启用': '禁用'}}</el-button>
                     </template>
                 </el-table-column>
@@ -86,14 +86,14 @@
                     <span>元</span>
                 </el-form-item>
                 <el-form-item label="充值条数" prop="chCounts">
-                    <el-input v-model.number="chdataForm.chCounts" placeholder="请输入充值条数"></el-input>
-                    <span>万条</span>
+                    <el-input v-model.number="chdataForm.chCounts" placeholder="请输入充值条数" readonly></el-input>
+                    <span>条</span>
                 </el-form-item>
                 <el-form-item label="入账类型" prop="type">
                     <el-select v-model="chdataForm.type" placeholder="入账类型">
-                        <el-option label="支付宝" value="0"></el-option>
-                        <el-option label="对公转账" value="1"></el-option>
-                        <el-option label="赠送" value="2"></el-option>
+                        <el-option label="支付宝" value="1"></el-option>
+                        <el-option label="对公转账" value="5"></el-option>
+                        <el-option label="赠送" value="6"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="备注" prop="remark">
@@ -187,17 +187,24 @@
             }
         },
         watch: {
-            chdataForm: {
-                handler: function (val, oldval) {
-                    if (this.chdataForm.chMoney !== "" && this.chdataForm.chPrice !== "") {
-                        this.chdataForm.chCounts = Number(this.chdataForm.chMoney) / (this.chdataForm.chPrice);
-                    } else {
-                        this.chdataForm.chCounts = ""
-                    }
-                },
-
-                deep: true
+            'chdataForm.chMoney'() {
+                if (this.chdataForm.chMoney !== "" && this.chdataForm.chPrice !== "") {
+                    this.chdataForm.chCounts = Math.ceil(Number(this.chdataForm.chMoney) / (this.chdataForm.chPrice));
+                } else {
+                    this.chdataForm.chCounts = ""
+                }
             }
+            // chdataForm: {
+            //     handler: function (val, oldval) {
+            //         if (this.chdataForm.chMoney !== "" && this.chdataForm.chPrice !== "") {
+            //             this.chdataForm.chCounts = Number(this.chdataForm.chMoney) / (this.chdataForm.chPrice);
+            //         } else {
+            //             this.chdataForm.chCounts = ""
+            //         }
+            //     },
+
+            //     deep: true
+            // }
         },
         components: {
             AddOrUpdate,
@@ -290,10 +297,11 @@
                     this.$refs.agentseecon.showInit(id)
                 })
             },
-            chdataBtn(agentId, companyName) {
+            chdataBtn(agentId, companyName, price) {
                 this.chdataFormVisible = true
                 this.cdAgentId = agentId
                 this.chdataForm.accnumber = companyName
+                this.chdataForm.chPrice = price
                 this.$nextTick(() => {
                     this.$refs['chdataFormref'].resetFields();
                 })
