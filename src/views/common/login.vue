@@ -20,9 +20,9 @@
             <img src="~@/assets/img/keylogin.jpg" alt="" class="icon">
             <el-input v-model="dataForm.password" type="password" placeholder="请输入密码" class="account"></el-input>
           </el-form-item>
-          <span style="color:#999;font-size:14px">如需开户请联系管理员</span>
-          <el-button type="text" class="forgetPwd" @click="forgetPwd">忘记密码</el-button>
-          <el-form-item>
+          <span style="color:#999;font-size:14px;">如需开户请联系管理员</span>
+          <el-button type="text" class="forgetPwd" @click="forgetPwd" style="display:none">忘记密码</el-button>
+          <el-form-item style="margin-top:30px">
             <el-button class="login-btn-submit loginBtn" type="primary" @click="dataFormSubmit()">登录</el-button>
           </el-form-item>
         </el-form>

@@ -2,7 +2,7 @@
     <el-dialog title="充值" :visible.sync="chargeVisible" width="40%">
         <el-form :model="rechargeDataForm" :rules="rechargerules" ref="rechargeRef" label-width="150px" :label-position="labelPosition">
             <el-form-item label="客户名称：" prop="userName">
-                <el-input v-model="rechargeDataForm.userName" placeholder="手机号码" id="mobile" readonly></el-input>
+                <el-input v-model="rechargeDataForm.userName" placeholder="客户名称" id="mobile" readonly></el-input>
             </el-form-item>
             <el-form-item label="套餐选择：" prop="packageList">
                 <el-select v-model="rechargeDataForm.packageList" placeholder="请选择套餐" @change="selectT()">
@@ -19,12 +19,11 @@
             </el-form-item>
             <el-form-item label="充值条数：" prop="rechargeCounts">
                 <el-input v-model="rechargeDataForm.rechargeCounts" placeholder="充值条数" :readonly="readCounts"></el-input>
-                <span>万条</span>
+                <span>条</span>
             </el-form-item>
-
             <el-form-item label="我的余额：" prop="myCounts">
                 <el-input v-model="rechargeDataForm.myCounts" placeholder="我的余额" id="myCounts" readonly></el-input>
-                <span>万条</span>
+                <span>条</span>
             </el-form-item>
             <el-form-item label="充值方式：" prop="rechargeMethod">
                 <el-select v-model="rechargeDataForm.rechargeMethod" placeholder="请选择充值方式">
@@ -53,6 +52,7 @@
                 chargeVisible: false,
                 labelPosition: 'right',
                 rechargeArr: [],
+                number: 0,
                 rechargeDataForm: {
                     creUserId: '',
                     userName: '',
@@ -91,16 +91,25 @@
             }
         },
         watch: {
-            rechargeDataForm: {
-                handler: function (val, oldval) {
+            'rechargeDataForm.rechargeMoney'() {
+                if (this.number == 1) {   //number为1才进行监控自动计算
                     if (this.rechargeDataForm.rechargeMoney !== "" && this.rechargeDataForm.price !== "") {
-                        this.rechargeDataForm.rechargeCounts = Number(this.rechargeDataForm.rechargeMoney) / (this.rechargeDataForm.price);
+                        this.rechargeDataForm.rechargeCounts = Math.ceil(Number(this.rechargeDataForm.rechargeMoney) / (this.rechargeDataForm.price));
                     } else {
                         this.rechargeDataForm.rechargeCounts = ""
                     }
-                },
-                deep: true
+                }
             }
+            // rechargeDataForm: {
+            //     handler: function (val, oldval) {
+            //         if (this.rechargeDataForm.rechargeMoney !== "" && this.rechargeDataForm.price !== "") {
+            //             this.rechargeDataForm.rechargeCounts = Number(this.rechargeDataForm.rechargeMoney) / (this.rechargeDataForm.price);
+            //         } else {
+            //             this.rechargeDataForm.rechargeCounts = ""
+            //         }
+            //     },
+            //     deep: true
+            // }
         },
         methods: {
             packagePro() {
@@ -116,7 +125,7 @@
                         this.rechargeArr = data.data
                         this.rechargeDataForm.userName = data.custName
                         this.rechargeDataForm.myCounts = data.amount
-                        
+
                     } else {
                         this.$message.error(data.msg)
                     }
@@ -156,13 +165,14 @@
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
                         // console.log(this.rechargeDataForm.packageList)
-                        if (this.rechargeDataForm.packageList == 8) {
+                        if (data.data.number == 1) {
                             this.readPrice = false;
                             this.readCounts = false;
                             this.readMoney = false;
                             this.rechargeDataForm.price = data.data.price
                             this.rechargeDataForm.rechargeCounts = ""
                             this.rechargeDataForm.rechargeMoney = ""
+                            this.number = 1
                         } else {
                             this.readPrice = true;
                             this.readCounts = true;
@@ -170,6 +180,7 @@
                             this.rechargeDataForm.price = data.data.price
                             this.rechargeDataForm.rechargeCounts = data.data.number
                             this.rechargeDataForm.rechargeMoney = data.data.money
+                            this.number = 0
                         }
                     } else {
                         this.$message.error(data.msg)

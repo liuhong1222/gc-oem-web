@@ -2,7 +2,7 @@
     <div class="seecuslog">
         <!-- 查看个人信息 -->
         <el-dialog title="查看个人客户" :visible.sync="perseeVisible" width="48%">
-            查看个人客户
+        
             <el-form :model="perseeDataForm" ref="perDataForm" label-width="150px" :label-position="labelPosition">
                 <el-form-item label="手机号码：">
                     <el-input v-model="perseeDataForm.mobile" placeholder="手机号码" readonly></el-input>
@@ -46,7 +46,7 @@
 
         <!-- 查看企业信息 -->
         <el-dialog title=" 查看企业客户" :visible.sync="entriseVisible" width="52%">
-            查看企业客户
+          
             <el-form :model="seepriseDataForm" ref="seepriseDataFormref" label-width="150px" :label-position="labelPosition">
                 <el-form-item label="手机号码：">
                     <el-input v-model="seepriseDataForm.mobile" placeholder="手机号码"></el-input>
