@@ -774,6 +774,7 @@
                             onClose: () => {
                                 this.flagVisibile = false
                                 this.seeflagVisibile = true
+                                this.getBasicInfo()
                             }
                         });
                         if (this.active++ >= 5) this.active = 0;
@@ -1011,6 +1012,7 @@
                             this.wxdataForm.wxmchid = data.data.mchid
                             this.wxdataForm.wxcallbackUrl = data.data.callbackUrl
                             this.wxdataForm.wxcallUrl = data.data.callUrls
+
                         }
                     })
                 }

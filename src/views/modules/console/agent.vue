@@ -367,11 +367,12 @@
       // 必须输入正整数
       proving1() {
         let moneyType = (this.chdataForm.chMoney).toString()
-        this.chdataForm.chMoney = Number(moneyType.replace(/[^\.\d]/g, ''));
-        this.chdataForm.chMoney = Number(moneyType.replace('.', ''));
-        if (this.chdataForm.chMoney == 0) {
-          this.chdataForm.chMoney = ""
-        }
+        this.chdataForm.chMoney = moneyType.replace(/[^0-9]*/g, '').replace(/\b(0+)/gi, "")
+        // this.chdataForm.chMoney = Number(moneyType.replace(/[^\.\d]/g, ''));
+        // this.chdataForm.chMoney = Number(moneyType.replace('.', ''));
+        // if (this.chdataForm.chMoney == 0) {
+        //   this.chdataForm.chMoney = ""
+        // }
       },
       getQrcode() {
         this.$nextTick(() => {

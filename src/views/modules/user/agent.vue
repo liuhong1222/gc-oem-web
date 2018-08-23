@@ -194,17 +194,6 @@
                     this.chdataForm.chCounts = ""
                 }
             }
-            // chdataForm: {
-            //     handler: function (val, oldval) {
-            //         if (this.chdataForm.chMoney !== "" && this.chdataForm.chPrice !== "") {
-            //             this.chdataForm.chCounts = Number(this.chdataForm.chMoney) / (this.chdataForm.chPrice);
-            //         } else {
-            //             this.chdataForm.chCounts = ""
-            //         }
-            //     },
-
-            //     deep: true
-            // }
         },
         components: {
             AddOrUpdate,

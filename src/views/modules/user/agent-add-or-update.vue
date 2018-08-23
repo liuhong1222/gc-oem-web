@@ -15,7 +15,7 @@
             </el-form-item>
 
             <el-form-item label="商户编号：" prop="businNumber">
-                <el-input v-model.number="dataForm.businNumber" placeholder="商户编号" maxlength="6"></el-input>
+                <el-input v-model="dataForm.businNumber" placeholder="商户编号" maxlength="6" @keyup.native="probusinNumber"></el-input>
             </el-form-item>
             <el-form-item label="公司名称：" prop="companyName">
                 <el-input v-model="dataForm.companyName" placeholder="公司名称"></el-input>
@@ -50,7 +50,7 @@
             <el-form-item label="登录账号：" prop="loginAcc">
                 <el-input v-model="dataForm.loginAcc" placeholder="登录账号" readonly></el-input>
             </el-form-item>
-            <el-form-item label="密码："  :prop="!dataForm.id ? 'pwd' : ''">
+            <el-form-item label="密码：" :prop="!dataForm.id ? 'pwd' : ''">
                 <el-input v-model="dataForm.pwd" placeholder="密码"></el-input>
             </el-form-item>
             <h3>代理商级别</h3>
@@ -123,8 +123,7 @@
                     //     { required: true, message: '请输入代理商编号', trigger: 'blur' }
                     // ],
                     businNumber: [
-                        { required: true, message: '请输入商家编号', trigger: 'blur' },
-                        { type: 'number', message: '商家编号必须为数字，并且长度最大为6' },
+                        { required: true, message: '请输入最长为6的商家编号（只能为数字）', trigger: 'blur' },
                     ],
                     companyName: [
                         { required: true, message: '请输入公司名称', trigger: 'blur' }
@@ -175,7 +174,7 @@
                     this.dataForm.loginAcc = this.dataForm.mobile
                 },
                 deep: true
-            }
+            },
         },
         methods: {
             showInit(id) {
@@ -230,6 +229,9 @@
                     })
                 }
 
+            },
+            probusinNumber() {
+                this.dataForm.businNumber = this.dataForm.businNumber.replace(/[^0-9]*/g, '').replace(/\b(0+)/gi, "")
             },
             dataFormSubmit() {
                 // console.log(this.dataForm.busindate1)
