@@ -5,7 +5,7 @@
                 <el-form-item label="手机号码：" prop="mobile">
                     <el-input v-model="refundDataForm.mobile" placeholder="手机号码" id="mobile" readonly></el-input>
                 </el-form-item>
-                <el-form-item label="客户名称：" prop="custNanme">
+                <el-form-item label="客户名称：" >
                     <el-input v-model="refundDataForm.custNanme" placeholder="客户名称" id="custNanme" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="剩余条数：" prop="refunCounts">
@@ -54,9 +54,9 @@
                     mobile: [
                         { required: true, message: '请输入手机号', trigger: 'blur' }
                     ],
-                    custNanme: [
-                        { required: true, message: '请输入客户名称', trigger: 'blur' }
-                    ],
+                    // custNanme: [
+                    //     { required: true, message: '请输入客户名称', trigger: 'blur' }
+                    // ],
                     refunCounts: [
                         { required: true, message: '请输入剩余条数', trigger: 'blur' }
                     ],

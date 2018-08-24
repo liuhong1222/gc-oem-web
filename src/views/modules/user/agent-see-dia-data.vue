@@ -1,12 +1,12 @@
 <template>
     <div id="seeAgent">
-        <el-dialog title="查看" :visible.sync="dialogVisible" width="52%">
+        <el-dialog title="查看" :visible.sync="dialogVisible" width="40%">
             <el-form :model="dataForm" ref="dataForm" label-width="150px" class="demo-ruleForm" :label-position="labelPosition">
                 <!-- <h3>基本信息</h3> -->
                 <!-- <el-form-item label="代理商编号：" prop="agentNumber">
                     <el-input v-model="dataForm.agentNumber" placeholder="代理商编号" readonly></el-input>
                 </el-form-item> -->
-                <el-form-item label="营业执照：" >
+                <el-form-item label="营业执照：">
                     <el-upload class="avatar-uploader" action="" :show-file-list="false" disabled>
                         <img v-if="seeImageUrl" :src="seeImageUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -16,44 +16,47 @@
                 <el-form-item label="商户编号：">
                     <el-input v-model="dataForm.businNumber" placeholder="商户编号" readonly></el-input>
                 </el-form-item>
-                <el-form-item label="公司名称：" >
+                <el-form-item label="公司名称：">
                     <el-input v-model="dataForm.companyName" placeholder="公司名称" readonly></el-input>
                 </el-form-item>
-                <el-form-item label="营业执照所在地：" >
+                <el-form-item label="营业执照所在地：">
                     <el-input v-model="dataForm.bussicAdress" placeholder="营业执照所在地" readonly></el-input>
                 </el-form-item>
-                <el-form-item label="法人姓名：" >
+                <el-form-item label="法人姓名：">
                     <el-input v-model="dataForm.lawName" placeholder="法人姓名" readonly></el-input>
                 </el-form-item>
-                <el-form-item label="营业执照号：" >
+                <el-form-item label="营业执照号：">
                     <el-input v-model="dataForm.businNum" placeholder="营业执照号" readonly></el-input>
                 </el-form-item>
-                <el-form-item label="营业期限：" >
-                    <el-input v-model="dataForm.busindate1" placeholder="营业执照号" style="width:35%;" readonly></el-input>至
-                    <el-input v-model="dataForm.busindate2" placeholder="营业执照号" style="width:35%;" readonly></el-input>
+                <el-form-item label="营业期限：">
+                    <span style="margin-left:15px">{{dataForm.busindate1}}</span>
+                    <span>至</span>
+                    <span>{{dataForm.busindate2}}</span>
+                    <!-- <el-input v-model="dataForm.busindate1" placeholder="营业执照号" style="width:35%;" readonly></el-input>至 -->
+                    <!-- <el-input v-model="dataForm.busindate2" placeholder="营业执照号" style="width:35%;" readonly></el-input> -->
                 </el-form-item>
                 <!-- <h3>联系人信息</h3> -->
-                <el-form-item label="联系人姓名：" >
+                <el-form-item label="联系人姓名：">
                     <el-input v-model="dataForm.username" placeholder="联系人姓名" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="联系人手机号：">
                     <el-input v-model="dataForm.mobile" placeholder="联系人手机号" readonly></el-input>
                 </el-form-item>
-                <el-form-item label="联系人邮箱：" >
+                <el-form-item label="联系人邮箱：">
                     <el-input v-model="dataForm.email" placeholder="联系人邮箱" readonly></el-input>
                 </el-form-item>
-                <el-form-item label="职务：" >
+                <el-form-item label="职务：">
                     <el-input v-model="dataForm.work" placeholder="职务" readonly></el-input>
                 </el-form-item>
                 <!-- <h3>账号信息</h3> -->
-                <el-form-item label="登录账号：" >
+                <el-form-item label="登录账号：">
                     <el-input v-model="dataForm.loginAcc" placeholder="登录账号" readonly></el-input>
                 </el-form-item>
                 <!-- <el-form-item label="初始密码：" prop="pwd">
                     <el-input v-model="dataForm.pwd" placeholder="初始密码" readonly></el-input>
                 </el-form-item> -->
                 <!-- <h3>代理商级别</h3> -->
-                <el-form-item label="代理级别：" >
+                <el-form-item label="代理级别：">
                     <el-input v-model="dataForm.agencylevel" placeholder="代理级别" readonly></el-input>
                     <!-- <el-select v-model="dataForm.agencylevel" placeholder="请选择代理级别">
                         <el-option label="一级" value="1"></el-option>
@@ -61,11 +64,13 @@
                     </el-select> -->
                 </el-form-item>
                 <el-form-item label="单价：">
-                    <el-input v-model="dataForm.price" placeholder="单价" readonly></el-input>
+                    <span style="margin-left:15px">{{dataForm.price}}</span>
+                    <!-- <el-input v-model="dataForm.price" placeholder="单价" readonly></el-input> -->
                     <span>元/条</span>
                 </el-form-item>
-                <el-form-item label="预警条数：" >
-                    <el-input v-model="dataForm.allowCounts" placeholder="预警条数" readonly></el-input>
+                <el-form-item label="预警条数：">
+                    <span style="margin-left:15px">{{dataForm.allowCounts}}</span>
+                    <!-- <el-input v-model="" placeholder="预警条数" readonly></el-input> -->
                     <span>条</span>
                 </el-form-item>
             </el-form>
@@ -145,4 +150,8 @@
     #seeAgent .el-input__inner {
         border: none !important;
     }
+    /* #priceCss .el-input {
+        width: auto;
+        border:1px solid red
+    } */
 </style>

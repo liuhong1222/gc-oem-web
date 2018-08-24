@@ -313,6 +313,7 @@
                 this.dataForm.busindate1 = ""
                 this.dataForm.busindate2 = ""
                 this.dataForm.pwd = ""
+                this.agentReadonly=false
             },
             changeLevel(val) {
                 let arr = [];
