@@ -13,9 +13,9 @@
       <!-- 基本信息 -->
       <div class="essentialInformation" v-if="active === 0 ">
         <el-form :inline="true" :model="basicdataForm" v-model="dataList" :rules="basicDatarules" ref="basicdataList" label-width="110px">
-          <el-form-item label="代理商序号" prop="agentId">
+          <!-- <el-form-item label="代理商序号" prop="agentId">
             <el-input v-model="basicdataForm.agentId" placeholder="代理商序号"></el-input>
-          </el-form-item><br />
+          </el-form-item><br /> -->
           <el-form-item label="商户编号" prop="busicId">
             <el-input v-model="basicdataForm.busicId" placeholder="商户编号"></el-input>
           </el-form-item><br />
@@ -40,7 +40,7 @@
               <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M，长40px，宽40px，（再次上传请删除上一次上传）</div>
             </el-upload>
           </el-form-item><br />
-          <el-form-item label="代表签字">
+          <el-form-item label="代表签字" >
             <el-upload class="upload-demo" drag :show-file-list="true" name="file" :action="actionSignatures()" :on-success="handleAvatarSuccessSignatures"
               :on-error="errorSignatures" :on-progress="onProgressSignatures" :before-upload="beforeAvatarUploadSignatures"
               :data="SignaturesQueryParams" enctype="multipart/form-data" :limit="1">
@@ -49,7 +49,7 @@
               <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M，（再次上传请删除上一次上传）</div>
             </el-upload>
           </el-form-item><br />
-          <el-form-item label="公司红章">
+          <el-form-item label="公司红章" >
             <el-upload class="upload-demo" drag :show-file-list="true" name="file" :action="actionChapter()" :on-success="handleAvatarSuccessChapter"
               :on-error="errorChapter" :on-progress="onProgressChapter" :before-upload="beforeAvatarUploadChapter" :data="ChapterQueryParams"
               enctype="multipart/form-data" :limit="1">
@@ -219,10 +219,10 @@
         },
         basicDatarules: {  //基本信息规则
           agentId: [
-            { required: true, message: '请输入代理商编号', trigger: 'blur' }
+            { required: true, message: '请输入代理商序号', trigger: 'blur' }
           ],
           busicId: [
-            { required: true, message: '请输入代理商编号', trigger: 'blur' }
+            { required: true, message: '请输入商户编号', trigger: 'blur' }
           ],
           agentName: [
             { required: true, message: '请输入代理商名称', trigger: 'blur' }
@@ -901,4 +901,5 @@
     color: #999;
     line-height: 182px;
   }
+
 </style>

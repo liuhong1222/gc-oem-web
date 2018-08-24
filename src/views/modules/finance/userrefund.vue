@@ -11,7 +11,7 @@
                 <el-form-item label="客户手机号：" style="margin-left:35px;">
                     <el-input v-model="refundSearchData.mobile" placeholder="客户手机号" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="代理商名称：" style="margin-left:-15px;">
+                <el-form-item label="代理商名称：" style="margin-left:-15px;" v-if="disableAgent">
                     <el-input v-model="refundSearchData.agentName" placeholder="代理商名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="客户名称：" style="margin-left:-2px;">
@@ -28,23 +28,23 @@
                 :header-cell-style="getRowClass">
                 <el-table-column type="index" header-align="center" align="center" width="70" label="序号">
                 </el-table-column>
-                <el-table-column prop="payTime" label="退款时间" align="center" width="135">
+                <el-table-column prop="payTime" label="退款时间" align="center">
                 </el-table-column>
-                <el-table-column prop="userId" label=" 客户编号" width="80" align="center">
-                </el-table-column>
+                <!-- <el-table-column prop="userId" label=" 客户编号" width="80" align="center">
+                </el-table-column> -->
                 <el-table-column prop="userName" label=" 客户名称" align="center">
                 </el-table-column>
-                <el-table-column prop="userMobile" label="手机号" width="100" align="center">
+                <el-table-column prop="userMobile" label="手机号" align="center">
                 </el-table-column>
-                <el-table-column prop="agentCompanyName" label="代理名称" align="center">
+                <el-table-column prop="agentCompanyName" label="代理名称" align="center" v-if="disableAgentName">
                 </el-table-column>
-                <el-table-column prop="price" label="单价（元/条）" width="100" align="center">
+                <el-table-column prop="price" label="单价（元/条）" align="center">
                 </el-table-column>
-                <el-table-column prop="number" label="条数" width="120" align="center">
+                <el-table-column prop="number" label="条数" align="center">
                 </el-table-column>
-                <el-table-column prop="money" label="金额（元）" width="120" align="center">
+                <el-table-column prop="money" label="金额（元）" align="center">
                 </el-table-column>
-                <el-table-column fixed="right" prop="remark" label="备注" align="center">
+                <el-table-column  prop="remark" label="备注" align="center">
                 </el-table-column>
             </el-table>
         </div>
@@ -62,6 +62,8 @@
             return {
                 dataListLoading: false,
                 disabled: false,
+                disableAgent: true,
+                disableAgentName: true,
                 refundSearchData: {
                     dateTime: [],
                     agentName: "",
@@ -93,6 +95,10 @@
 
             // 获取退款记录接口
             refundList() {
+                if (sessionStorage.getItem('msjRoleName') == '2') {
+                    this.disableAgent = false
+                    this.disableAgentName = false
+                }
                 this.dataListLoading = true
                 this.$http({
                     url: this.$http.adornUrl(`agent/finance/user/refund/list?token=${this.$cookie.get('token')}`),

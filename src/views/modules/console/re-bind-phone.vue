@@ -111,7 +111,6 @@
 
             // 获取新手机号验证码
             getnewCode() {
-                alert('心心心心')
                 if (this.rePhoneForm.newPhone == "") {
                     this.$message.error('请输入新手机号!')
                     return

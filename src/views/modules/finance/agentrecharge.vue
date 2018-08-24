@@ -30,17 +30,17 @@
                 :header-cell-style="getRowClass">
                 <el-table-column type="index" header-align="center" align="center" width="80" label="序号">
                 </el-table-column>
-                <el-table-column prop="agentId" label="代理商序号" align="center" width="80">
+                <el-table-column prop="agentId" label="代理商序号" align="center" >
                 </el-table-column>
-                <el-table-column prop="companyName" label="代理商名称" align="center" width="100">
+                <el-table-column prop="companyName" label="代理商名称" align="center" >
                 </el-table-column>
                 <el-table-column prop="payTime" label="充值时间" align="center">
                 </el-table-column>
                 <el-table-column prop="orderNo" label=" 订单编号" align="center">
                 </el-table-column>
-                <el-table-column prop="levelName" label="代理等级" width="80" align="center">
+                <el-table-column prop="levelName" label="代理等级"  align="center">
                 </el-table-column>
-                <el-table-column prop="price" label="单价（元/条）" align="center" width="80">
+                <el-table-column prop="price" label="单价（元/条）" align="center">
                 </el-table-column>
                 <el-table-column prop="number" label="条数" align="center">
                 </el-table-column>

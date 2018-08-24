@@ -68,7 +68,8 @@
           <span>元/条</span>
         </el-form-item>
         <el-form-item label="充值金额" prop="chMoney">
-          <el-input v-model.number="chdataForm.chMoney" placeholder="请输入整数，最低充值金额1万元……" @keyup.native="proving1"></el-input>
+            <el-input v-model.number="chdataForm.chMoney" placeholder="请输入整数，最低充值金额1万元……" ></el-input>
+          <!-- <el-input v-model.number="chdataForm.chMoney" placeholder="请输入整数，最低充值金额1万元……" @keyup.native="proving1"></el-input> -->
           <span>万元</span>
         </el-form-item>
         <el-form-item label="充值条数">
@@ -365,15 +366,15 @@
         }
       },
       // 必须输入正整数
-      proving1() {
-        let moneyType = (this.chdataForm.chMoney).toString()
-        this.chdataForm.chMoney = moneyType.replace(/[^0-9]*/g, '').replace(/\b(0+)/gi, "")
-        // this.chdataForm.chMoney = Number(moneyType.replace(/[^\.\d]/g, ''));
-        // this.chdataForm.chMoney = Number(moneyType.replace('.', ''));
-        // if (this.chdataForm.chMoney == 0) {
-        //   this.chdataForm.chMoney = ""
-        // }
-      },
+      // proving1() {
+      //   let moneyType = (this.chdataForm.chMoney).toString()
+      //   this.chdataForm.chMoney = moneyType.replace(/[^0-9]*/g, '').replace(/\b(0+)/gi, "")
+      //   // this.chdataForm.chMoney = Number(moneyType.replace(/[^\.\d]/g, ''));
+      //   // this.chdataForm.chMoney = Number(moneyType.replace('.', ''));
+      //   // if (this.chdataForm.chMoney == 0) {
+      //   //   this.chdataForm.chMoney = ""
+      //   // }
+      // },
       getQrcode() {
         this.$nextTick(() => {
           let qrcode = new QRCode('qrcode', {

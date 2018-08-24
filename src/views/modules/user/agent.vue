@@ -32,8 +32,8 @@
             <el-table :data="agentTableData" style="width: 100%" v-loading="dataListLoading" :header-cell-style="getRowClass">
                 <el-table-column type="index" header-align="center" align="center" width="80" fixed label="序号">
                 </el-table-column>
-                <el-table-column prop="agentNo" label="代理商编号" width="90" align="center">
-                </el-table-column>
+                <!-- <el-table-column prop="agentNo" label="代理商编号" width="90" align="center">
+                </el-table-column> -->
                 <el-table-column prop="mchId" label=" 商户编号" width="80" align="center">
                 </el-table-column>
                 <el-table-column prop="companyName" label=" 代理商名称" width="165" align="center">
@@ -108,8 +108,10 @@
 
         <!-- 禁用，启用 -->
         <el-dialog :title="disableTitlt" :visible.sync="disableVisible" width="30%">
-            <p v-show="jinShow">您将禁用账号<input type="text" value="*****" style="border:none; color:#3E8EF7" v-model="account">，禁用后该账户将不可登录该系统</p>
-            <p v-show="qiShow">您将启用账号<input type="text" value="*****" style="border:none;" v-model="account">，启用后该账户将恢复正常使用。</p>
+            <p v-show="jinShow">您将禁用账号{{account}}，禁用后该账户将不可登录该系统</p>
+            <p v-show="qiShow">您将启用账号{{account}}，启用后该账户将恢复正常使用。</p>
+            <!-- <p v-show="jinShow">您将禁用账号<input type="text" value="*****" style="border:none; color:#3E8EF7;min-width:50px" v-model="account">，禁用后该账户将不可登录该系统</p>
+            <p v-show="qiShow">您将启用账号<input type="text" value="*****" style="border:none;min-width:50px" v-model="account">，启用后该账户将恢复正常使用。</p> -->
             <span slot="footer" class="dialog-footer">
             <el-button @click="disableVisible = false">取 消</el-button>
             <el-button type="primary" @click="ddd">确 定</el-button>

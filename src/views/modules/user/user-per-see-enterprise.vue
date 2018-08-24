@@ -2,14 +2,14 @@
     <div class="seecuslog">
         <!-- 查看个人信息 -->
         <el-dialog title="查看个人客户" :visible.sync="perseeVisible" width="48%">
-        
+
             <el-form :model="perseeDataForm" ref="perDataForm" label-width="150px" :label-position="labelPosition">
                 <el-form-item label="手机号码：">
                     <el-input v-model="perseeDataForm.mobile" placeholder="手机号码" readonly></el-input>
                 </el-form-item>
-                <el-form-item label="客户编号">
+                <!-- <el-form-item label="客户编号">
                     <el-input v-model="perseeDataForm.custNum" placeholder="客户编号" readonly></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="身份证照片">
                     <el-upload class="avatar-uploader" action="" :show-file-list="false" style="display:inline-block" disabled>
                         <img v-if="imageUrlFace" :src="imageUrlFace" class="avatar">
@@ -46,14 +46,14 @@
 
         <!-- 查看企业信息 -->
         <el-dialog title=" 查看企业客户" :visible.sync="entriseVisible" width="52%">
-          
+
             <el-form :model="seepriseDataForm" ref="seepriseDataFormref" label-width="150px" :label-position="labelPosition">
                 <el-form-item label="手机号码：">
                     <el-input v-model="seepriseDataForm.mobile" placeholder="手机号码"></el-input>
                 </el-form-item>
-                <el-form-item label="客户编号：">
+                <!-- <el-form-item label="客户编号：">
                     <el-input v-model="seepriseDataForm.prisecustNum" placeholder="客户编号"></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="营业执照：">
                     <el-upload class="avatar-uploader" action="" :show-file-list="false" readonly>
                         <img v-if="priseimageUrl" :src="priseimageUrl" class="avatar">
@@ -88,7 +88,7 @@
     </div>
 </template>
 <script>
-     import imgUrl from '@/utils/imgUrl'
+    import imgUrl from '@/utils/imgUrl'
     export default {
         data() {
             return {
@@ -101,7 +101,7 @@
                     id: '',
                     creUserId: '',
                     mobile: '',
-                    custNum: '',
+                    // custNum: '',
                     custNanme: '',
                     perIdno: '',
                     peraddress: '',
@@ -112,7 +112,7 @@
                     id: '',
                     creUserId: '',
                     mobile: '',
-                    prisecustNum: '',
+                    // prisecustNum: '',
                     priseComName: '',
                     businNum: '',
                     priseaddress: '',
@@ -134,23 +134,23 @@
                     this.perseeDataForm.id = arr[0]
                     this.perseeDataForm.creUserId = arr[2]
                     this.$http({
-                        url: this.$http.adornUrl(`agent/cust/findPersonById?token=${this.$cookie.get('token')}&id=${this.perseeDataForm.id === null ? "" :this.perseeDataForm.id }&creUserId=${this.perseeDataForm.creUserId}`),
+                        url: this.$http.adornUrl(`agent/cust/findPersonById?token=${this.$cookie.get('token')}&id=${this.perseeDataForm.id === null ? "" : this.perseeDataForm.id}&creUserId=${this.perseeDataForm.creUserId}`),
                         method: 'get',
                         params: this.$http.adornParams()
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
                             // console.log(data)
-                            this.perseeDataForm.mobile=data.mobile
+                            this.perseeDataForm.mobile = data.mobile
                             this.perseeDataForm.peremail = data.mail
-                            this.imageUrlFace = imgUrl.imgUrl+data.idCardInfo.faceUrl
-                            this.imageUrlback = imgUrl.imgUrl+data.idCardInfo.backUrl
-                            this.perseeDataForm.custNum = data.idCardInfo.creUserId
+                            this.imageUrlFace = imgUrl.imgUrl + data.idCardInfo.faceUrl
+                            this.imageUrlback = imgUrl.imgUrl + data.idCardInfo.backUrl
+                            // this.perseeDataForm.custNum = data.idCardInfo.creUserId
                             this.perseeDataForm.custNanme = data.idCardInfo.username
                             this.perseeDataForm.perIdno = data.idCardInfo.idno
                             this.perseeDataForm.peraddress = data.idCardInfo.address
                             this.perseeDataForm.pertimelimit1 = data.idCardInfo.effectdate
                             this.perseeDataForm.pertimelimit2 = data.idCardInfo.expiredate
-                           
+
                         } else {
                             this.$message.error(data.msg)
                         }
@@ -168,8 +168,8 @@
                         if (data && data.code === 0) {
                             // console.log(data)
                             this.seepriseDataForm.mobile = data.mobile
-                            this.priseimageUrl = imgUrl.imgUrl+data.businessLicenceInfo.pictureUrl
-                            this.seepriseDataForm.prisecustNum = data.businessLicenceInfo.creUserId
+                            this.priseimageUrl = imgUrl.imgUrl + data.businessLicenceInfo.pictureUrl
+                            // this.seepriseDataForm.prisecustNum = data.businessLicenceInfo.creUserId
                             this.seepriseDataForm.priseComName = data.businessLicenceInfo.name
                             this.seepriseDataForm.businNum = data.businessLicenceInfo.regnum
                             this.seepriseDataForm.priseaddress = data.businessLicenceInfo.address

@@ -87,7 +87,7 @@
           realName: '',
           // roleIdList: [],
           status: 1,
-          roleId:1
+          roleId: 1
         },
         dataRule: {
           userName: [
@@ -160,13 +160,13 @@
               data: this.$http.adornData({
                 'userId': this.dataForm.id || undefined,
                 'username': this.dataForm.userName,
-                'password': md5(this.dataForm.password),
+                'password': (this.dataForm.password) ? md5(this.dataForm.password) : (this.dataForm.password),
                 'salt': this.dataForm.salt,
                 'email': this.dataForm.email,
                 'mobile': this.dataForm.userName,
                 'status': this.dataForm.status,
                 'realName': this.dataForm.realName,
-                'roleIdList':this.parmroleList
+                'roleIdList': this.parmroleList
               })
             }).then(({ data }) => {
               if (data && data.code === 0) {

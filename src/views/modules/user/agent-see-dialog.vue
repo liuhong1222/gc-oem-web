@@ -4,9 +4,9 @@
             <el-collapse v-model="activeNames" @change="handleChange" accordion>
                 <el-collapse-item title="基本信息" name="1">
                     <el-form :model="basicdataForm" ref="basicdataForm" label-width="150px" class="demo-ruleForm" :label-position="labelPosition">
-                        <el-form-item label="代理商序号：">
+                        <!-- <el-form-item label="代理商序号：">
                             <el-input v-model="basicdataForm.agentNumber" placeholder="代理商序号" readonly></el-input>
-                        </el-form-item>
+                        </el-form-item> -->
                         <el-form-item label="商户编号：">
                             <el-input v-model="basicdataForm.businNumber" placeholder="商户编号" readonly></el-input>
                         </el-form-item>
@@ -25,13 +25,13 @@
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </el-form-item>
-                        <el-form-item label="代表签字：">
+                        <el-form-item label="代表签字：" id="picImgSizeDemo">
                             <el-upload class="avatar-uploader" action="" :show-file-list="false" disabled>
                                 <img v-if="dqImageUrl" :src="dqImageUrl" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </el-form-item>
-                        <el-form-item label="公司红章：">
+                        <el-form-item label="公司红章：" id="picImgSizeDemo1">
                             <el-upload class="avatar-uploader" action="" :show-file-list="false" disabled>
                                 <img v-if="gzImageUrl" :src="gzImageUrl" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -157,7 +157,7 @@
                 dqImageUrl: '',
                 gzImageUrl: '',
                 basicdataForm: { //基本信息
-                    agentNumber: '',
+                    // agentNumber: '',
                     businNumber: '',
                     agentName: '',
                     dxName: '',
@@ -212,7 +212,7 @@
                     method: 'post',
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
-                        this.basicdataForm.agentNumber = data.data[0].agentId
+                        // this.basicdataForm.agentNumber = data.data[0].agentId
                         this.basicdataForm.businNumber = data.data[0].agent_no
                         this.basicdataForm.ageagentNamentName = data.data[0].company_name
                         this.basicdataForm.dxName = data.data[0].sms_sign
@@ -316,4 +316,12 @@
     .mainAess .el-input__inner {
         border: none
     }
+    #picImgSizeDemo .el-upload,#picImgSizeDemo1 .el-upload{
+    width: 180px;
+    height: 150px;
+  }
+  #picImgSizeDemo .el-upload img, #picImgSizeDemo1 .el-upload img {
+    width: 100%;
+    height: 100%
+  }
 </style>

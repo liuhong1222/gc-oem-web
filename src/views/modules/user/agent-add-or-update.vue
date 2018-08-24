@@ -2,9 +2,9 @@
     <el-dialog :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="visible" :before-close="closeDialog">
         <el-form :model="dataForm" :rules="datarules" ref="dataForm" label-width="150px" class="demo-ruleForm" :label-position="labelPosition">
             <h3>基本信息</h3>
-            <el-form-item label="代理商编号：" prop="agentNumber" v-show="agentNumberFlag" id="agentNumberCss">
+            <!-- <el-form-item label="代理商编号：" prop="agentNumber" v-show="agentNumberFlag" id="agentNumberCss">
                 <el-input v-model="dataForm.agentNumber" placeholder="代理商编号" readonly></el-input>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="营业执照：" prop="">
                 <el-upload class="avatar-uploader" :action="priseurl" accept="image/jpeg,image/jpg,image/png" :show-file-list="false" :on-success="perisehandleAvatarSuccess"
                     :before-upload="beforeAvatarUpload">
@@ -38,7 +38,7 @@
                 <el-input v-model="dataForm.username" placeholder="联系人姓名"></el-input>
             </el-form-item>
             <el-form-item label="联系人手机号：" prop="mobile">
-                <el-input v-model="dataForm.mobile" placeholder="联系人手机号" maxlength="11"></el-input>
+                <el-input v-model="dataForm.mobile" placeholder="联系人手机号" maxlength="11" :readonly="agentReadonly"></el-input>
             </el-form-item>
             <el-form-item label="联系人邮箱：" prop="email">
                 <el-input v-model="dataForm.email" placeholder="联系人邮箱"></el-input>
@@ -51,7 +51,7 @@
                 <el-input v-model="dataForm.loginAcc" placeholder="登录账号" readonly></el-input>
             </el-form-item>
             <el-form-item label="密码：" :prop="!dataForm.id ? 'pwd' : ''">
-                <el-input v-model="dataForm.pwd" placeholder="密码"></el-input>
+                <el-input type="password" v-model="dataForm.pwd" placeholder="密码"></el-input>
             </el-form-item>
             <h3>代理商级别</h3>
             <el-form-item label="代理级别：" prop="agencylevel">
@@ -90,7 +90,8 @@
                 }
             }
             return {
-                agentNumberFlag: false,
+                // agentNumberFlag: false,
+                agentReadonly:false,
                 priseimageUrl: "",
                 priseurl: "",
                 licensePicNo: '',
@@ -99,7 +100,7 @@
                 agencylevelArr: [],  //级别数组
                 dataForm: {
                     id: 0,
-                    agentNumber: '',
+                    // agentNumber: '',
                     businNumber: '',
                     companyName: '',
                     bussicAdress: '',
@@ -179,7 +180,7 @@
         methods: {
             showInit(id) {
                 this.dataForm.id = id || 0
-                this.agentNumberFlag = false
+                // this.agentNumberFlag = false
                 this.visible = true
                 // console.log('id' + id)
                 // console.log(this.$http.adornParams())
@@ -199,7 +200,8 @@
                 })
                 this.priseurl = this.$http.adornUrl(`agent/agentInfo/license/upload?token=${this.$cookie.get('token')}`)
                 if (this.dataForm.id) {
-                    this.agentNumberFlag = true
+                    this.agentReadonly=true
+                    // this.agentNumberFlag = true
                     this.$http({
                         url: this.$http.adornUrl(`agent/agentInfo/detail?token=${this.$cookie.get('token')}&agentId=${this.dataForm.id}`),
                         method: 'get',
@@ -209,7 +211,7 @@
                             // console.log(imgUrl.imgUrl)
                             // console.log(imgUrl.imgUrl + data.data.licenseUrl)
                             this.priseimageUrl = imgUrl.imgUrl + data.data.licenseUrl
-                            this.dataForm.agentNumber = data.data.agentNo
+                            // this.dataForm.agentNumber = data.data.agentNo
                             this.dataForm.businNumber = data.data.mchId
                             this.dataForm.companyName = data.data.companyName
                             this.dataForm.bussicAdress = data.data.address
@@ -257,7 +259,7 @@
                                 'position': this.dataForm.work,
                                 'mobile': this.dataForm.mobile,
                                 'email': this.dataForm.email,
-                                'password': md5(this.dataForm.pwd),
+                                'password': (this.dataForm.pwd) ? md5(this.dataForm.pwd) : "",
                                 'levelId': this.dataForm.agencylevel,
                                 'price': this.dataForm.price,
                                 'emptyWarnNumber': this.dataForm.allowCounts
@@ -310,6 +312,7 @@
                 this.priseimageUrl = ""
                 this.dataForm.busindate1 = ""
                 this.dataForm.busindate2 = ""
+                this.dataForm.pwd = ""
             },
             changeLevel(val) {
                 let arr = [];

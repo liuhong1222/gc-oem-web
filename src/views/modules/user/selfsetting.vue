@@ -15,9 +15,9 @@
                 <!-- 基本信息 -->
                 <div class="essentialInformation" v-if="active === 0 ">
                     <el-form :inline="true" :model="basicdataForm" v-model="dataList" :rules="basicDatarules" ref="basicdataList" label-width="110px">
-                        <el-form-item label="代理商序号：" prop="agentId" class="noborder">
+                        <!-- <el-form-item label="代理商序号：" prop="agentId" class="noborder">
                             <el-input v-model="basicdataForm.agentId" placeholder="代理商序号" readonly></el-input>
-                        </el-form-item><br />
+                        </el-form-item><br /> -->
                         <el-form-item label="商户编号：" prop="busicId" class="noborder">
                             <el-input v-model="basicdataForm.busicId" placeholder="商户编号" readonly></el-input>
                         </el-form-item><br />
@@ -193,9 +193,9 @@
             <el-collapse v-model="activeNames" @change="handleChange" accordion>
                 <el-collapse-item title="基本信息 ✚" name="1">
                     <el-form :model="basicdataForm" ref="basicdataForm" label-width="150px" class="demo-ruleForm" :label-position="labelPosition">
-                        <el-form-item label="代理商序号：">
+                        <!-- <el-form-item label="代理商序号：">
                             <el-input v-model="basicdataForm.agentId" placeholder="代理商序号" readonly></el-input>
-                        </el-form-item>
+                        </el-form-item> -->
                         <el-form-item label="商户编号：">
                             <el-input v-model="basicdataForm.busicId" placeholder="商户编号" readonly></el-input>
                         </el-form-item>
@@ -361,11 +361,11 @@
                     agentDomain: ''
                 },
                 basicDatarules: {  //基本信息规则
-                    agentId: [
-                        { required: true, message: '请输入代理商编号', trigger: 'blur' }
-                    ],
+                    // agentId: [
+                    //     { required: true, message: '请输入代理商序号', trigger: 'blur' }
+                    // ],
                     busicId: [
-                        { required: true, message: '请输入代理商编号', trigger: 'blur' }
+                        { required: true, message: '请输入商户编号', trigger: 'blur' }
                     ],
                     agentName: [
                         { required: true, message: '请输入代理商名称', trigger: 'blur' }
@@ -657,7 +657,7 @@
                         this.contractdataForm.openBank = data.data.bankName
                         this.contractdataForm.zipcode = data.data.postcode
                         this.contractdataForm.phone = data.data.mobile,
-                            this.contractdataForm.id = data.data.id
+                        this.contractdataForm.id = data.data.id
                     }
                 })
             },

@@ -8,11 +8,14 @@
                         value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="代理商名称：" style="margin-left:5px;">
+                <el-form-item label="代理商名称：" style="margin-left:5px;" v-if="disableAgent">
                     <el-input v-model="customerSearchData.agentName" placeholder="代理商名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="客户名称：" style="margin-left:-2px;">
                     <el-input v-model="customerSearchData.custName" placeholder="客户名称" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="手机号：" style="margin-left:10px;">
+                    <el-input v-model="customerSearchData.custMobile" placeholder="手机号" clearable></el-input>
                 </el-form-item>
                 <el-form-item style="margin-left:6px">
                     <el-button type="primary" @click="uerRechargeList">查询</el-button>
@@ -27,19 +30,19 @@
                 </el-table-column>
                 <el-table-column prop="payTime" label="充值时间" align="center">
                 </el-table-column>
-                <el-table-column prop="userId" label=" 客户编号" align="center">
+                <!-- <el-table-column prop="userId" label=" 客户编号" align="center">
+                </el-table-column> -->
+                <el-table-column prop="userName" label=" 客户名称" align="center" >
                 </el-table-column>
-                <el-table-column prop="userName" label=" 客户名称" align="center">
+                <el-table-column prop="agentCompanyName" label="代理商名称" align="center" v-if="disableAgentName">
                 </el-table-column>
-                <el-table-column prop="agentCompanyName" label="代理商名称" align="center">
+                <el-table-column prop="userMobile" label="手机号" align="center" >
                 </el-table-column>
-                <el-table-column prop="userMobile" label="手机号" align="center">
-                </el-table-column>
-                <el-table-column prop="orderNo" label="订单编号" align="center">
+                <el-table-column prop="orderNo" label="订单编号" align="center" >
                 </el-table-column>
                 <el-table-column prop="packageName" label="套餐选择" align="center">
                 </el-table-column>
-                <el-table-column prop="price" label="单价（元/条）" align="center">
+                <el-table-column prop="price" label="单价（元/条）" align="center" >
                 </el-table-column>
                 <el-table-column prop="number" label="条数" align="center">
                 </el-table-column>
@@ -64,12 +67,16 @@
     export default {
         data() {
             return {
+                roleName: null,
                 dataListLoading: false,
                 disabled: false,
+                disableAgent: true,
+                disableAgentName: true,
                 customerSearchData: {
                     dateTime: [],
                     agentName: "",
                     custName: '',
+                    custMobile: ''
                 },
                 customerTableData: [],
                 pageIndex: 1,
@@ -87,6 +94,11 @@
         },
         methods: {
             uerRechargeList() {
+
+                if (sessionStorage.getItem('msjRoleName') == '2') {
+                    this.disableAgent = false
+                    this.disableAgentName = false
+                }
                 this.dataListLoading = true;
                 disabled: false,
                     this.$http({
@@ -97,6 +109,7 @@
                             'pageSize': this.pageSize,
                             'companyName': this.customerSearchData.agentName,
                             'userName': this.customerSearchData.custName,
+                            'userMobile': this.customerSearchData.custMobile,
                             'startTime': '' || this.customerSearchData.dateTime == null ? '' : this.customerSearchData.dateTime[0],
                             'endTime': '' || this.customerSearchData.dateTime == null ? '' : this.customerSearchData.dateTime[1]
                         })

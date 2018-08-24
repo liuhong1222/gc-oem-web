@@ -11,7 +11,7 @@
                 <el-form-item label="客户手机号：" style="margin-left:35px;">
                     <el-input v-model="consumeSearchData.mobile" placeholder="客户手机号" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="代理商名称：">
+                <el-form-item label="代理商名称：" v-if="disableAgent">
                     <el-input v-model="consumeSearchData.agentName" placeholder="代理商名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="客户名称：" style="margin-left:-2px;">
@@ -28,17 +28,17 @@
                 :header-cell-style="getRowClass">
                 <el-table-column type="index" header-align="center" align="center" width="80" label="序号">
                 </el-table-column>
-                <el-table-column prop="userId" label=" 客户编号" width="80" align="center">
-                </el-table-column>
+                <!-- <el-table-column prop="userId" label=" 客户编号"  align="center">
+                </el-table-column> -->
                 <el-table-column prop="userName" label=" 客户名称" align="center">
                 </el-table-column>
-                <el-table-column prop="agentCompanyName" label="代理商名称" align="center">
+                <el-table-column prop="agentCompanyName" label="代理商名称" align="center" v-if="disableAgentName">
                 </el-table-column>
                 <el-table-column prop="consumeTime" label="消耗时间" align="center">
                 </el-table-column>
-                <el-table-column prop="number" label="消耗条数（条）" width="120" align="center">
+                <el-table-column prop="number" label="消耗条数（条）" align="center">
                 </el-table-column>
-                <el-table-column prop="userMobile" label="手机号" width="100" align="center">
+                <el-table-column prop="userMobile" label="手机号" align="center">
                 </el-table-column>
             </el-table>
         </div>
@@ -56,6 +56,8 @@
             return {
                 dataListLoading: false,
                 disabled: false,
+                disableAgent: true,
+                disableAgentName: true,
                 consumeSearchData: {
                     dateTime: [],
                     agentName: "",
@@ -79,6 +81,10 @@
         methods: {
             // 获取消耗记录接口
             consumeList() {
+                if (sessionStorage.getItem('msjRoleName') == '2') {
+                    this.disableAgent = false
+                    this.disableAgentName = false
+                }
                 this.dataListLoading = true
                 this.$http({
                     url: this.$http.adornUrl(`agent/finance/user/consume/list?token=${this.$cookie.get('token')}`),

@@ -20,27 +20,27 @@
             <el-table :data="dataList" style="width: 100%" :header-cell-style="getRowClass">
                 <el-table-column type="index" header-align="center" align="center" width="50" fixed label="序号">
                 </el-table-column>
-                <el-table-column prop="agentId" label=" 代理商序号" width="80" align="center">
+                <!-- <el-table-column prop="agentId" label=" 代理商序号" width="100" align="center">
+                </el-table-column> -->
+                <el-table-column prop="mch_id" label=" 商户编号" width="100" align="center">
                 </el-table-column>
-                <el-table-column prop="mch_id" label=" 客户编号" width="70" align="center">
-                </el-table-column>
-                <el-table-column prop="company_name" label=" 代理商名称" width="80" align="center">
+                <el-table-column prop="company_name" label=" 代理商名称" width="100" align="center">
                 </el-table-column>
                 <el-table-column prop="create_time" label="创建时间" align="center" width="150">
                 </el-table-column>
-                <el-table-column prop="logo_url" label="LOGO" align="center">
+                <el-table-column prop="logo_url" label="LOGO" align="center" width="150" :show-overflow-tooltip="true">
                 </el-table-column>
-                <el-table-column prop="icon_url" label="ICON" align="center">
+                <el-table-column prop="icon_url" label="ICON" align="center" width="150" :show-overflow-tooltip="true">
                 </el-table-column>
-                <el-table-column prop="sign_url" label="代理商签字" align="center">
+                <el-table-column prop="sign_url" label="代理商签字" align="center" width="150" :show-overflow-tooltip="true">
                 </el-table-column>
-                <el-table-column prop="seal_url" label="公章" align="center">
+                <el-table-column prop="seal_url" label="公章" align="center" width="150" :show-overflow-tooltip="true">
                 </el-table-column>
                 <el-table-column prop="sms_sign" label="短信签名" align="center">
                 </el-table-column>
                 <el-table-column prop="dayuming" label="代理商域名" align="center">
                 </el-table-column>
-                <el-table-column prop="beian" label="域名备案信息" align="center" width="150">
+                <el-table-column prop="beian" label="域名备案信息" id="infoHeight" align="center" width="150">
                     <template slot-scope="scope">
                         <div>{{scope.row.licence}}</div>
                         <div>{{scope.icp_record}}</div>
@@ -48,13 +48,14 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="kefy" label="客服资料" align="center" width="150">
+
                     <template slot-scope="scope">
                         <div>QQ:{{scope.row.qq}}</div>
                         <div>客服热线:{{scope.row.hotline}}</div>
                         <div>商务合作:{{scope.row.biz_no}}</div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="zbInfo" label="支付宝资料" align="center" width="250">
+                <el-table-column prop="zbInfo" label="支付宝资料" align="center" width="150">
                     <template slot-scope="scope">
                         <div>api id:{{scope.row.aliAppid}}</div>
                         <div>支付调用地址:{{scope.row.alicall_url}}</div>
@@ -63,7 +64,7 @@
                         <div>应用私钥:{{scope.row.aliprivate_key}}</div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="weiinfo" label="微信资料" align="center" width="250">
+                <el-table-column prop="weiinfo" label="微信资料" align="center" width="150">
                     <template slot-scope="scope">
                         <div>mchid:{{scope.row.wxMchid}}</div>
                         <div>支付调用地址:{{scope.row.wxcall_url}}</div>
@@ -72,7 +73,7 @@
                         <div>key:{{scope.row.wxKey}}</div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="ht" label="合同信息" align="center" width="250">
+                <el-table-column prop="ht" label="合同信息" align="center" width="150">
                     <template slot-scope="scope">
                         <div>名称:{{scope.row.htcompany_name}}</div>
                         <div>地址:{{scope.row.htcompany_address}}</div>
@@ -253,4 +254,10 @@
     .main .el-table .cell {
         line-height: 13px;
     }
+    /* .cell div:nth-child(2) {
+        width: 120px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis
+    } */
 </style>

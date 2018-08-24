@@ -22,7 +22,7 @@
         <el-form-item label="客户名称：" style="margin-left:0px;">
           <el-input v-model="searchData.custName" placeholder="客户名称" clearable></el-input>
         </el-form-item>
-        <el-form-item label="代理商名称：">
+        <el-form-item label="代理商名称：" v-if="disableAgent">
           <el-input v-model="searchData.agentName" placeholder="代理商名称" clearable></el-input>
         </el-form-item>
         <el-form-item>
@@ -35,23 +35,23 @@
       <el-table :data="userTableData" style="width: 100%" v-loading="dataListLoading" :header-cell-style="getRowClass">
         <el-table-column type="index" header-align="center" align="center" width="80" fixed label="序号">
         </el-table-column>
-        <el-table-column prop="creUserId" label=" 客户编号" width="80" align="center">
+        <!-- <el-table-column prop="creUserId" label=" 客户编号" width="80" align="center">
+        </el-table-column> -->
+        <el-table-column prop="user_phone" label="手机号码" align="center">
         </el-table-column>
-        <el-table-column prop="user_phone" label="手机号码" width="110" align="center">
-        </el-table-column>
-        <el-table-column prop="userType" label="客户类型" width="90" align="center">
+        <el-table-column prop="userType" label="客户类型" align="center">
         </el-table-column>
         <el-table-column prop="custName" label=" 客户名称" align="center">
         </el-table-column>
-        <el-table-column prop="company_name" label="代理商名称" align="center" width="150">
+        <el-table-column prop="company_name" label="代理商名称" align="center"  v-if="disableAgentName">
         </el-table-column>
-        <el-table-column prop="create_time" label="注册时间" align="center" width="150">
+        <el-table-column prop="create_time" label="注册时间" align="center" >
         </el-table-column>
-        <el-table-column prop="money" label="充值总计（元）" width="120" align="center">
+        <el-table-column prop="money" label="充值总计（元）" align="center">
         </el-table-column>
-        <el-table-column prop="number" label="充值总条数" width="120" align="center">
+        <el-table-column prop="number" label="充值总条数"  align="center">
         </el-table-column>
-        <el-table-column prop="account" label="剩余条数" width="120" align="center">
+        <el-table-column prop="account" label="剩余条数"  align="center">
         </el-table-column>
         <el-table-column fixed="right" label="操作" align="center" width="150">
           <template slot-scope="scope">
@@ -95,6 +95,8 @@
         chargeVisible: false,
         refundVisible: false,
         dataListLoading: false,
+        disableAgent: true,
+        disableAgentName: true,
         arr: [],  //保存点击的id和区分个人和企业的id
         searchData: {
           dateTime: [],
@@ -141,6 +143,10 @@
       },
       // 获取客户列表
       getCustomList() {
+        if (sessionStorage.getItem('msjRoleName') == '2') {
+          this.disableAgent = false
+          this.disableAgentName = false
+        }
         this.dataListLoading = true
         this.$http({
           url: this.$http.adornUrl(`agent/cust/custList?token=${this.$cookie.get('token')}`),

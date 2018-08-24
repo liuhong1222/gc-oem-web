@@ -80,7 +80,7 @@
             accDataFormSubmit() {
                 this.$refs['accountdataFormref'].validate((valid) => {
                     if (valid) {
-                        console.log('验证通过')
+                        // console.log('验证通过')
                         this.$http({
                             url: this.$http.adornUrl(`agent/agentSysUser/${!this.accountdataForm.id ? 'save' : 'update'}?token=${this.$cookie.get('token')}`),
                             method: 'post',
@@ -88,7 +88,7 @@
                                 'userId': this.accountdataForm.id || undefined,
                                 'realName': this.accountdataForm.name,
                                 'mobile': this.accountdataForm.mobile,
-                                'password': md5(this.accountdataForm.password)
+                                'password': (this.accountdataForm.password) ? md5(this.accountdataForm.password) : this.accountdataForm.password
                             })
                         }).then(({ data }) => {
                             console.log(data)
