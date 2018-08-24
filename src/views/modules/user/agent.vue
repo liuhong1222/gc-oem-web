@@ -107,9 +107,9 @@
         </el-dialog>
 
         <!-- 禁用，启用 -->
-        <el-dialog :title="disableTitlt" :visible.sync="disableVisible" width="30%">
-            <p v-show="jinShow">您将禁用账号{{account}}，禁用后该账户将不可登录该系统</p>
-            <p v-show="qiShow">您将启用账号{{account}}，启用后该账户将恢复正常使用。</p>
+        <el-dialog :title="disableTitlt" :visible.sync="disableVisible" width="30%" @close="closeDialogjq">
+            <p v-show="jinShow" class="hideCON">您将禁用账号{{account}}，禁用后该账户将不可登录该系统</p>
+            <p v-show="qiShow" class="hideCON">您将启用账号{{account}}，启用后该账户将恢复正常使用。</p>
             <!-- <p v-show="jinShow">您将禁用账号<input type="text" value="*****" style="border:none; color:#3E8EF7;min-width:50px" v-model="account">，禁用后该账户将不可登录该系统</p>
             <p v-show="qiShow">您将启用账号<input type="text" value="*****" style="border:none;min-width:50px" v-model="account">，启用后该账户将恢复正常使用。</p> -->
             <span slot="footer" class="dialog-footer">
@@ -256,7 +256,10 @@
                     return ''
                 }
             },
-
+            closeDialogjq() {
+                this.jinShow = false
+                this.qiShow = false
+            },
             // 导出 
             exporTable() {
                 let startTime;
