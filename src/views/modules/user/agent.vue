@@ -93,7 +93,7 @@
                     <el-select v-model="chdataForm.type" placeholder="入账类型">
                         <el-option label="支付宝" value="1"></el-option>
                         <el-option label="对公转账" value="5"></el-option>
-                        <el-option label="赠送" value="6"></el-option>
+                        <!-- <el-option label="赠送" value="6"></el-option> -->
                     </el-select>
                 </el-form-item>
                 <el-form-item label="备注" prop="remark">
