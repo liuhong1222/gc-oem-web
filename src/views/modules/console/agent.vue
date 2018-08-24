@@ -68,7 +68,7 @@
           <span>元/条</span>
         </el-form-item>
         <el-form-item label="充值金额" prop="chMoney">
-            <el-input v-model.number="chdataForm.chMoney" placeholder="请输入整数，最低充值金额1万元……" ></el-input>
+          <el-input v-model.number="chdataForm.chMoney" placeholder="请输入整数，最低充值金额1万元……"></el-input>
           <!-- <el-input v-model.number="chdataForm.chMoney" placeholder="请输入整数，最低充值金额1万元……" @keyup.native="proving1"></el-input> -->
           <span>万元</span>
         </el-form-item>
@@ -184,6 +184,7 @@
       }
       return {
         copyinput: '',
+        time: null,
         payUrl: '',
         orderNo: '',
         dat: {
@@ -266,7 +267,7 @@
           this.chdataForm.chCounts = Math.ceil((Number(this.chdataForm.chMoney) / (this.chdataForm.chPrice)) * 10000) / 10000
           // console.log('获取充值二维码')
           document.getElementById('qrcode').innerHTML = "";
-          let time = null
+          // let time = null
           let that = this
           this.$http({
             url: this.$http.adornUrl(`agent/fund/recharge?token=${this.$cookie.get('token')}`),
@@ -283,26 +284,31 @@
               this.getQrcode()
               this.payUrl = data.data.payUrl
               this.orderNo = data.data.orderNo
-              clearInterval(window.time);
-              window.time = setInterval(function () {
-                // console.log('定时器')
-                that.$http({
-                  url: that.$http.adornUrl(`agent/fund/findOrderStatus?token=${that.$cookie.get('token')}`),
+              clearInterval(this.time);
+
+              this.time = setInterval(() => {
+                this.$http({
+                  url: this.$http.adornUrl(`agent/fund/findOrderStatus?token=${that.$cookie.get('token')}`),
                   method: 'post',
-                  params: that.$http.adornParams({
-                    'orderNo': that.orderNo,
+                  params: this.$http.adornParams({
+                    'orderNo': this.orderNo,
                   })
                 }).then(({ data }) => {
                   if (data && data.code === 0) {
                     if (data.data.orderStatus == "Success") {
-                      this.$message.succcess('充值成功')
-                      clearInterval(window.time);
-                      that.closeDialog = false
-                      that.getAgentDeskInfo()
+                      this.$nextTick(() => {
+                        this.$message.success('充值成功')
+                        this.chdataFormVisible = false
+                        this.closeDialog()
+                        this.getAgentDeskInfo()
+                      })
+                    } else if (data.data.orderStatus == "Fail") {
+                           this.closeDialog()
+                         this.$message.error('充值失败，请重新充值!')
                     }
                   }
                 })
-              }, 10000)
+              }, 10000);
             } else {
               document.getElementById('qrcode').innerHTML = "";
               this.$message.error(data.msg)
@@ -387,8 +393,8 @@
       },
       closeDialog() {
         document.getElementById('qrcode').innerHTML = "";
-        if (window.time) {
-          clearInterval(window.time);
+        if (this.time) {
+          clearInterval(this.time);
         }
         //  
       },
