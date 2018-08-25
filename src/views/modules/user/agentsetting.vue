@@ -34,7 +34,7 @@
                 </el-table-column>
                 <el-table-column prop="sign_url" label="代理商签字" align="center" width="150" :show-overflow-tooltip="true">
                 </el-table-column>
-                <el-table-column prop="seal_url" label="公章" align="center" width="150" :show-overflow-tooltip="true">
+                <el-table-column prop="seal_url" label="公章" align="center" width="150" >
                 </el-table-column>
                 <el-table-column prop="sms_sign" label="短信签名" align="center">
                 </el-table-column>
@@ -48,42 +48,67 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="kefy" label="客服资料" align="center" width="150">
-
                     <template slot-scope="scope">
+                        <div>QQ</div>
+                        <div>客服热线</div>
+                        <div>商务合作</div>
+                    </template>
+                    <!-- <template slot-scope="scope">
                         <div>QQ:{{scope.row.qq}}</div>
                         <div>客服热线:{{scope.row.hotline}}</div>
                         <div>商务合作:{{scope.row.biz_no}}</div>
-                    </template>
+                    </template> -->
                 </el-table-column>
                 <el-table-column prop="zbInfo" label="支付宝资料" align="center" width="150">
                     <template slot-scope="scope">
+                        <div>api id</div>
+                        <div>支付调用地址</div>
+                        <div>支付回调地址</div>
+                        <div>支付宝公钥</div>
+                        <div>应用私钥</div>
+                    </template>
+                    <!-- <template slot-scope="scope">
                         <div>api id:{{scope.row.aliAppid}}</div>
                         <div>支付调用地址:{{scope.row.alicall_url}}</div>
                         <div>支付回调地址:{{scope.row.alicallback_url}}</div>
                         <div>支付宝公钥:{{scope.row.alipublic_key}}</div>
                         <div>应用私钥:{{scope.row.aliprivate_key}}</div>
-                    </template>
+                    </template> -->
                 </el-table-column>
                 <el-table-column prop="weiinfo" label="微信资料" align="center" width="150">
                     <template slot-scope="scope">
+                        <div>mchid</div>
+                        <div>支付调用地址</div>
+                        <div>支付回调地址</div>
+                        <div>api id</div>
+                        <div>key</div>
+                    </template>
+                    <!-- <template slot-scope="scope">
                         <div>mchid:{{scope.row.wxMchid}}</div>
                         <div>支付调用地址:{{scope.row.wxcall_url}}</div>
                         <div>支付回调地址:{{scope.row.wxcallback_url}}</div>
                         <div>api id:{{scope.row.wxappid}}</div>
                         <div>key:{{scope.row.wxKey}}</div>
-                    </template>
+                    </template> -->
                 </el-table-column>
                 <el-table-column prop="ht" label="合同信息" align="center" width="150">
                     <template slot-scope="scope">
+                        <div>名称</div>
+                        <div>地址</div>
+                        <div>账户</div>
+                        <div>开户行</div>
+                        <div>邮编</div>
+                        <div>电话</div>
+                    </template>
+                    <!-- <template slot-scope="scope">
                         <div>名称:{{scope.row.htcompany_name}}</div>
                         <div>地址:{{scope.row.htcompany_address}}</div>
                         <div>账户:{{scope.row.htaccount_no}}</div>
                         <div>开户行:{{scope.row.htbank_name}}</div>
                         <div>邮编:{{scope.row.htpostcode}}</div>
                         <div>电话:{{scope.row.htmobile}}</div>
-                    </template>
+                    </template> -->
                 </el-table-column>
-
                 <el-table-column fixed="right" label="操作" align="center" width="130">
                     <template slot-scope="scope">
                         <el-button type="text" size="small" @click=seedialog(scope.row)>查看</el-button>

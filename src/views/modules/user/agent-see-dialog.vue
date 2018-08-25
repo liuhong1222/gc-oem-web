@@ -44,7 +44,7 @@
                             <el-input v-model="basicdataForm.domaintName" placeholder="代理商域名" readonly></el-input>
                         </el-form-item>
                     </el-form>
-
+                    
                 </el-collapse-item>
                 <el-collapse-item title="域名备案信息" name="2">
                     <el-form label-width="180px" :model="domainDataForm" ref="domaindataList" class="demo-ruleForm">
