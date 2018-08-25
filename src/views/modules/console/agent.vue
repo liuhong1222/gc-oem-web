@@ -47,7 +47,7 @@
         <div class="grid-content bg-purple">
           <div>
             <h2>充值套餐</h2>
-            <el-button type="text" style="float:right" @click="editMeal">修改</el-button>
+            <!-- <el-button type="text" style="float:right" @click="editMeal">修改</el-button> -->
           </div>
           <ul class="cf mealPackage">
             <li v-for="(item,index) in mealList" :key="index">
