@@ -6,7 +6,7 @@
                 <!-- <el-form-item label="代理商编号：" prop="agentNumber">
                     <el-input v-model="dataForm.agentNumber" placeholder="代理商编号" readonly></el-input>
                 </el-form-item> -->
-                <el-form-item label="营业执照：">
+                <el-form-item label="营业执照：" id="avatar-uploaderImg">
                     <el-upload class="avatar-uploader" action="" :show-file-list="false" disabled>
                         <img v-if="seeImageUrl" :src="seeImageUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -154,4 +154,13 @@
         width: auto;
         border:1px solid red
     } */
+
+    #avatar-uploaderImg .el-upload{
+        width: 150px;
+        height: 110px;
+    }
+    #avatar-uploaderImg .el-upload img{
+        width: 100%;
+        height:100%;
+    }
 </style>

@@ -10,7 +10,7 @@
                 <!-- <el-form-item label="客户编号">
                     <el-input v-model="perseeDataForm.custNum" placeholder="客户编号" readonly></el-input>
                 </el-form-item> -->
-                <el-form-item label="身份证照片">
+                <el-form-item label="身份证照片" id="avatar-uploaderFceImg">
                     <el-upload class="avatar-uploader" action="" :show-file-list="false" style="display:inline-block" disabled>
                         <img v-if="imageUrlFace" :src="imageUrlFace" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon" style="font-size:14px">正面</i>
@@ -192,5 +192,15 @@
     .seecuslog .el-input__inner,
     .seecuslog .el-textarea__inner {
         border: none;
+    }
+
+    #avatar-uploaderFceImg .el-upload {
+        width: 150px;
+        height: 110px;
+    }
+
+    #avatar-uploaderFceImg .el-upload img {
+        width: 100%;
+        height: 100%;
     }
 </style>
