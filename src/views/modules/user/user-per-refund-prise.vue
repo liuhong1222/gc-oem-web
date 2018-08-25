@@ -5,9 +5,9 @@
                 <el-form-item label="手机号码：" prop="mobile">
                     <el-input v-model="refundDataForm.mobile" placeholder="手机号码" id="mobile" readonly></el-input>
                 </el-form-item>
-                <el-form-item label="客户名称：" >
+                <!-- <el-form-item label="客户名称：" >
                     <el-input v-model="refundDataForm.custNanme" placeholder="客户名称" id="custNanme" readonly></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="剩余条数：" prop="refunCounts">
                     <el-input v-model="refundDataForm.refunCounts" placeholder="剩余条数" id="refunCounts" readonly></el-input>
                 </el-form-item>

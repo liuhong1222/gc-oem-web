@@ -1,8 +1,8 @@
 <template>
     <el-dialog title="充值" :visible.sync="chargeVisible" width="40%">
         <el-form :model="rechargeDataForm" :rules="rechargerules" ref="rechargeRef" label-width="150px" :label-position="labelPosition">
-            <el-form-item label="客户名称：" prop="userName">
-                <el-input v-model="rechargeDataForm.userName" placeholder="客户名称" id="mobile" readonly></el-input>
+            <el-form-item label="手机号：" prop="userName">
+                <el-input v-model="rechargeDataForm.userName" placeholder="手机号" id="mobile" readonly></el-input>
             </el-form-item>
             <el-form-item label="套餐选择：" prop="packageList">
                 <el-select v-model="rechargeDataForm.packageList" placeholder="请选择套餐" @change="selectT()">
@@ -66,7 +66,7 @@
                 },
                 rechargerules: {
                     userName: [
-                        { required: true, message: '请输入用户名', trigger: 'blur' },
+                        { required: true, message: '请输入手机号', trigger: 'blur' },
                     ],
                     packageList: [
                         { required: true, message: '请选择套餐', trigger: 'blur' },

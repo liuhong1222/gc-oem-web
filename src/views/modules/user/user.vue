@@ -221,7 +221,7 @@
         this.arr[0] = row.id
         this.arr[1] = row.user_type
         this.arr[2] = row.creUserId
-        this.arr[3] = row.custName
+        this.arr[3] = row.user_phone
         this.$nextTick(() => {
           this.$refs.rechargecon.rechargeInit(arr)
         })
@@ -233,7 +233,7 @@
         this.arr[0] = row.id
         this.arr[1] = row.user_type
         this.arr[2] = row.creUserId
-        this.arr[3] = row.custName
+        this.arr[3] = row.user_phone
         this.$nextTick(() => {
           this.$refs.refundcon.refundInit(arr)
         })
