@@ -28,13 +28,13 @@
                 </el-table-column>
                 <el-table-column prop="create_time" label="创建时间" align="center" width="150">
                 </el-table-column>
-                <el-table-column prop="logo_url" label="LOGO" align="center" width="150" :show-overflow-tooltip="true">
+                <el-table-column prop="logo_url" label="LOGO" align="center" width="150">
                 </el-table-column>
-                <el-table-column prop="icon_url" label="ICON" align="center" width="150" :show-overflow-tooltip="true">
+                <el-table-column prop="icon_url" label="ICON" align="center" width="150">
                 </el-table-column>
-                <el-table-column prop="sign_url" label="代理商签字" align="center" width="150" :show-overflow-tooltip="true">
+                <el-table-column prop="sign_url" label="代理商签字" align="center" width="150">
                 </el-table-column>
-                <el-table-column prop="seal_url" label="公章" align="center" width="150" >
+                <el-table-column prop="seal_url" label="公章" align="center" width="150">
                 </el-table-column>
                 <el-table-column prop="sms_sign" label="短信签名" align="center">
                 </el-table-column>
@@ -146,7 +146,7 @@
                     custName: '',
                     mobile: ""
                 },
-
+                
                 dataList: [],
                 agentSettingDialogVisible: false,
                 agentSeeDialogVisible: false,

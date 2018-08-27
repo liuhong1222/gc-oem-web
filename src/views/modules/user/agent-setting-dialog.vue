@@ -29,7 +29,7 @@
               enctype="multipart/form-data" :limit="1">
               <img v-if="imageUrlLogo" :src="imageUrlLogo" class="avatar">
               <i class="el-icon-plus"></i>
-              <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M，长140px，宽36px，（再次上传请删除上一次上传）</div>
+              <div class="el-upload__tip" slot="tip">要求为背景透明的png格式，且不超过2M，长140px，宽36px，（再次上传请删除上一次上传）</div>
             </el-upload>
           </el-form-item><br />
           <el-form-item label="icon" id="iconImgSize">
@@ -37,25 +37,25 @@
               :before-upload="beforeAvatarUploadIcon" :action="actionIcon()" :data="iconQueryParams" :on-error="errorIcon">
               <img v-if="imageUrlIcon" :src="imageUrlIcon" class="avatar" :limit="1">
               <i class="el-icon-plus"></i>
-              <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M，长40px，宽40px，（再次上传请删除上一次上传）</div>
+              <div class="el-upload__tip" slot="tip">要求为背景透明的png格式，且不超过2M，长40px，宽40px，（再次上传请删除上一次上传）</div>
             </el-upload>
           </el-form-item><br />
-          <el-form-item label="代表签字" >
+          <el-form-item label="代表签字">
             <el-upload class="upload-demo" drag :show-file-list="true" name="file" :action="actionSignatures()" :on-success="handleAvatarSuccessSignatures"
               :on-error="errorSignatures" :on-progress="onProgressSignatures" :before-upload="beforeAvatarUploadSignatures"
               :data="SignaturesQueryParams" enctype="multipart/form-data" :limit="1">
               <img v-if="imageUrlSignatures" :src="imageUrlSignatures" class="avatar">
               <i class="el-icon-plus"></i>
-              <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M，（再次上传请删除上一次上传）</div>
+              <div class="el-upload__tip" slot="tip">仅支持png格式，且不超过2M，长1261px，宽482px，（再次上传请删除上一次上传）</div>
             </el-upload>
           </el-form-item><br />
-          <el-form-item label="公司红章" >
+          <el-form-item label="公司红章">
             <el-upload class="upload-demo" drag :show-file-list="true" name="file" :action="actionChapter()" :on-success="handleAvatarSuccessChapter"
               :on-error="errorChapter" :on-progress="onProgressChapter" :before-upload="beforeAvatarUploadChapter" :data="ChapterQueryParams"
               enctype="multipart/form-data" :limit="1">
               <img v-if="imageUrlChapter" :src="imageUrlChapter" class="avatar">
               <i class="el-icon-plus"></i>
-              <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M，（再次上传请删除上一次上传）</div>
+              <div class="el-upload__tip" slot="tip">仅支持png格式，且不超过2M，长169px，宽168px，（再次上传请删除上一次上传）</div>
             </el-upload>
           </el-form-item><br />
           <el-form-item label="短信签名" prop="messSign">
@@ -407,7 +407,7 @@
 
       // 获取下一步里面的内容（域名备案信息）
       getDomain() {
-        
+
         this.$http({
           url: this.$http.adornUrl(`agent/set/findDomainInfo?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
           method: 'post',
@@ -428,7 +428,7 @@
       nextDomain() {
         this.$refs['domaindataList'].validate((valid) => {
           if (valid) {
-          
+
             this.$http({
               url: this.$http.adornUrl(`agent/set/updateDomainInfo?token=${this.$cookie.get('token')}`),
               method: 'post',
@@ -651,15 +651,14 @@
         return url;
       },
       beforeAvatarUploadLogo(file) {
-        const isJPG = (file.type === 'image/jpeg') || (file.type == 'image/png') || (file.type == 'image/jpg');
+        const isJPG = (file.type == 'image/png');
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isJPG) {
-          this.$message.error("上传头像图片只能是 JPG/png 格式!");
+          this.$message.error("上传logo图片只能是 png 格式!");
         }
         if (!isLt2M) {
-          this.$message.error("上传头像图片大小不能超过 2MB!");
+          this.$message.error("上传logo图片大小不能超过 2MB!");
         }
-
         var _this = this;
         const imgSize = new Promise(function (resolve, reject) {
           var reader = new FileReader();
@@ -669,11 +668,11 @@
               var width = this.width;
               var height = this.height;
               if (width !== 140) {
-                _this.$alert('图片宽必须为140!', '提示', { confirmButtonText: '确定' });
+                _this.$alert('图片长必须为140!', '提示', { confirmButtonText: '确定' });
                 reject();
               }
               if (height !== 36) {
-                _this.$alert('图片高必须为36!', '提示', { confirmButtonText: '确定' });
+                _this.$alert('图片宽必须为36!', '提示', { confirmButtonText: '确定' });
                 reject();
               }
               resolve();
@@ -701,13 +700,13 @@
         return url;
       },
       beforeAvatarUploadIcon(file) {
-        const isJPG = (file.type === 'image/jpeg') || (file.type == 'image/png') || (file.type == 'image/jpg');
+        const isJPG = (file.type == 'image/png');
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isJPG) {
-          this.$message.error("上传头像图片只能是 JPG/png 格式!");
+          this.$message.error("上传icon图片只能是背景透明的 png 格式!");
         }
         if (!isLt2M) {
-          this.$message.error("上传头像图片大小不能超过 2MB!");
+          this.$message.error("上传icon图片大小不能超过 2MB!");
         }
         var _this = this;
         const imgSize = new Promise(function (resolve, reject) {
@@ -718,11 +717,11 @@
               var width = this.width;
               var height = this.height;
               if (width !== 40) {
-                _this.$alert('图片宽必须为40!', '提示', { confirmButtonText: '确定' });
+                _this.$alert('图片长必须为40!', '提示', { confirmButtonText: '确定' });
                 reject();
               }
               if (height !== 40) {
-                _this.$alert('图片高必须为40!', '提示', { confirmButtonText: '确定' });
+                _this.$alert('图片宽必须为40!', '提示', { confirmButtonText: '确定' });
                 reject();
               }
               resolve();
@@ -751,16 +750,41 @@
         return url;
       },
       beforeAvatarUploadSignatures(file) {
-        const isJPG = (file.type === 'image/jpeg') || (file.type == 'image/png') || (file.type == 'image/jpg');
+        const isJPG = (file.type == 'image/png');
+        // const isJPG = (file.type === 'image/jpeg') || (file.type == 'image/png') || (file.type == 'image/jpg');
         const isLt2M = file.size / 1024 / 1024 < 2;
 
         if (!isJPG) {
-          this.$message.error("上传头像图片只能是 JPG 格式!");
+          this.$message.error("上传代表签字图片只能是 png 格式!");
         }
         if (!isLt2M) {
-          this.$message.error("上传头像图片大小不能超过 2MB!");
+          this.$message.error("上传代表签字图片大小不能超过 2MB!");
         }
-        return isJPG && isLt2M;
+        var _this = this;
+        const imgSize = new Promise(function (resolve, reject) {
+          var reader = new FileReader();
+          reader.onload = function (event) {
+            var image = new Image();
+            image.onload = function () {
+              var width = this.width;
+              var height = this.height;
+              if (width !== 1261) {
+                _this.$alert('图片长必须为1261!', '提示', { confirmButtonText: '确定' });
+                reject();
+              }
+              if (height !== 482) {
+                _this.$alert('图片宽必须为482!', '提示', { confirmButtonText: '确定' });
+                reject();
+              }
+              resolve();
+            };
+            image.src = event.target.result;
+          }
+          reader.readAsDataURL(file);
+        });
+
+        return isJPG && isLt2M && imgSize;
+        // return isJPG && isLt2M;
       },
       handleAvatarSuccessSignatures(res, file) {
         this.signUrl = res.data.licenseUrl
@@ -780,16 +804,40 @@
         return url;
       },
       beforeAvatarUploadChapter(file) {
-        const isJPG = (file.type === 'image/jpeg') || (file.type == 'image/png') || (file.type == 'image/jpg');
+        const isJPG = (file.type == 'image/png');
         const isLt2M = file.size / 1024 / 1024 < 2;
 
         if (!isJPG) {
-          this.$message.error("上传头像图片只能是 JPG 格式!");
+          this.$message.error("上传公司红章图片只能是 png 格式!");
         }
         if (!isLt2M) {
-          this.$message.error("上传头像图片大小不能超过 2MB!");
+          this.$message.error("上传公司红章图片大小不能超过 2MB!");
         }
-        return isJPG && isLt2M;
+
+        var _this = this;
+        const imgSize = new Promise(function (resolve, reject) {
+          var reader = new FileReader();
+          reader.onload = function (event) {
+            var image = new Image();
+            image.onload = function () {
+              var width = this.width;
+              var height = this.height;
+              if (width !== 169) {
+                _this.$alert('图片长必须为169!', '提示', { confirmButtonText: '确定' });
+                reject();
+              }
+              if (height !== 168) {
+                _this.$alert('图片宽必须为168!', '提示', { confirmButtonText: '确定' });
+                reject();
+              }
+              resolve();
+            };
+            image.src = event.target.result;
+          }
+          reader.readAsDataURL(file);
+        });
+
+        return isJPG && isLt2M && imgSize;
       },
       handleAvatarSuccessChapter(res, file) {
         this.sealUrl = res.data.licenseUrl
@@ -901,5 +949,4 @@
     color: #999;
     line-height: 182px;
   }
-
 </style>
