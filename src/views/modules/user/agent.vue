@@ -104,7 +104,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="chdataFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="chsubmit">确 定</el-button>
+                <el-button type="primary" @click="chsubmit" :disabled="disabledcz">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -135,6 +135,7 @@
                 cdAgentId: '',
                 jinorQiId: '',
                 disabled: false,
+                disabledcz:false,
                 agentseeVisible: false,
                 jinShow: false,
                 qiShow: false,
@@ -373,12 +374,14 @@
                         }).then(({ data }) => {
                             // console.log(data)
                             if (data && data.code === 0) {
+                                this.disabledcz=true
                                 this.$message({
                                     message: '操作成功',
                                     type: 'success',
                                     duration: 1500,
                                     onClose: () => {
                                         this.chdataFormVisible = false
+                                        this.disabledcz=false
                                         this.getDataList()
                                     }
                                 })

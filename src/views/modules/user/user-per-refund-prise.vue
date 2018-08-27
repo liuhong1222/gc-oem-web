@@ -29,7 +29,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                         <el-button @click="refundVisible = false">取 消</el-button>
-                        <el-button type="primary" @click="refundDataFormTrue">确 定</el-button>
+                        <el-button type="primary" @click="refundDataFormTrue" :disabled="disabled">确 定</el-button>
                     </span>
         </el-dialog>
 
@@ -41,6 +41,7 @@
             return {
                 refundVisible: false,
                 labelPosition: 'right',
+                disabled: false,
                 refundDataForm: {
                     mobile: '',
                     custNanme: '',
@@ -134,6 +135,7 @@
                 }
             },
             refundDataFormTrue() {
+
                 this.$refs['refundDataFormRef'].validate((valid) => {
                     if (valid) {
                         // console.log('表单验证通过')
@@ -148,12 +150,14 @@
                             })
                         }).then(({ data }) => {
                             if (data && data.code === 0) {
+                                this.disabled = true
                                 this.$message({
                                     message: '操作成功',
                                     type: 'success',
                                     duration: 1500,
                                     onClose: () => {
                                         this.refundVisible = false
+                                        this.disabled = false
                                         this.$emit('refreshDataList')
                                     }
                                 })

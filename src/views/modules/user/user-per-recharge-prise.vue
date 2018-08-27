@@ -38,7 +38,7 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
                     <el-button @click="chargeVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="rechargeDataSubmit">确 定</el-button>
+                    <el-button type="primary" @click="rechargeDataSubmit" :disabled="disabled">确 定</el-button>
                 </span>
     </el-dialog>
 </template>
@@ -50,6 +50,7 @@
                 readCounts: true,
                 readMoney: true,
                 chargeVisible: false,
+                disabled: false,
                 labelPosition: 'right',
                 rechargeArr: [],
                 number: 0,
@@ -205,12 +206,14 @@
                             })
                         }).then(({ data }) => {
                             if (data && data.code === 0) {
+                                this.disabled = true
                                 this.$message({
                                     message: '操作成功',
                                     type: 'success',
                                     duration: 1500,
                                     onClose: () => {
                                         this.chargeVisible = false
+                                        this.disabled = false
                                         this.$emit('refreshDataList')
                                     }
                                 })
