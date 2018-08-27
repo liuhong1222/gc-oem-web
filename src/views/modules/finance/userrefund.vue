@@ -18,7 +18,7 @@
                     <el-input v-model="refundSearchData.custName" placeholder="客户名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item style="margin-left:6px">
-                    <el-button type="primary" @click="refundList">查询</el-button>
+                    <el-button type="primary" @click="refundList(1)">查询</el-button>
                     <el-button type="primary" @click="refundExport" :disabled="disabled">导出</el-button>
                 </el-form-item>
             </el-form>
@@ -44,7 +44,7 @@
                 </el-table-column>
                 <el-table-column prop="money" label="金额（元）" align="center">
                 </el-table-column>
-                <el-table-column  prop="remark" label="备注" align="center">
+                <el-table-column prop="remark" label="备注" align="center">
                 </el-table-column>
             </el-table>
         </div>
@@ -94,7 +94,7 @@
             },
 
             // 获取退款记录接口
-            refundList() {
+            refundList(cur) {
                 if (sessionStorage.getItem('msjRoleName') == '2') {
                     this.disableAgent = false
                     this.disableAgentName = false
@@ -104,7 +104,7 @@
                     url: this.$http.adornUrl(`agent/finance/user/refund/list?token=${this.$cookie.get('token')}`),
                     method: 'get',
                     params: this.$http.adornParams({
-                        'currentPage': this.pageIndex,
+                        'currentPage': cur || this.pageIndex,
                         'pageSize': this.pageSize,
                         'userMobile': this.refundSearchData.mobile,
                         'companyName': this.refundSearchData.agentName,
@@ -114,6 +114,9 @@
                     })
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
+                        if (cur == 1) {
+                            this.pageIndex = 1
+                        }
                         this.refundTableData = data.data.list
                         this.totalPage = data.data.total
                         if (data.data.list.length == 0) {
@@ -132,12 +135,12 @@
             sizeChangeHandle(val) {
                 this.pageSize = val
                 this.pageIndex = 1
-                this.agentRechargeList()
+                this.refundList()
             },
             // 当前页
             currentChangeHandle(val) {
                 this.pageIndex = val
-                this.agentRechargeList()
+                this.refundList()
             },
             getTotal(param) {
                 const { columns, data } = param;
