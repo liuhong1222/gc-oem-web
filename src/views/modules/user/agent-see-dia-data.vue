@@ -19,6 +19,9 @@
                 <el-form-item label="公司名称：">
                     <el-input v-model="dataForm.companyName" placeholder="公司名称" readonly></el-input>
                 </el-form-item>
+                <el-form-item label="公司简称：">
+                    <el-input v-model="dataForm.shortName" placeholder="公司简称" readonly></el-input>
+                </el-form-item>
                 <el-form-item label="营业执照所在地：">
                     <el-input v-model="dataForm.bussicAdress" placeholder="营业执照所在地" readonly></el-input>
                 </el-form-item>
@@ -107,8 +110,8 @@
                     pwd: '',
                     agencylevel: '',  //级别
                     price: '',
-                    allowCounts: ''
-
+                    allowCounts: '',
+                    shortName: ''
                 },
             }
         },
@@ -126,6 +129,7 @@
                         // this.dataForm.agentNumber = data.data.agentNo
                         this.dataForm.businNumber = data.data.mchId
                         this.dataForm.companyName = data.data.companyName
+                        this.dataForm.shortName = data.data.shortName
                         this.dataForm.bussicAdress = data.data.address
                         this.dataForm.lawName = data.data.legalPerson
                         this.dataForm.businNum = data.data.licenseNo
@@ -155,12 +159,13 @@
         border:1px solid red
     } */
 
-    #avatar-uploaderImg .el-upload{
+    #avatar-uploaderImg .el-upload {
         width: 150px;
         height: 110px;
     }
-    #avatar-uploaderImg .el-upload img{
+
+    #avatar-uploaderImg .el-upload img {
         width: 100%;
-        height:100%;
+        height: 100%;
     }
 </style>

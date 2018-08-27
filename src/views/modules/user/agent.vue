@@ -40,6 +40,8 @@
                 </el-table-column>
                 <el-table-column prop="statusName" label=" 代理商状态" width="90" align="center">
                 </el-table-column>
+                <el-table-column prop="shortName" label=" 公司简称"  align="center">
+                </el-table-column>
                 <el-table-column prop="createTime" label="创建时间" width="150" align="center">
                 </el-table-column>
                 <el-table-column prop="canUpgradeName" label="能否升级" width="80" align="center">

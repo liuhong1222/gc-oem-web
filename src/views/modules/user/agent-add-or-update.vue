@@ -20,6 +20,9 @@
             <el-form-item label="公司名称：" prop="companyName">
                 <el-input v-model="dataForm.companyName" placeholder="公司名称"></el-input>
             </el-form-item>
+            <el-form-item label="公司简称：" prop="shortName">
+                <el-input v-model="dataForm.shortName" placeholder="公司简称"></el-input>
+            </el-form-item>
             <el-form-item label="营业执照所在地：" prop="bussicAdress">
                 <el-input v-model="dataForm.bussicAdress" placeholder="营业执照所在地"></el-input>
             </el-form-item>
@@ -91,7 +94,7 @@
             }
             return {
                 // agentNumberFlag: false,
-                agentReadonly:false,
+                agentReadonly: false,
                 priseimageUrl: "",
                 priseurl: "",
                 licensePicNo: '',
@@ -116,7 +119,8 @@
                     pwd: '',
                     agencylevel: '',  //级别
                     price: '',
-                    allowCounts: ''
+                    allowCounts: '',
+                    shortName: ''
 
                 },
                 datarules: {
@@ -128,6 +132,9 @@
                     ],
                     companyName: [
                         { required: true, message: '请输入公司名称', trigger: 'blur' }
+                    ],
+                    shortName: [
+                        { required: true, message: '请输入公司简称', trigger: 'blur' }
                     ],
                     bussicAdress: [
                         { required: true, message: '请输入营业执照所在地', trigger: 'blur' }
@@ -200,7 +207,7 @@
                 })
                 this.priseurl = this.$http.adornUrl(`agent/agentInfo/license/upload?token=${this.$cookie.get('token')}`)
                 if (this.dataForm.id) {
-                    this.agentReadonly=true
+                    this.agentReadonly = true
                     // this.agentNumberFlag = true
                     this.$http({
                         url: this.$http.adornUrl(`agent/agentInfo/detail?token=${this.$cookie.get('token')}&agentId=${this.dataForm.id}`),
@@ -214,6 +221,7 @@
                             // this.dataForm.agentNumber = data.data.agentNo
                             this.dataForm.businNumber = data.data.mchId
                             this.dataForm.companyName = data.data.companyName
+                            this.dataForm.shortName = data.data.shortName
                             this.dataForm.bussicAdress = data.data.address
                             this.dataForm.lawName = data.data.legalPerson
                             this.dataForm.businNum = data.data.licenseNo
@@ -230,7 +238,6 @@
                         }
                     })
                 }
-
             },
             probusinNumber() {
                 this.dataForm.businNumber = this.dataForm.businNumber.replace(/[^0-9]*/g, '').replace(/\b(0+)/gi, "")
@@ -262,7 +269,8 @@
                                 'password': (this.dataForm.pwd) ? md5(this.dataForm.pwd) : "",
                                 'levelId': this.dataForm.agencylevel,
                                 'price': this.dataForm.price,
-                                'emptyWarnNumber': this.dataForm.allowCounts
+                                'emptyWarnNumber': this.dataForm.allowCounts,
+                                'shortName': this.dataForm.shortName
                             })
                         }).then(({ data }) => {
                             if (data && data.code === 0) {
@@ -313,7 +321,7 @@
                 this.dataForm.busindate1 = ""
                 this.dataForm.busindate2 = ""
                 this.dataForm.pwd = ""
-                this.agentReadonly=false
+                this.agentReadonly = false
             },
             changeLevel(val) {
                 let arr = [];
