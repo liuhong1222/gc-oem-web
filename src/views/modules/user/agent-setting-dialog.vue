@@ -46,7 +46,7 @@
               :data="SignaturesQueryParams" enctype="multipart/form-data" :limit="1">
               <img v-if="imageUrlSignatures" :src="imageUrlSignatures" class="avatar">
               <i class="el-icon-plus"></i>
-              <div class="el-upload__tip" slot="tip">仅支持png格式，且不超过2M，长1261px，宽482px，（再次上传请删除上一次上传）</div>
+              <div class="el-upload__tip" slot="tip">要求为背景透明的png格式，且不超过2M，长1261px，宽482px，（再次上传请删除上一次上传）</div>
             </el-upload>
           </el-form-item><br />
           <el-form-item label="公司红章">
@@ -55,7 +55,7 @@
               enctype="multipart/form-data" :limit="1">
               <img v-if="imageUrlChapter" :src="imageUrlChapter" class="avatar">
               <i class="el-icon-plus"></i>
-              <div class="el-upload__tip" slot="tip">仅支持png格式，且不超过2M，长169px，宽168px，（再次上传请删除上一次上传）</div>
+              <div class="el-upload__tip" slot="tip">要求为背景透明的png格式，且不超过2M，长169px，宽168px，（再次上传请删除上一次上传）</div>
             </el-upload>
           </el-form-item><br />
           <el-form-item label="短信签名" prop="messSign">
@@ -654,7 +654,7 @@
         const isJPG = (file.type == 'image/png');
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isJPG) {
-          this.$message.error("上传logo图片只能是 png 格式!");
+          this.$message.error("上传logo图片只能是背景透明的 png 格式!");
         }
         if (!isLt2M) {
           this.$message.error("上传logo图片大小不能超过 2MB!");
@@ -755,7 +755,7 @@
         const isLt2M = file.size / 1024 / 1024 < 2;
 
         if (!isJPG) {
-          this.$message.error("上传代表签字图片只能是 png 格式!");
+          this.$message.error("上传代表签字图片只能是背景透明的 png 格式!");
         }
         if (!isLt2M) {
           this.$message.error("上传代表签字图片大小不能超过 2MB!");
@@ -808,7 +808,7 @@
         const isLt2M = file.size / 1024 / 1024 < 2;
 
         if (!isJPG) {
-          this.$message.error("上传公司红章图片只能是 png 格式!");
+          this.$message.error("上传公司红章图片只能是背景透明的 png 格式!");
         }
         if (!isLt2M) {
           this.$message.error("上传公司红章图片大小不能超过 2MB!");

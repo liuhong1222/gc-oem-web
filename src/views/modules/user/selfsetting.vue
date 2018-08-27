@@ -51,7 +51,7 @@
                                 <img v-if="imageUrlSignatures" :src="imageUrlSignatures" class="avatar">
                                 <i class="el-icon-plus"></i>
                                 <!-- <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div> -->
-                                <div class="el-upload__tip" slot="tip">仅支持png格式，且不超过2M，长1261px，宽482px，（再次上传请删除上一次上传）</div>
+                                <div class="el-upload__tip" slot="tip">要求为背景透明的png格式，且不超过2M，长1261px，宽482px，（再次上传请删除上一次上传）</div>
                             </el-upload>
                         </el-form-item><br />
                         <el-form-item label="公司红章：">
@@ -61,7 +61,7 @@
                                 <img v-if="imageUrlChapter" :src="imageUrlChapter" class="avatar">
                                 <i class="el-icon-plus"></i>
                                 <!-- <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div> -->
-                                <div class="el-upload__tip" slot="tip">仅支持png格式，且不超过2M，长169px，宽168px，（再次上传请删除上一次上传）</div>
+                                <div class="el-upload__tip" slot="tip">要求为背景透明的png格式，且不超过2M，长169px，宽168px，（再次上传请删除上一次上传）</div>
                             </el-upload>
                         </el-form-item><br />
                         <el-form-item label="短信签名：" prop="messSign">
@@ -907,10 +907,10 @@
                 const isLt2M = file.size / 1024 / 1024 < 2;
 
                 if (!isJPG) {
-                    this.$message.error("上传头像图片只能是 png 格式!");
+                    this.$message.error("上传代表签字图片只能是背景为透明的png 格式!");
                 }
                 if (!isLt2M) {
-                    this.$message.error("上传头像图片大小不能超过 2MB!");
+                    this.$message.error("上传代表签字图片大小不能超过 2MB!");
                 }
                 var _this = this;
                 const imgSize = new Promise(function (resolve, reject) {
@@ -959,10 +959,10 @@
                 const isLt2M = file.size / 1024 / 1024 < 2;
 
                 if (!isJPG) {
-                    this.$message.error("上传头像图片只能是 png 格式!");
+                    this.$message.error("上传公司红章图片只能是背景为透明的png 格式!");
                 }
                 if (!isLt2M) {
-                    this.$message.error("上传头像图片大小不能超过 2MB!");
+                    this.$message.error("上传公司红章图片大小不能超过 2MB!");
                 }
 
                 var _this = this;
