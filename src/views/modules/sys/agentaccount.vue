@@ -21,7 +21,9 @@
                 </el-table-column> -->
                 <el-table-column prop="realName" label=" 用户名称" align="center">
                 </el-table-column>
-                <el-table-column prop="mobile" label="手机号码" width="120" align="center">
+                <el-table-column prop="mobile" label="手机号码"  align="center">
+                </el-table-column>
+                <el-table-column prop="email" label="邮箱"  align="center">
                 </el-table-column>
                 <!-- <el-table-column prop="password" label="密码" width="90" align="center">
                 </el-table-column> -->
@@ -29,10 +31,10 @@
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" size="small" @click="addUpdateAgent(scope.row)"  v-if="scope.row.flag == '0'" disabled>修改</el-button>
-                        <el-button type="text" size="small" @click="addUpdateAgent(scope.row)"  v-else >修改</el-button>
+                        <el-button type="text" size="small" @click="addUpdateAgent(scope.row)" v-if="scope.row.flag == '0'" disabled>修改</el-button>
+                        <el-button type="text" size="small" @click="addUpdateAgent(scope.row)" v-else>修改</el-button>
                         <el-button type="text" size="small" @click="delAcc(scope.row)" v-if="scope.row.flag == '0'" disabled>删除</el-button>
-                        <el-button type="text" size="small" @click="delAcc(scope.row)"  v-else>删除</el-button>
+                        <el-button type="text" size="small" @click="delAcc(scope.row)" v-else>删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -44,7 +46,6 @@
 </template>
 
 <script>
-   
     import addAgentUpdate from './acc-add-agent-update'
     export default {
         data() {
@@ -100,6 +101,7 @@
                     this.paramArr[0] = row.userId
                     this.paramArr[1] = row.realName
                     this.paramArr[2] = row.mobile
+                    this.paramArr[3] = row.email
                 } else {
                     paramArr = ""
                 }

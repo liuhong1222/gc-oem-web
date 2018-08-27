@@ -11,6 +11,9 @@
             <el-form-item label="手机号：" prop="mobile">
                 <el-input v-model="accountdataForm.mobile" placeholder="手机号"></el-input>
             </el-form-item>
+            <el-form-item label="邮箱：" prop="email">
+                <el-input v-model="accountdataForm.email" placeholder="邮箱"></el-input>
+            </el-form-item>
             <el-form-item label="密码：" :prop="!accountdataForm.id ? 'password' : ''">
                 <el-input v-model="accountdataForm.password" placeholder="密码"></el-input>
             </el-form-item>
@@ -34,6 +37,13 @@
                     callback()
                 }
             }
+            var validateEmail = (rule, value, callback) => {
+                if (!isEmail(value)) {
+                    callback(new Error('邮箱格式错误'))
+                } else {
+                    callback()
+                }
+            }
             return {
                 visible: false,
                 readonly: false,
@@ -43,6 +53,7 @@
                     // agentNumber: '',
                     name: '',
                     mobile: '',
+                    email: '',
                     password: ''
                 },
                 accdatarules: {
@@ -56,6 +67,10 @@
                         { required: true, message: '请输入联系电话', trigger: 'blur' },
                         { validator: validateMobile, trigger: 'blur' }
                     ],
+                    email: [
+                        { required: true, message: '邮箱不能为空', trigger: 'blur' },
+                        { validator: validateEmail, trigger: 'blur' }
+                    ],
                     password: [
                         { required: true, message: '请输入密码', trigger: 'blur' }
                     ],
@@ -65,17 +80,18 @@
         },
         methods: {
             updateInit(paramArr) {
-                console.log(paramArr)
+                // console.log(paramArr)
                 this.visible = true
                 this.readonly = false
                 if (paramArr !== "") {
+                    // console.log(paramArr)
                     this.readonly = true
                     this.accountdataForm.id = paramArr[0] || 0
                     // this.accountdataForm.agentNumber = paramArr[0]
                     this.accountdataForm.name = paramArr[1]
                     this.accountdataForm.mobile = paramArr[2]
+                    this.accountdataForm.email = paramArr[3]
                 }
-
             },
             accDataFormSubmit() {
                 this.$refs['accountdataFormref'].validate((valid) => {
@@ -88,6 +104,7 @@
                                 'userId': this.accountdataForm.id || undefined,
                                 'realName': this.accountdataForm.name,
                                 'mobile': this.accountdataForm.mobile,
+                                'email': this.accountdataForm.email,
                                 'password': (this.accountdataForm.password) ? md5(this.accountdataForm.password) : this.accountdataForm.password
                             })
                         }).then(({ data }) => {
@@ -115,6 +132,7 @@
                 this.accountdataForm.name = ""
                 this.accountdataForm.mobile = ""
                 this.accountdataForm.password = ""
+                this.accountdataForm.email = ""
             }
         }
     }
