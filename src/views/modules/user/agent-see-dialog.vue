@@ -300,7 +300,7 @@
                             this.wxdataForm.wxappid = data.data.appid
                             this.wxdataForm.wxmchid = data.data.mchid
                             this.wxdataForm.wxcallbackUrl = data.data.callbackUrl
-                            this.wxdataForm.wxcallUrl = data.data.callUrls
+                            this.wxdataForm.wxcallUrl = data.data.callUrl
                         }
                     })
                 }

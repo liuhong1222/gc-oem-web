@@ -280,6 +280,7 @@
                                     duration: 1500,
                                     onClose: () => {
                                         this.visible = false
+                                        this.priseimageUrl = ""
                                         this.$emit('refreshDataList')
                                     }
                                 })
