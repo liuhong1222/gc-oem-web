@@ -563,14 +563,22 @@
           method: 'post',
         }).then(({ data }) => {
           if (data && data.code === 0) {
-            // console.log(data)
+            console.log(data.data)
             if (data.data !== null) {
+              // alert(2222222)
               this.alipaydataForm.aliappid = data.data.appid
               this.alipaydataForm.alicallUrl = data.data.callUrl
               this.alipaydataForm.alicallbackUrl = data.data.callbackUrl
               this.alipaydataForm.alipublicKey = data.data.publicKey
               this.alipaydataForm.aliprivateKey = data.data.privateKey
               this.alipaydataForm.id = data.data.id
+            } else {
+              // alert(33333)
+              this.alipaydataForm.aliappid = ""
+              this.alipaydataForm.alicallUrl = ""
+              this.alipaydataForm.alicallbackUrl = ""
+              this.alipaydataForm.alipublicKey = ""
+              this.alipaydataForm.aliprivateKey = ""
             }
           }
         })
@@ -613,6 +621,13 @@
               this.wxdataForm.wxcallbackUrl = data.data.callbackUrl
               this.wxdataForm.wxcallUrl = data.data.callUrls
               this.wxdataForm.id = data.data.id
+            } else {
+
+              this.wxdataForm.wxkey = ""
+              this.wxdataForm.wxappid = ""
+              this.wxdataForm.wxmchid = ""
+              this.wxdataForm.wxcallbackUrl = ""
+              this.wxdataForm.wxcallUrl = ""
             }
           }
         })

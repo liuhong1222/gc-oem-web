@@ -214,7 +214,7 @@
                     if (data && data.code === 0) {
                         // this.basicdataForm.agentNumber = data.data[0].agentId
                         this.basicdataForm.businNumber = data.data[0].agent_no
-                        this.basicdataForm.ageagentNamentName = data.data[0].company_name
+                        this.basicdataForm.agentName = data.data[0].company_name
                         this.basicdataForm.dxName = data.data[0].sms_sign
                         this.basicdataForm.domaintName = data.data[0].name
                         this.logoImageUrl = imgUrl.imgUrl + data.data[0].logo_url
@@ -267,6 +267,11 @@
                         }
                     })
                 } else if (val == 5) { //支付宝资料
+                    this.alipaydataForm.aliappid = ""
+                    this.alipaydataForm.alicallUrl = ""
+                    this.alipaydataForm.alicallbackUrl = ""
+                    this.alipaydataForm.alipublicKey = ""
+                    this.alipaydataForm.aliprivateKey = ""
                     this.$http({
                         url: this.$http.adornUrl(`agent/set/findAlipay?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                         method: 'post',
@@ -281,6 +286,11 @@
                         }
                     })
                 } else if (val == 6) {
+                    this.wxdataForm.wxkey = ""
+                    this.wxdataForm.wxappid = ""
+                    this.wxdataForm.wxmchid = ""
+                    this.wxdataForm.wxcallbackUrl = ""
+                    this.wxdataForm.wxcallUrl = ""
                     this.$http({
                         url: this.$http.adornUrl(`agent/set/findWeixinpay?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                         method: 'post',
@@ -296,7 +306,7 @@
                 }
             },
             closeDialog() {
-                this.activeNames=[]
+                this.activeNames = []
                 this.activeNames.push('1')  //获取第一步  关闭之前
             }
         }
