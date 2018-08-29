@@ -414,12 +414,14 @@
         }).then(({ data }) => {
           if (data && data.code === 0) {
             // console.log(data)
-            this.domainDataForm.copyinfo = data.data.copyright
-            this.domainDataForm.compAdress = data.data.address
-            this.domainDataForm.telservice = data.data.licence
-            this.domainDataForm.icpInfo = data.data.icpRecord
-            this.domainDataForm.secrecord = data.data.policeRecord
-            this.domainDataForm.id = data.data.id
+            if (data.data !== null) {
+              this.domainDataForm.copyinfo = data.data.copyright
+              this.domainDataForm.compAdress = data.data.address
+              this.domainDataForm.telservice = data.data.licence
+              this.domainDataForm.icpInfo = data.data.icpRecord
+              this.domainDataForm.secrecord = data.data.policeRecord
+              this.domainDataForm.id = data.data.id
+            }
           }
         })
       },
@@ -464,10 +466,12 @@
         }).then(({ data }) => {
           if (data && data.code === 0) {
             // console.log(data)
-            this.customerDataForm.kfLine = data.data.hotline
-            this.customerDataForm.keyqq = data.data.qq
-            this.customerDataForm.businNO = data.data.bizNo
-            this.customerDataForm.id = data.data.id
+            if (data.data !== null) {
+              this.customerDataForm.kfLine = data.data.hotline
+              this.customerDataForm.keyqq = data.data.qq
+              this.customerDataForm.businNO = data.data.bizNo
+              this.customerDataForm.id = data.data.id
+            }
           }
         })
       },
@@ -508,13 +512,15 @@
         }).then(({ data }) => {
           if (data && data.code === 0) {
             // console.log(data)
-            this.contractdataForm.comName = data.data.companyName
-            this.contractdataForm.comAdress = data.data.companyAddress
-            this.contractdataForm.comAccount = data.data.accountNo
-            this.contractdataForm.openBank = data.data.bankName
-            this.contractdataForm.zipcode = data.data.postcode
-            this.contractdataForm.phone = data.data.mobile
-            this.contractdataForm.id = data.data.id
+            if (data.data !== null) {
+              this.contractdataForm.comName = data.data.companyName
+              this.contractdataForm.comAdress = data.data.companyAddress
+              this.contractdataForm.comAccount = data.data.accountNo
+              this.contractdataForm.openBank = data.data.bankName
+              this.contractdataForm.zipcode = data.data.postcode
+              this.contractdataForm.phone = data.data.mobile
+              this.contractdataForm.id = data.data.id
+            }
           }
         })
       },
@@ -558,12 +564,14 @@
         }).then(({ data }) => {
           if (data && data.code === 0) {
             // console.log(data)
-            this.alipaydataForm.aliappid = data.data.appid
-            this.alipaydataForm.alicallUrl = data.data.callUrl
-            this.alipaydataForm.alicallbackUrl = data.data.callbackUrl
-            this.alipaydataForm.alipublicKey = data.data.publicKey
-            this.alipaydataForm.aliprivateKey = data.data.privateKey
-            this.alipaydataForm.id = data.data.id
+            if (data.data !== null) {
+              this.alipaydataForm.aliappid = data.data.appid
+              this.alipaydataForm.alicallUrl = data.data.callUrl
+              this.alipaydataForm.alicallbackUrl = data.data.callbackUrl
+              this.alipaydataForm.alipublicKey = data.data.publicKey
+              this.alipaydataForm.aliprivateKey = data.data.privateKey
+              this.alipaydataForm.id = data.data.id
+            }
           }
         })
       },
@@ -598,12 +606,14 @@
           method: 'post',
         }).then(({ data }) => {
           if (data && data.code === 0) {
-            this.wxdataForm.wxkey = data.data.wxkey
-            this.wxdataForm.wxappid = data.data.appid
-            this.wxdataForm.wxmchid = data.data.mchid
-            this.wxdataForm.wxcallbackUrl = data.data.callbackUrl
-            this.wxdataForm.wxcallUrl = data.data.callUrls
-            this.wxdataForm.id = data.data.id
+            if (data.data !== null) {
+              this.wxdataForm.wxkey = data.data.wxkey
+              this.wxdataForm.wxappid = data.data.appid
+              this.wxdataForm.wxmchid = data.data.mchid
+              this.wxdataForm.wxcallbackUrl = data.data.callbackUrl
+              this.wxdataForm.wxcallUrl = data.data.callUrls
+              this.wxdataForm.id = data.data.id
+            }
           }
         })
       },
@@ -644,7 +654,9 @@
         this.active--;
       },
 
-      closeDialog() { },
+      closeDialog() {
+        this.active = 0  //修改回到第一步
+      },
       //上传 执行顺序：beforeAvatarUpload ---执行action提交----执行handleAvatarSuccess or uploadError
       actionLogo() {
         let url = this.$http.adornUrl(`file/image/upload?token=${this.$cookie.get('token')}&imageType=3`);

@@ -1,6 +1,6 @@
 <template>
     <div class="mainAess">
-        <el-dialog title="查看" :visible.sync="dialogVisible" width="50%">
+        <el-dialog title="查看" :visible.sync="dialogVisible" width="50%" @close="closeDialog">
             <el-collapse v-model="activeNames" @change="handleChange" accordion>
                 <el-collapse-item title="基本信息" name="1">
                     <el-form :model="basicdataForm" ref="basicdataForm" label-width="150px" class="demo-ruleForm" :label-position="labelPosition">
@@ -44,7 +44,7 @@
                             <el-input v-model="basicdataForm.domaintName" placeholder="代理商域名" readonly></el-input>
                         </el-form-item>
                     </el-form>
-                    
+
                 </el-collapse-item>
                 <el-collapse-item title="域名备案信息" name="2">
                     <el-form label-width="180px" :model="domainDataForm" ref="domaindataList" class="demo-ruleForm">
@@ -294,6 +294,10 @@
                         }
                     })
                 }
+            },
+            closeDialog() {
+                this.activeNames=[]
+                this.activeNames.push('1')  //获取第一步  关闭之前
             }
         }
     }
@@ -316,12 +320,16 @@
     .mainAess .el-input__inner {
         border: none
     }
-    #picImgSizeDemo .el-upload,#picImgSizeDemo1 .el-upload{
-    width: 180px;
-    height: 150px;
-  }
-  #picImgSizeDemo .el-upload img, #picImgSizeDemo1 .el-upload img {
-    width: 100%;
-    height: 100%
-  }
+
+    #picImgSizeDemo .el-upload,
+    #picImgSizeDemo1 .el-upload {
+        width: 180px;
+        height: 150px;
+    }
+
+    #picImgSizeDemo .el-upload img,
+    #picImgSizeDemo1 .el-upload img {
+        width: 100%;
+        height: 100%
+    }
 </style>
