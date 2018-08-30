@@ -194,8 +194,8 @@
     .seecuslog .el-textarea__inner {
         border: none;
     }
-    
-    #avatar-uploaderFceImg .el-upload ,.avatar-uploaderpriseImg .el-upload{
+
+    #avatar-uploaderFceImg .el-upload ,#avatar-uploaderpriseImg .el-upload{
         width: 150px;
         height: 110px;
     }
