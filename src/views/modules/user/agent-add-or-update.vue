@@ -318,6 +318,7 @@
             },
             closeDialog(done) {
                 done();
+                this.licensePicNo=""
                 this.priseimageUrl = ""
                 this.dataForm.busindate1 = ""
                 this.dataForm.busindate2 = ""

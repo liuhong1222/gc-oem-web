@@ -495,31 +495,35 @@
         },
         methods: {
             getBasicInfo() {
-                // 获取基本信息
-                this.$http({
-                    url: this.$http.adornUrl(`agent/set/findBasicInfo?token=${this.$cookie.get('token')}`),
-                    method: 'post',
-                }).then(({ data }) => {
-                    if (data && data.code === 0) {
-                        if (data.data[0].setStatus == 'true') {
-                            this.seeflagVisibile = true
-                            this.flagVisibile = false
-                        } else if (data.data[0].setStatus == 'false') {
-                            this.flagVisibile = true
-                            this.seeflagVisibile = false
+                this.logoUrl = '',
+                    this.iconUrl = '',
+                    this.signUrl = '',
+                    this.sealUrl = '',
+                    // 获取基本信息
+                    this.$http({
+                        url: this.$http.adornUrl(`agent/set/findBasicInfo?token=${this.$cookie.get('token')}`),
+                        method: 'post',
+                    }).then(({ data }) => {
+                        if (data && data.code === 0) {
+                            if (data.data[0].setStatus == 'true') {
+                                this.seeflagVisibile = true
+                                this.flagVisibile = false
+                            } else if (data.data[0].setStatus == 'false') {
+                                this.flagVisibile = true
+                                this.seeflagVisibile = false
+                            }
+                            this.basicdataForm.agentId = data.data[0].agentId
+                            this.basicdataForm.busicId = data.data[0].agent_no
+                            this.basicdataForm.agentName = data.data[0].company_name
+                            this.logoImageUrl = imgUrl.imgUrl + data.data[0].logo_url
+                            this.iconImageUrl = imgUrl.imgUrl + data.data[0].icon_url
+                            this.dqImageUrl = imgUrl.imgUrl + data.data[0].sign_url
+                            this.gzImageUrl = imgUrl.imgUrl + data.data[0].seal_url
+                            this.basicdataForm.messSign = data.data[0].sms_sign
+                            this.basicdataForm.agentDomain = data.data[0].name
+                            this.agentId = data.data[0].agentId
                         }
-                        this.basicdataForm.agentId = data.data[0].agentId
-                        this.basicdataForm.busicId = data.data[0].agent_no
-                        this.basicdataForm.agentName = data.data[0].company_name
-                        this.logoImageUrl = imgUrl.imgUrl + data.data[0].logo_url
-                        this.iconImageUrl = imgUrl.imgUrl + data.data[0].icon_url
-                        this.dqImageUrl = imgUrl.imgUrl + data.data[0].sign_url
-                        this.gzImageUrl = imgUrl.imgUrl + data.data[0].seal_url
-                        this.basicdataForm.messSign = data.data[0].sms_sign
-                        this.basicdataForm.agentDomain = data.data[0].name
-                        this.agentId = data.data[0].agentId
-                    }
-                })
+                    })
             },
             next() {  //点击基本信息
                 this.$refs['basicdataList'].validate((valid) => {

@@ -26,7 +26,7 @@
                     <el-input v-model="dataForm.bussicAdress" placeholder="营业执照所在地" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="法人姓名：">
-                    <el-input v-model="dataForm.lawName" placeholder="法人姓名" readonly></el-input>
+                    <el-input v-model="dataForm.lawName" placeholder="法人姓名" readonly></el-input> 
                 </el-form-item>
                 <el-form-item label="营业执照号：">
                     <el-input v-model="dataForm.businNum" placeholder="营业执照号" readonly></el-input>

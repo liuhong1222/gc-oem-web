@@ -206,6 +206,11 @@
                 // console.log('查看弹出层')
                 this.dialogVisible = true
                 this.agentId = agentId;
+
+                this.logoImageUrl = ""
+                this.iconImageUrl = ""
+                this.dqImageUrl = ""
+                this.gzImageUrl = ""
                 // 获取基本信息
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findBasicInfo?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
