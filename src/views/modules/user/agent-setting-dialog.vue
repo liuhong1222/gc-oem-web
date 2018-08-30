@@ -17,10 +17,10 @@
             <el-input v-model="basicdataForm.agentId" placeholder="代理商序号"></el-input>
           </el-form-item><br /> -->
           <el-form-item label="商户编号" prop="busicId">
-            <el-input v-model="basicdataForm.busicId" placeholder="商户编号"></el-input>
+            <el-input v-model="basicdataForm.busicId" placeholder="商户编号" readonly></el-input>
           </el-form-item><br />
           <el-form-item label="代理商名称" prop="agentName">
-            <el-input v-model="basicdataForm.agentName" placeholder="代理商名称"></el-input>
+            <el-input v-model="basicdataForm.agentName" placeholder="代理商名称" readonly></el-input>
           </el-form-item>
           <br />
           <el-form-item label="logo" id="logoImgSize">
