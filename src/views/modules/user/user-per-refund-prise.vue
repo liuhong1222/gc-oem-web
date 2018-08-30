@@ -158,6 +158,7 @@
                                     onClose: () => {
                                         this.refundVisible = false
                                         this.disabled = false
+                                        this.refundDataForm.desc = ""
                                         this.$emit('refreshDataList')
                                     }
                                 })

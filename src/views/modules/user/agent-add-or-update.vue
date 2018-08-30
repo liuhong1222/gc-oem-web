@@ -5,11 +5,12 @@
             <!-- <el-form-item label="代理商编号：" prop="agentNumber" v-show="agentNumberFlag" id="agentNumberCss">
                 <el-input v-model="dataForm.agentNumber" placeholder="代理商编号" readonly></el-input>
             </el-form-item> -->
-            <el-form-item label="营业执照：" prop="">
+            <el-form-item label="营业执照：" prop="priseimageUrl">
                 <el-upload class="avatar-uploader" :action="priseurl" accept="image/jpeg,image/jpg,image/png" :show-file-list="false" :on-success="perisehandleAvatarSuccess"
                     :before-upload="beforeAvatarUpload">
-                    <img v-if="priseimageUrl" :src="priseimageUrl" class="avatar">
+                    <img v-if="dataForm.priseimageUrl" :src="dataForm.priseimageUrl" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    <input type="hidden" v-model="dataForm.priseimageUrl"/>
                 </el-upload>
                 <span>（上传后，以下部分信息可自动导入）</span>
             </el-form-item>
@@ -95,7 +96,7 @@
             return {
                 // agentNumberFlag: false,
                 agentReadonly: false,
-                priseimageUrl: "",
+                // priseimageUrl: "",
                 priseurl: "",
                 licensePicNo: '',
                 visible: false,
@@ -120,13 +121,17 @@
                     agencylevel: '',  //级别
                     price: '',
                     allowCounts: '',
-                    shortName: ''
+                    shortName: '',
+                    priseimageUrl:''
 
                 },
                 datarules: {
                     // agentNumber: [
                     //     { required: true, message: '请输入代理商编号', trigger: 'blur' }
                     // ],
+                    priseimageUrl:[
+                    { required: true, message: '请上传营业执照', trigger: 'blur' }
+                    ],
                     businNumber: [
                         { required: true, message: '请输入最长为6的商家编号（只能为数字）', trigger: 'blur' },
                     ],
@@ -217,7 +222,7 @@
                         if (data && data.code === 0) {
                             // console.log(imgUrl.imgUrl)
                             // console.log(imgUrl.imgUrl + data.data.licenseUrl)
-                            this.priseimageUrl = imgUrl.imgUrl + data.data.licenseUrl
+                            this.dataForm.priseimageUrl = imgUrl.imgUrl + data.data.licenseUrl
                             // this.dataForm.agentNumber = data.data.agentNo
                             this.dataForm.businNumber = data.data.mchId
                             this.dataForm.companyName = data.data.companyName
@@ -280,7 +285,10 @@
                                     duration: 1500,
                                     onClose: () => {
                                         this.visible = false
-                                        this.priseimageUrl = ""
+                                        this.dataForm.priseimageUrl = ""
+                                        this.licensePicNo = ""
+                                        this.dataForm.busindate2 = ""
+                                        this.dataForm.pwd=""
                                         this.$emit('refreshDataList')
                                     }
                                 })
@@ -295,7 +303,9 @@
             },
             clearAgent() {
                 this.visible = false
-                this.priseimageUrl = ""
+                this.dataForm.priseimageUrl = ""
+                this.licensePicNo = ""
+                this.dataForm.pwd=""
                 this.dataForm.busindate1 = ""
                 this.dataForm.busindate2 = ""
             },
@@ -312,14 +322,14 @@
             },
             perisehandleAvatarSuccess(res, file) {
                 // console.log(res.data.licensePicNo)
-                this.priseimageUrl = URL.createObjectURL(file.raw);
+                this.dataForm.priseimageUrl = URL.createObjectURL(file.raw);
                 this.licensePicNo = res.data.licensePicNo
                 // console.log(this.priseimageUrl)
             },
             closeDialog(done) {
                 done();
-                this.licensePicNo=""
-                this.priseimageUrl = ""
+                this.licensePicNo = ""
+                this.dataForm.priseimageUrl = ""
                 this.dataForm.busindate1 = ""
                 this.dataForm.busindate2 = ""
                 this.dataForm.pwd = ""

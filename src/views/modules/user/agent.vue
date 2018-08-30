@@ -40,7 +40,7 @@
                 </el-table-column>
                 <el-table-column prop="statusName" label=" 代理商状态" width="90" align="center">
                 </el-table-column>
-                <el-table-column prop="shortName" label=" 公司简称"  align="center">
+                <el-table-column prop="shortName" label=" 公司简称" align="center">
                 </el-table-column>
                 <el-table-column prop="createTime" label="创建时间" width="150" align="center">
                 </el-table-column>
@@ -135,7 +135,7 @@
                 cdAgentId: '',
                 jinorQiId: '',
                 disabled: false,
-                disabledcz:false,
+                disabledcz: false,
                 agentseeVisible: false,
                 jinShow: false,
                 qiShow: false,
@@ -374,14 +374,15 @@
                         }).then(({ data }) => {
                             // console.log(data)
                             if (data && data.code === 0) {
-                                this.disabledcz=true
+                                this.disabledcz = true
                                 this.$message({
                                     message: '操作成功',
                                     type: 'success',
                                     duration: 1500,
                                     onClose: () => {
                                         this.chdataFormVisible = false
-                                        this.disabledcz=false
+                                        this.disabledcz = false
+                                        this.chdataForm.remark = ""// 清空备注
                                         this.getDataList()
                                     }
                                 })

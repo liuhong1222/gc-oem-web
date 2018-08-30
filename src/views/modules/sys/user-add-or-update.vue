@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="visible">
+  <el-dialog :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="visible" @close="closeDialog">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
       <el-form-item label="手机号" prop="userName">
         <el-input v-model="dataForm.userName" placeholder="手机号"></el-input>
@@ -185,6 +185,11 @@
             })
           }
         })
+      },
+      closeDialog() {  //关闭之前
+        this.dataForm.comfirmPassword = ""
+        this.dataForm.password = ""
+
       }
     }
   }
