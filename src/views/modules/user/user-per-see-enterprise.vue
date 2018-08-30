@@ -89,6 +89,7 @@
 </template>
 <script>
     import imgUrl from '@/utils/imgUrl'
+   
     export default {
         data() {
             return {
@@ -142,8 +143,8 @@
                             // console.log(data)
                             this.perseeDataForm.mobile = data.mobile
                             this.perseeDataForm.peremail = data.mail
-                            this.imageUrlFace = imgUrl.imgUrl + data.idCardInfo.faceUrl
-                            this.imageUrlback = imgUrl.imgUrl + data.idCardInfo.backUrl
+                            this.imageUrlFace = imgUrl.zxaImgUrl + data.idCardInfo.faceUrl
+                            this.imageUrlback = imgUrl.zxaImgUrl + data.idCardInfo.backUrl
                             // this.perseeDataForm.custNum = data.idCardInfo.creUserId
                             this.perseeDataForm.custNanme = data.idCardInfo.username
                             this.perseeDataForm.perIdno = data.idCardInfo.idno
@@ -168,7 +169,7 @@
                         if (data && data.code === 0) {
                             // console.log(data)
                             this.seepriseDataForm.mobile = data.mobile
-                            this.priseimageUrl = imgUrl.imgUrl + data.businessLicenceInfo.pictureUrl
+                            this.priseimageUrl = imgUrl.zxaImgUrl + data.businessLicenceInfo.pictureUrl
                             // this.seepriseDataForm.prisecustNum = data.businessLicenceInfo.creUserId
                             this.seepriseDataForm.priseComName = data.businessLicenceInfo.name
                             this.seepriseDataForm.businNum = data.businessLicenceInfo.regnum
