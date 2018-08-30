@@ -25,43 +25,47 @@
                             <el-input v-model="basicdataForm.agentName" placeholder="代理商名称" readonly></el-input>
                         </el-form-item>
                         <br />
-                        <el-form-item label="logo：" id="logoImgSize">
+                        <el-form-item label="logo：" id="logoImgSize" prop="imageUrlLogo">
                             <el-upload class="upload-demo" drag :show-file-list="true" name="file" :action="actionLogo()" :on-success="handleAvatarSuccessLogo"
                                 :on-error="errorLogo" :on-progress="onProgressLogo" :before-upload="beforeAvatarUploadLogo" :data="logoQueryParams"
                                 enctype="multipart/form-data" :limit="1">
-                                <img v-if="imageUrlLogo" :src="imageUrlLogo" class="avatar">
+                                <img v-if="basicdataForm.imageUrlLogo" :src="basicdataForm.imageUrlLogo" class="avatar">
                                 <i class="el-icon-plus "></i>
                                 <!-- <div class="el-upload__text" style="margin-top:-28px"><em>点击上传</em></div> -->
                                 <div class="el-upload__tip" slot="tip">要求为背景透明的png格式，且不超过2M，长140px，宽36px，（再次上传请删除上一次上传）</div>
+                                <input type="hidden" v-model="basicdataForm.imageUrlLogo" />
                             </el-upload>
                         </el-form-item><br />
-                        <el-form-item label="icon：" id="iconImgSize">
+                        <el-form-item label="icon：" id="iconImgSize" prop="imageUrlIcon">
                             <el-upload class="upload-demo" drag :show-file-list="true" :on-success="handleAvatarSuccessIcon" :on-progress="onProgressIcon"
                                 :before-upload="beforeAvatarUploadIcon" :action="actionIcon()" :data="iconQueryParams" :on-error="errorIcon">
-                                <img v-if="imageUrlIcon" :src="imageUrlIcon" class="avatar" :limit="1">
+                                <img v-if="basicdataForm.imageUrlIcon" :src="basicdataForm.imageUrlIcon" class="avatar" :limit="1">
                                 <i class="el-icon-plus"></i>
                                 <!-- <div class="el-upload__text"><em>点击上传</em></div> -->
                                 <div class="el-upload__tip" slot="tip">要求为背景透明的png格式，且不超过2M，长40px，宽40px，（再次上传请删除上一次上传）</div>
+                                <input type="hidden" v-model="basicdataForm.imageUrlIcon" />
                             </el-upload>
                         </el-form-item><br />
-                        <el-form-item label="代表签字：">
+                        <el-form-item label="代表签字：" prop="imageUrlSignatures">
                             <el-upload class="upload-demo" drag :show-file-list="true" name="file" :action="actionSignatures()" :on-success="handleAvatarSuccessSignatures"
                                 :on-error="errorSignatures" :on-progress="onProgressSignatures" :before-upload="beforeAvatarUploadSignatures"
                                 :data="SignaturesQueryParams" enctype="multipart/form-data" :limit="1">
-                                <img v-if="imageUrlSignatures" :src="imageUrlSignatures" class="avatar">
+                                <img v-if="basicdataForm.imageUrlSignatures" :src="basicdataForm.imageUrlSignatures" class="avatar">
                                 <i class="el-icon-plus"></i>
                                 <!-- <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div> -->
                                 <div class="el-upload__tip" slot="tip">要求为背景透明的png格式，且不超过2M，长1261px，宽482px，（再次上传请删除上一次上传）</div>
+                                <input type="hidden" v-model="basicdataForm.imageUrlSignatures" />
                             </el-upload>
                         </el-form-item><br />
-                        <el-form-item label="公司红章：">
+                        <el-form-item label="公司红章：" prop="imageUrlChapter">
                             <el-upload class="upload-demo" drag :show-file-list="true" name="file" :action="actionChapter()" :on-success="handleAvatarSuccessChapter"
                                 :on-error="errorChapter" :on-progress="onProgressChapter" :before-upload="beforeAvatarUploadChapter"
                                 :data="ChapterQueryParams" enctype="multipart/form-data" :limit="1">
-                                <img v-if="imageUrlChapter" :src="imageUrlChapter" class="avatar">
+                                <img v-if="basicdataForm.imageUrlChapter" :src="basicdataForm.imageUrlChapter" class="avatar">
                                 <i class="el-icon-plus"></i>
                                 <!-- <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div> -->
                                 <div class="el-upload__tip" slot="tip">要求为背景透明的png格式，且不超过2M，长169px，宽168px，（再次上传请删除上一次上传）</div>
+                                <input type="hidden" v-model="basicdataForm.imageUrlChapter" />
                             </el-upload>
                         </el-form-item><br />
                         <el-form-item label="短信签名：" prop="messSign">
@@ -154,10 +158,10 @@
                             <el-input v-model="alipaydataForm.alicallbackUrl" placeholder="支付回调地址"></el-input>
                         </el-form-item>
                         <el-form-item label="支付宝公钥">
-                            <el-input type="textarea" v-model="alipaydataForm.alipublicKey" placeholder="公钥" :rows="5"></el-input>
+                            <el-input type="textarea" v-model="alipaydataForm.alipublicKey" placeholder="支付宝公钥" :rows="5"></el-input>
                         </el-form-item>
                         <el-form-item label="应用私钥">
-                            <el-input type="textarea" v-model="alipaydataForm.aliprivateKey" placeholder="私钥" :rows="5"></el-input>
+                            <el-input type="textarea" v-model="alipaydataForm.aliprivateKey" placeholder="应用私钥" :rows="5"></el-input>
                         </el-form-item>
                         <el-button style="margin-top: 12px;" @click="lastStep">上一步</el-button>
                         <el-button style="margin-top: 12px;" @click="nextalipay">下一步</el-button>
@@ -300,11 +304,11 @@
                         <el-form-item label="支付回调地址">
                             <el-input v-model="alipaydataForm.alicallbackUrl" placeholder="支付回调地址" readonly></el-input>
                         </el-form-item>
-                        <el-form-item label="公钥">
-                            <el-input type="textarea" v-model="alipaydataForm.alipublicKey" placeholder="公钥" :rows="5" readonly></el-input>
+                        <el-form-item label="支付宝公钥">
+                            <el-input type="textarea" v-model="alipaydataForm.alipublicKey" placeholder="支付宝公钥" :rows="5" readonly></el-input>
                         </el-form-item>
-                        <el-form-item label="私钥">
-                            <el-input type="textarea" v-model="alipaydataForm.aliprivateKey" placeholder="私钥" :rows="5" readonly></el-input>
+                        <el-form-item label="应用私钥">
+                            <el-input type="textarea" v-model="alipaydataForm.aliprivateKey" placeholder="应用私钥" :rows="5" readonly></el-input>
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
@@ -358,7 +362,11 @@
                     busicId: '',
                     agentName: '',
                     messSign: '',
-                    agentDomain: ''
+                    agentDomain: '',
+                    imageUrlIcon: "",
+                    imageUrlLogo: "",
+                    imageUrlSignatures: "",  //代表签字
+                    imageUrlChapter: "",  //公司红章
                 },
                 basicDatarules: {  //基本信息规则
                     // agentId: [
@@ -366,6 +374,18 @@
                     // ],
                     busicId: [
                         { required: true, message: '请输入商户编号', trigger: 'blur' }
+                    ],
+                    imageUrlIcon: [
+                        { required: true, message: '请上传icon', trigger: 'blur' }
+                    ],
+                    imageUrlLogo: [
+                        { required: true, message: '请上传logo', trigger: 'blur' }
+                    ],
+                    imageUrlSignatures: [
+                        { required: true, message: '请上传代表签字', trigger: 'blur' }
+                    ],
+                    imageUrlChapter: [
+                        { required: true, message: '请上传公司红章', trigger: 'blur' }
                     ],
                     agentName: [
                         { required: true, message: '请输入代理商名称', trigger: 'blur' }
@@ -464,10 +484,10 @@
                     wxcallUrl: '',
                     id: ''  //后端返回的id
                 },
-                imageUrlIcon: "",
-                imageUrlLogo: "",
-                imageUrlSignatures: "",  //代表签字
-                imageUrlChapter: "",  //公司红章
+                // imageUrlIcon: "",
+                // imageUrlLogo: "",
+                // imageUrlSignatures: "",  //代表签字
+                // imageUrlChapter: "",  //公司红章
                 logoQueryParams: {  //logo上传参数
                     imageType: 3,
                     agentId: null,
@@ -843,7 +863,7 @@
             },
             handleAvatarSuccessLogo(res, file) {
                 this.logoUrl = res.data.licenseUrl
-                this.imageUrlLogo = URL.createObjectURL(file.raw);
+                this.basicdataForm.imageUrlLogo = URL.createObjectURL(file.raw);
             },
             errorLogo() {
                 console.log("yyyyyy");
@@ -892,7 +912,7 @@
             },
             handleAvatarSuccessIcon(res, file) {
                 this.iconUrl = res.data.licenseUrl
-                this.imageUrlIcon = URL.createObjectURL(file.raw);
+                this.basicdataForm.imageUrlIcon = URL.createObjectURL(file.raw);
             },
             errorIcon() {
                 console.log("yyyyyy");
@@ -943,7 +963,7 @@
             },
             handleAvatarSuccessSignatures(res, file) {
                 this.signUrl = res.data.licenseUrl
-                this.imageUrlSignatures = URL.createObjectURL(file.raw);
+                this.basicdataForm.imageUrlSignatures = URL.createObjectURL(file.raw);
             },
             errorSignatures() {
                 console.log("yyyyyy");
@@ -996,7 +1016,7 @@
             },
             handleAvatarSuccessChapter(res, file) {
                 this.sealUrl = res.data.licenseUrl
-                this.imageUrlChapter = URL.createObjectURL(file.raw);
+                this.basicdataForm.imageUrlChapter = URL.createObjectURL(file.raw);
             },
             errorChapter() {
                 console.log("yyyyyy");

@@ -23,39 +23,43 @@
             <el-input v-model="basicdataForm.agentName" placeholder="代理商名称" readonly></el-input>
           </el-form-item>
           <br />
-          <el-form-item label="logo" id="logoImgSize">
+          <el-form-item label="logo" id="logoImgSize" prop="imageUrlLogo">
             <el-upload class="upload-demo" drag :show-file-list="true" name="file" :action="actionLogo()" :on-success="handleAvatarSuccessLogo"
               :on-error="errorLogo" :on-progress="onProgressLogo" :before-upload="beforeAvatarUploadLogo" :data="logoQueryParams"
               enctype="multipart/form-data" :limit="1">
-              <img v-if="imageUrlLogo" :src="imageUrlLogo" class="avatar">
+              <img v-if="basicdataForm.imageUrlLogo" :src="basicdataForm.imageUrlLogo" class="avatar">
               <i class="el-icon-plus"></i>
               <div class="el-upload__tip" slot="tip">要求为背景透明的png格式，且不超过2M，长140px，宽36px，（再次上传请删除上一次上传）</div>
+              <input type="hidden" v-model="basicdataForm.imageUrlLogo" />
             </el-upload>
           </el-form-item><br />
-          <el-form-item label="icon" id="iconImgSize">
+          <el-form-item label="icon" id="iconImgSize" prop="imageUrlIcon">
             <el-upload class="upload-demo" drag :show-file-list="true" :on-success="handleAvatarSuccessIcon" :on-progress="onProgressIcon"
               :before-upload="beforeAvatarUploadIcon" :action="actionIcon()" :data="iconQueryParams" :on-error="errorIcon">
-              <img v-if="imageUrlIcon" :src="imageUrlIcon" class="avatar" :limit="1">
+              <img v-if="basicdataForm.imageUrlIcon" :src="basicdataForm.imageUrlIcon" class="avatar" :limit="1">
               <i class="el-icon-plus"></i>
               <div class="el-upload__tip" slot="tip">要求为背景透明的png格式，且不超过2M，长40px，宽40px，（再次上传请删除上一次上传）</div>
+              <input type="hidden" v-model="basicdataForm.imageUrlIcon" />
             </el-upload>
           </el-form-item><br />
-          <el-form-item label="代表签字">
+          <el-form-item label="代表签字" prop="imageUrlSignatures">
             <el-upload class="upload-demo" drag :show-file-list="true" name="file" :action="actionSignatures()" :on-success="handleAvatarSuccessSignatures"
               :on-error="errorSignatures" :on-progress="onProgressSignatures" :before-upload="beforeAvatarUploadSignatures"
               :data="SignaturesQueryParams" enctype="multipart/form-data" :limit="1">
-              <img v-if="imageUrlSignatures" :src="imageUrlSignatures" class="avatar">
+              <img v-if="basicdataForm.imageUrlSignatures" :src="basicdataForm.imageUrlSignatures" class="avatar">
               <i class="el-icon-plus"></i>
               <div class="el-upload__tip" slot="tip">要求为背景透明的png格式，且不超过2M，长1261px，宽482px，（再次上传请删除上一次上传）</div>
+              <input type="hidden" v-model="basicdataForm.imageUrlSignatures" />
             </el-upload>
           </el-form-item><br />
-          <el-form-item label="公司红章">
+          <el-form-item label="公司红章" prop="imageUrlChapter">
             <el-upload class="upload-demo" drag :show-file-list="true" name="file" :action="actionChapter()" :on-success="handleAvatarSuccessChapter"
               :on-error="errorChapter" :on-progress="onProgressChapter" :before-upload="beforeAvatarUploadChapter" :data="ChapterQueryParams"
               enctype="multipart/form-data" :limit="1">
-              <img v-if="imageUrlChapter" :src="imageUrlChapter" class="avatar">
+              <img v-if="basicdataForm.imageUrlChapter" :src="basicdataForm.imageUrlChapter" class="avatar">
               <i class="el-icon-plus"></i>
               <div class="el-upload__tip" slot="tip">要求为背景透明的png格式，且不超过2M，长169px，宽168px，（再次上传请删除上一次上传）</div>
+              <input type="hidden" v-model="basicdataForm.imageUrlChapter" />
             </el-upload>
           </el-form-item><br />
           <el-form-item label="短信签名" prop="messSign">
@@ -215,7 +219,11 @@
           busicId: '',
           agentName: '',
           messSign: '',
-          agentDomain: ''
+          agentDomain: '',
+          imageUrlLogo: '',
+          imageUrlIcon: '',
+          imageUrlSignatures: '',
+          imageUrlChapter: ''
         },
         basicDatarules: {  //基本信息规则
           agentId: [
@@ -224,8 +232,20 @@
           busicId: [
             { required: true, message: '请输入商户编号', trigger: 'blur' }
           ],
+          imageUrlLogo: [
+            { required: true, message: '请输入上传logo', trigger: 'blur' }
+          ],
+          imageUrlIcon: [
+            { required: true, message: '请上传icon', trigger: 'blur' }
+          ],
+          imageUrlSignatures: [
+            { required: true, message: '请上传logo', trigger: 'blur' }
+          ],
+          imageUrlChapter: [
+            { required: true, message: '请上传公司红章', trigger: 'blur' }
+          ],
           agentName: [
-            { required: true, message: '请输入代理商名称', trigger: 'blur' }
+            { required: true, message: '请上传代表签字', trigger: 'blur' }
           ],
           messSign: [
             { required: true, message: '请输入短信签名', trigger: 'blur' }
@@ -321,10 +341,10 @@
           wxcallUrl: '',
           id: ''  //后端返回的id
         },
-        imageUrlIcon: "",
-        imageUrlLogo: "",
-        imageUrlSignatures: "",  //代表签字
-        imageUrlChapter: "",  //公司红章
+        // imageUrlIcon: "",
+        // imageUrlLogo: "",
+        // imageUrlSignatures: "",  //代表签字
+        // imageUrlChapter: "",  //公司红章
         logoQueryParams: {  //logo上传参数
           imageType: 3,
           agentId: null,
@@ -355,28 +375,28 @@
         this.iconQueryParams.agentId = agentId;
         this.SignaturesQueryParams.agentId = agentId;
         this.ChapterQueryParams.agentId = agentId;
-        this.logoUrl=""
-        this.iconUrl=""
-        this.signUrl=""
-        this.sealUrl=""
-          // 获取基本信息
-          this.$http({
-            url: this.$http.adornUrl(`agent/set/findBasicInfo?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
-            method: 'post',
-          }).then(({ data }) => {
-            if (data && data.code === 0) {
-              // console.log(data)
-              this.basicdataForm.agentId = data.data[0].agentId
-              this.basicdataForm.busicId = data.data[0].agent_no
-              this.basicdataForm.agentName = data.data[0].company_name
-              this.imageUrlLogo = imgUrl.imgUrl + data.data[0].logo_url
-              this.imageUrlIcon = imgUrl.imgUrl + data.data[0].icon_url   //为了显示图片
-              this.imageUrlSignatures = imgUrl.imgUrl + data.data[0].sign_url
-              this.imageUrlChapter = imgUrl.imgUrl + data.data[0].seal_url
-              this.basicdataForm.messSign = data.data[0].sms_sign
-              this.basicdataForm.agentDomain = data.data[0].name
-            }
-          })
+        this.logoUrl = ""
+        this.iconUrl = ""
+        this.signUrl = ""
+        this.sealUrl = ""
+        // 获取基本信息
+        this.$http({
+          url: this.$http.adornUrl(`agent/set/findBasicInfo?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
+          method: 'post',
+        }).then(({ data }) => {
+          if (data && data.code === 0) {
+            // console.log(data)
+            this.basicdataForm.agentId = data.data[0].agentId
+            this.basicdataForm.busicId = data.data[0].agent_no
+            this.basicdataForm.agentName = data.data[0].company_name
+            this.basicdataForm.imageUrlLogo = imgUrl.imgUrl + data.data[0].logo_url
+            this.basicdataForm.imageUrlIcon = imgUrl.imgUrl + data.data[0].icon_url   //为了显示图片
+            this.basicdataForm.imageUrlSignatures = imgUrl.imgUrl + data.data[0].sign_url
+            this.basicdataForm.imageUrlChapter = imgUrl.imgUrl + data.data[0].seal_url
+            this.basicdataForm.messSign = data.data[0].sms_sign
+            this.basicdataForm.agentDomain = data.data[0].name
+          }
+        })
       },
       next() {  //点击基本信息
 
@@ -717,7 +737,7 @@
       },
       handleAvatarSuccessLogo(res, file) {
         this.logoUrl = res.data.licenseUrl
-        this.imageUrlLogo = URL.createObjectURL(file.raw);
+        this.basicdataForm.imageUrlLogo = URL.createObjectURL(file.raw);
       },
       errorLogo() {
         console.log("yyyyyy");
@@ -766,7 +786,7 @@
       },
       handleAvatarSuccessIcon(res, file) {
         this.iconUrl = res.data.licenseUrl
-        this.imageUrlIcon = URL.createObjectURL(file.raw);
+        this.basicdataForm.imageUrlIcon = URL.createObjectURL(file.raw);
       },
       errorIcon() {
         console.log("yyyyyy");
@@ -819,7 +839,7 @@
       },
       handleAvatarSuccessSignatures(res, file) {
         this.signUrl = res.data.licenseUrl
-        this.imageUrlSignatures = URL.createObjectURL(file.raw);
+        this.basicdataForm.imageUrlSignatures = URL.createObjectURL(file.raw);
       },
       errorSignatures() {
         console.log("yyyyyy");
@@ -872,7 +892,7 @@
       },
       handleAvatarSuccessChapter(res, file) {
         this.sealUrl = res.data.licenseUrl
-        this.imageUrlChapter = URL.createObjectURL(file.raw);
+        this.basicdataForm.imageUrlChapter = URL.createObjectURL(file.raw);
       },
       errorChapter() {
         console.log("yyyyyy");
