@@ -236,6 +236,7 @@
                     this.domainDataForm.telservice = ""
                     this.domainDataForm.icpInfo = ""
                     this.domainDataForm.secrecord = ""
+                    this.domainDataForm.id = ""
                     this.$http({
                         url: this.$http.adornUrl(`agent/set/findDomainInfo?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                         method: 'post',

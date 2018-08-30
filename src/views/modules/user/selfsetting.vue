@@ -576,7 +576,7 @@
 
             // 获取下一步里面的内容（域名备案信息）
             getDomain() {
-
+                this.domainDataForm.id=""
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findDomainInfo?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                     method: 'post',
@@ -627,7 +627,7 @@
 
             // 获取客服资料
             getkfinfo() {
-
+                this.customerDataForm.id=""
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findCustService?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                     method: 'post',
@@ -672,7 +672,7 @@
             },
             // 获取合同信息
             getcontractinfo() {
-
+                this.contractdataForm.id=""
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findContract?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                     method: 'post',
@@ -723,7 +723,7 @@
 
             // 获取支付宝信息
             getalipay() {
-
+                this.alipaydataForm.id =""
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findAlipay?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                     method: 'post',
@@ -766,7 +766,7 @@
             },
             //获取微信信息
             getweixinInfo() {
-
+                this.wxdataForm.id=""
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findWeixinpay?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                     method: 'post',
