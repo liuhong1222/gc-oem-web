@@ -93,6 +93,7 @@
         },
         watch: {
             'rechargeDataForm.rechargeMoney'() {
+               
                 if (this.number == 1) {   //number为1才进行监控自动计算
                     if (this.rechargeDataForm.rechargeMoney !== "" && this.rechargeDataForm.price !== "") {
                         this.rechargeDataForm.rechargeCounts = Math.ceil(Number(this.rechargeDataForm.rechargeMoney) / (this.rechargeDataForm.price));

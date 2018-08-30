@@ -68,8 +68,8 @@
           <span>元/条</span>
         </el-form-item>
         <el-form-item label="充值金额" prop="chMoney">
-          <!-- <el-input v-model.number="chdataForm.chMoney" placeholder="请输入整数，最低充值金额1万元……"></el-input> -->
-          <el-input v-model.number="chdataForm.chMoney" placeholder="请输入整数，最低充值金额1万元……" @keyup.native="proving1"></el-input>
+          <!-- <el-input v-model.number="chdataForm.chMoney" placeholder="请输入整数，最低充值金额1万元……" @keyup.native="proving1"></el-input> -->
+          <el-input v-model.number="chdataForm.chMoney" placeholder="请输入整数，最低充值金额1万元……"></el-input>
           <span>万元</span>
         </el-form-item>
         <el-form-item label="充值条数">
@@ -263,11 +263,18 @@
     },
     watch: {
       'chdataForm.chMoney'() {
+        let reg = /^[1-9]\d*$/;
+        if (!reg.test(this.chdataForm.chMoney)) {
+          let moneyType = (this.chdataForm.chMoney).toString()
+          this.chdataForm.chMoney = moneyType.replace(/[^0-9]*/g, '').replace(/\b(0+)/gi, "")
+          return true;
+        }
         if (this.chdataForm.chMoney !== "" && this.chdataForm.chPrice !== "" && this.chdataForm.chMoney !== 0) {
           this.chdataForm.chCounts = Math.ceil((Number(this.chdataForm.chMoney) / (this.chdataForm.chPrice)) * 10000) / 10000
           // console.log('获取充值二维码')
           document.getElementById('qrcode').innerHTML = "";
           // let time = null
+          console.log(33333333)
           let that = this
           this.$http({
             url: this.$http.adornUrl(`agent/fund/recharge?token=${this.$cookie.get('token')}`),
@@ -303,8 +310,8 @@
                         this.getAgentDeskInfo()
                       })
                     } else if (data.data.orderStatus == "Fail") {
-                           this.closeDialog()
-                         this.$message.error('充值失败，请重新充值!')
+                      this.closeDialog()
+                      this.$message.error('充值失败，请重新充值!')
                     }
                   }
                 })
@@ -372,15 +379,17 @@
         }
       },
       // 必须输入正整数
-      proving1() {
-        let moneyType = (this.chdataForm.chMoney).toString()
-        this.chdataForm.chMoney = moneyType.replace(/[^0-9]*/g, '').replace(/\b(0+)/gi, "")
-        // this.chdataForm.chMoney = Number(moneyType.replace(/[^\.\d]/g, ''));
-        // this.chdataForm.chMoney = Number(moneyType.replace('.', ''));
-        // if (this.chdataForm.chMoney == 0) {
-        //   this.chdataForm.chMoney = ""
-        // }
-      },
+      // proving1() {
+      //   // let moneyType = (this.chdataForm.chMoney).toString()
+      //   // this.chdataForm.chMoney = moneyType.replace(/[^0-9]*/g, '').replace(/\b(0+)/gi, "")
+
+
+      //   // this.chdataForm.chMoney = Number(moneyType.replace(/[^\.\d]/g, ''));
+      //   // this.chdataForm.chMoney = Number(moneyType.replace('.', ''));
+      //   // if (this.chdataForm.chMoney == 0) {
+      //   //   this.chdataForm.chMoney = ""
+      //   // }
+      // },
       getQrcode() {
         this.$nextTick(() => {
           let qrcode = new QRCode('qrcode', {
@@ -393,6 +402,7 @@
       },
       closeDialog() {
         document.getElementById('qrcode').innerHTML = "";
+        this.chdataForm.chCounts = ""
         if (this.time) {
           clearInterval(this.time);
         }

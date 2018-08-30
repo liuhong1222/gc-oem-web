@@ -55,7 +55,7 @@
                     <el-input v-model="seepriseDataForm.prisecustNum" placeholder="客户编号"></el-input>
                 </el-form-item> -->
                 <el-form-item label="营业执照：" id="avatar-uploaderpriseImg">
-                    <el-upload class="avatar-uploader" action="" :show-file-list="false" readonly>
+                    <el-upload class="avatar-uploader" action="" :show-file-list="false" readonly disabled>
                         <img v-if="priseimageUrl" :src="priseimageUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
