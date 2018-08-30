@@ -54,7 +54,7 @@
                 <!-- <el-form-item label="客户编号：">
                     <el-input v-model="seepriseDataForm.prisecustNum" placeholder="客户编号"></el-input>
                 </el-form-item> -->
-                <el-form-item label="营业执照：">
+                <el-form-item label="营业执照：" id="avatar-uploaderpriseImg">
                     <el-upload class="avatar-uploader" action="" :show-file-list="false" readonly>
                         <img v-if="priseimageUrl" :src="priseimageUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -194,13 +194,13 @@
     .seecuslog .el-textarea__inner {
         border: none;
     }
-
-    #avatar-uploaderFceImg .el-upload {
+    
+    #avatar-uploaderFceImg .el-upload ,.avatar-uploaderpriseImg .el-upload{
         width: 150px;
         height: 110px;
     }
 
-    #avatar-uploaderFceImg .el-upload img {
+    #avatar-uploaderFceImg .el-upload img , #avatar-uploaderpriseImg  .el-upload img{
         width: 100%;
         height: 100%;
     }
