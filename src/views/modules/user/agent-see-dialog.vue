@@ -231,6 +231,11 @@
             },
             handleChange(val) {
                 if (val == 2) {
+                    this.domainDataForm.copyinfo = ""
+                    this.domainDataForm.compAdress = ""
+                    this.domainDataForm.telservice = ""
+                    this.domainDataForm.icpInfo = ""
+                    this.domainDataForm.secrecord = ""
                     this.$http({
                         url: this.$http.adornUrl(`agent/set/findDomainInfo?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                         method: 'post',
@@ -245,6 +250,9 @@
                         }
                     })
                 } else if (val == 3) {
+                    this.customerDataForm.kfLine = ""
+                    this.customerDataForm.keyqq = ""
+                    this.customerDataForm.businNO = ""
                     this.$http({
                         url: this.$http.adornUrl(`agent/set/findCustService?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                         method: 'post',
@@ -257,6 +265,12 @@
                         }
                     })
                 } else if (val == 4) {  //合同
+                    this.contractdataForm.comName = ""
+                    this.contractdataForm.comAdress = ""
+                    this.contractdataForm.comAccount = ""
+                    this.contractdataForm.openBank = ""
+                    this.contractdataForm.zipcode = ""
+                    this.contractdataForm.phone = ""
                     this.$http({
                         url: this.$http.adornUrl(`agent/set/findContract?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                         method: 'post',
