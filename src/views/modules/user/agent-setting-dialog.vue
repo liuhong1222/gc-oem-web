@@ -445,6 +445,12 @@
               this.domainDataForm.icpInfo = data.data.icpRecord
               this.domainDataForm.secrecord = data.data.policeRecord
               this.domainDataForm.id = data.data.id
+            }else {
+              this.domainDataForm.copyinfo = ""
+              this.domainDataForm.compAdress = ""
+              this.domainDataForm.telservice = ""
+              this.domainDataForm.icpInfo = ""
+              this.domainDataForm.secrecord = ""
             }
           }
         })
@@ -495,6 +501,10 @@
               this.customerDataForm.keyqq = data.data.qq
               this.customerDataForm.businNO = data.data.bizNo
               this.customerDataForm.id = data.data.id
+            } else {
+              this.customerDataForm.kfLine = ""
+              this.customerDataForm.keyqq = ""
+              this.customerDataForm.businNO = ""
             }
           }
         })
@@ -544,6 +554,13 @@
               this.contractdataForm.zipcode = data.data.postcode
               this.contractdataForm.phone = data.data.mobile
               this.contractdataForm.id = data.data.id
+            } else {
+              this.contractdataForm.comName = ""
+              this.contractdataForm.comAdress = ""
+              this.contractdataForm.comAccount = ""
+              this.contractdataForm.openBank = ""
+              this.contractdataForm.zipcode = ""
+              this.contractdataForm.phone =""
             }
           }
         })
