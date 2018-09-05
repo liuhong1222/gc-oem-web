@@ -242,12 +242,14 @@
                         method: 'post',
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
-                            this.domainDataForm.copyinfo = data.data.copyright
-                            this.domainDataForm.compAdress = data.data.address
-                            this.domainDataForm.telservice = data.data.licence
-                            this.domainDataForm.icpInfo = data.data.icpRecord
-                            this.domainDataForm.secrecord = data.data.policeRecord
-                            this.domainDataForm.id = data.data.id
+                            if (data.data !== null) {
+                                this.domainDataForm.copyinfo = data.data.copyright
+                                this.domainDataForm.compAdress = data.data.address
+                                this.domainDataForm.telservice = data.data.licence
+                                this.domainDataForm.icpInfo = data.data.icpRecord
+                                this.domainDataForm.secrecord = data.data.policeRecord
+                                this.domainDataForm.id = data.data.id
+                            }
                         }
                     })
                 } else if (val == 3) {
@@ -260,9 +262,11 @@
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
                             // console.log(data)
-                            this.customerDataForm.kfLine = data.data.hotline
-                            this.customerDataForm.keyqq = data.data.qq
-                            this.customerDataForm.businNO = data.data.bizNo
+                            if (data.data !== null) {
+                                this.customerDataForm.kfLine = data.data.hotline
+                                this.customerDataForm.keyqq = data.data.qq
+                                this.customerDataForm.businNO = data.data.bizNo
+                            }
                         }
                     })
                 } else if (val == 4) {  //合同
@@ -278,12 +282,14 @@
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
                             // console.log(data)
-                            this.contractdataForm.comName = data.data.companyName
-                            this.contractdataForm.comAdress = data.data.companyAddress
-                            this.contractdataForm.comAccount = data.data.accountNo
-                            this.contractdataForm.openBank = data.data.bankName
-                            this.contractdataForm.zipcode = data.data.postcode
-                            this.contractdataForm.phone = data.data.mobile
+                            if (data.data !== null) {
+                                this.contractdataForm.comName = data.data.companyName
+                                this.contractdataForm.comAdress = data.data.companyAddress
+                                this.contractdataForm.comAccount = data.data.accountNo
+                                this.contractdataForm.openBank = data.data.bankName
+                                this.contractdataForm.zipcode = data.data.postcode
+                                this.contractdataForm.phone = data.data.mobile
+                            }
                         }
                     })
                 } else if (val == 5) { //支付宝资料
@@ -298,11 +304,13 @@
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
                             // console.log(data)
-                            this.alipaydataForm.aliappid = data.data.appid
-                            this.alipaydataForm.alicallUrl = data.data.callUrl
-                            this.alipaydataForm.alicallbackUrl = data.data.callbackUrl
-                            this.alipaydataForm.alipublicKey = data.data.publicKey
-                            this.alipaydataForm.aliprivateKey = data.data.privateKey
+                            if (data.data !== null) {
+                                this.alipaydataForm.aliappid = data.data.appid
+                                this.alipaydataForm.alicallUrl = data.data.callUrl
+                                this.alipaydataForm.alicallbackUrl = data.data.callbackUrl
+                                this.alipaydataForm.alipublicKey = data.data.publicKey
+                                this.alipaydataForm.aliprivateKey = data.data.privateKey
+                            }
                         }
                     })
                 } else if (val == 6) {
@@ -316,11 +324,13 @@
                         method: 'post',
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
-                            this.wxdataForm.wxkey = data.data.wxkey
-                            this.wxdataForm.wxappid = data.data.appid
-                            this.wxdataForm.wxmchid = data.data.mchid
-                            this.wxdataForm.wxcallbackUrl = data.data.callbackUrl
-                            this.wxdataForm.wxcallUrl = data.data.callUrl
+                            if (data.data !== null) {
+                                this.wxdataForm.wxkey = data.data.wxkey
+                                this.wxdataForm.wxappid = data.data.appid
+                                this.wxdataForm.wxmchid = data.data.mchid
+                                this.wxdataForm.wxcallbackUrl = data.data.callbackUrl
+                                this.wxdataForm.wxcallUrl = data.data.callUrl
+                            }
                         }
                     })
                 }

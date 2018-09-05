@@ -73,6 +73,15 @@
         </div>
       </el-col>
     </el-row>
+    <!-- 驳回弹出框 -->
+    <el-dialog title="提示" :visible.sync="rejectDialogVisible" width="30%">
+      <span>您的设置被管理员驳回，请联系管理员或重新设置并提交。</span>
+      <span slot="footer" class="dialog-footer">
+      <el-button @click="rejectDialogVisible = false">稍后再说</el-button>
+      <el-button type="primary" @click="rejectRet()">前往设置</el-button>
+    </span>
+    </el-dialog>
+
     <!-- 充值弹框-->
     <el-dialog title="充值" :visible.sync="chdataFormVisible" @close='closeDialog' :close-on-click-modal="false">
       <el-form :model="chdataForm" ref="chdataFormref" :rules="chdataFormrefRule" label-width="100px">
@@ -116,7 +125,7 @@
         <el-button type="primary" @click="warnFormSubmit()">确 定</el-button>
       </div>
     </el-dialog>
-    
+
     <!-- 修改套餐 -->
     <el-dialog title="套餐修改" :visible.sync="editmealVisible" id="mealDialog">
       <div>
@@ -198,6 +207,7 @@
       return {
         remarksCon: '',
         myReject: false,  //我的代办
+        rejectDialogVisible: false,
         copyinput: '',
         time: null,
         payUrl: '',
@@ -351,7 +361,8 @@
       this.getAgentDeskInfo(),
         this.myRechargeList(),
         this.findAgentPackage(),
-        this.rejectVisibie()
+        this.rejectVisibie(),
+        this.remarkDialog()
     },
     // created: function () {
     //   // `this` 指向 vm 实例
@@ -399,6 +410,19 @@
       rejectVisibie() {
         if ((sessionStorage.getItem('isExamine')) && (sessionStorage.getItem('isExamine') == 'reject')) {
           this.myReject = true
+        }else {
+          this.myReject = false
+        }
+      },
+
+      // 弹出框
+      remarkDialog() {
+        if ((sessionStorage.getItem('remarkDialog')) && (sessionStorage.getItem('remarkDialog') == 'remarkDialogTr')) {
+          this.rejectDialogVisible = true
+          sessionStorage.setItem('remarkDialog', '')
+        }else {
+          this.rejectDialogVisible = false
+          sessionStorage.setItem('remarkDialog', '')
         }
       },
       // 必须输入正整数
@@ -526,6 +550,7 @@
 
       // 驳回,重新设置
       rejectRet() {
+        this.rejectDialogVisible=false
         this.$router.push({ name: 'user-selfsetting' })
       },
 

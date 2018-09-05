@@ -1,5 +1,6 @@
 <template>
-    <el-dialog :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="visible" :before-close="closeDialog">
+    <el-dialog :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="visible" :before-close="closeDialog"
+    v-loading.fullscreen.lock="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.4)">
         <el-form :model="dataForm" :rules="datarules" ref="dataForm" label-width="150px" class="demo-ruleForm" :label-position="labelPosition">
             <h3>基本信息</h3>
             <!-- <el-form-item label="代理商编号：" prop="agentNumber" v-show="agentNumberFlag" id="agentNumberCss">
@@ -10,7 +11,7 @@
                     :before-upload="beforeAvatarUpload">
                     <img v-if="dataForm.priseimageUrl" :src="dataForm.priseimageUrl" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                    <input type="hidden" v-model="dataForm.priseimageUrl"/>
+                    <input type="hidden" v-model="dataForm.priseimageUrl" />
                 </el-upload>
                 <span>（上传后，以下部分信息可自动导入）</span>
             </el-form-item>
@@ -25,7 +26,7 @@
                 <el-input v-model="dataForm.shortName" placeholder="公司简称"></el-input>
             </el-form-item>
             <el-form-item label="营业执照所在地：" prop="bussicAdress">
-                <el-input v-model="dataForm.bussicAdress" placeholder="营业执照所在地"></el-input>
+                <el-input v-model="dataForm.bussicAdress" placeholder=".营业执照所在地"></el-input>
             </el-form-item>
             <el-form-item label="法人姓名：" prop="lawName">
                 <el-input v-model="dataForm.lawName" placeholder="法人姓名"></el-input>
@@ -96,6 +97,7 @@
             return {
                 // agentNumberFlag: false,
                 agentReadonly: false,
+                loading: false,
                 // priseimageUrl: "",
                 priseurl: "",
                 licensePicNo: '',
@@ -122,15 +124,15 @@
                     price: '',
                     allowCounts: '',
                     shortName: '',
-                    priseimageUrl:''
+                    priseimageUrl: ''
 
                 },
                 datarules: {
                     // agentNumber: [
                     //     { required: true, message: '请输入代理商编号', trigger: 'blur' }
                     // ],
-                    priseimageUrl:[
-                    { required: true, message: '请上传营业执照', trigger: 'blur' }
+                    priseimageUrl: [
+                        { required: true, message: '请上传营业执照', trigger: 'blur' }
                     ],
                     businNumber: [
                         { required: true, message: '请输入最长为6的商家编号（只能为数字）', trigger: 'blur' },
@@ -288,7 +290,7 @@
                                         this.dataForm.priseimageUrl = ""
                                         this.licensePicNo = ""
                                         this.dataForm.busindate2 = ""
-                                        this.dataForm.pwd=""
+                                        this.dataForm.pwd = ""
                                         this.$emit('refreshDataList')
                                     }
                                 })
@@ -305,11 +307,12 @@
                 this.visible = false
                 this.dataForm.priseimageUrl = ""
                 this.licensePicNo = ""
-                this.dataForm.pwd=""
+                this.dataForm.pwd = ""
                 this.dataForm.busindate1 = ""
                 this.dataForm.busindate2 = ""
             },
             beforeAvatarUpload(file) {
+                this.loading = true
                 const isJPG = (file.type === 'image/jpeg') || (file.type == 'image/png') || (file.type == 'image/jpg');
                 const isLt2M = file.size / 1024 / 1024 < 2;
                 if (!isJPG) {
@@ -321,9 +324,22 @@
                 return isJPG && isLt2M;
             },
             perisehandleAvatarSuccess(res, file) {
-                // console.log(res.data.licensePicNo)
-                this.dataForm.priseimageUrl = URL.createObjectURL(file.raw);
-                this.licensePicNo = res.data.licensePicNo
+                if (res.code == 0) {
+                    this.loading = false
+                    this.dataForm.priseimageUrl = URL.createObjectURL(file.raw);
+                    this.licensePicNo = res.data.licensePicNo
+                    this.dataForm.companyName = res.data.companyName
+                    this.dataForm.bussicAdress = res.data.address
+                    this.dataForm.lawName = res.data.legalPerson
+                    this.dataForm.businNum = res.data.licenseNo
+                    this.dataForm.busindate1 = res.data.effectDate
+                    this.dataForm.busindate2 = res.data.expireDate
+                } else {
+                    this.$message.error(res.msg)
+                    this.loading = false
+                }
+
+
                 // console.log(this.priseimageUrl)
             },
             closeDialog(done) {

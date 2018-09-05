@@ -25,7 +25,7 @@
             </el-form>
         </div>
         <div class="agentTable">
-            <el-table :data="dataList" style="width: 100%" :header-cell-style="getRowClass" height="250">
+            <el-table :data="dataList" style="width: 100%" :header-cell-style="getRowClass" height="750">
                 <el-table-column type="index" header-align="center" align="center" width="50" fixed label="序号">
                 </el-table-column>
                 <!-- <el-table-column prop="agentId" label=" 代理商序号" width="100" align="center">

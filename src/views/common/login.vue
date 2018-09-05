@@ -99,8 +99,12 @@
         }).then(({ data }) => {
           if (data && data.code === 0) {
             if (data.auditState == 2) { //驳回
-              sessionStorage.setItem('isExamine', 'reject')
+              sessionStorage.setItem('isExamine', 'reject')  //我的代办
               sessionStorage.setItem('remarkCon', data.remark)
+              sessionStorage.setItem('remarkDialog', 'remarkDialogTr')  //弹出框
+            } else {
+              sessionStorage.setItem('isExamine', '')  //我的代办
+              sessionStorage.setItem('remarkDialog', '')  //弹出框
             }
           } else {
             this.$message.error(data.msg)

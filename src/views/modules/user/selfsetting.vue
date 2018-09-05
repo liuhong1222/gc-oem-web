@@ -519,31 +519,35 @@
                     this.iconUrl = '',
                     this.signUrl = '',
                     this.sealUrl = '',
-                    // 获取基本信息
-                    this.$http({
-                        url: this.$http.adornUrl(`agent/set/findBasicInfo?token=${this.$cookie.get('token')}`),
-                        method: 'post',
-                    }).then(({ data }) => {
-                        if (data && data.code === 0) {
-                            if (data.data[0].setStatus == 'true') {
-                                this.seeflagVisibile = true
-                                this.flagVisibile = false
-                            } else if (data.data[0].setStatus == 'false') {
-                                this.flagVisibile = true
-                                this.seeflagVisibile = false
-                            }
-                            this.basicdataForm.agentId = data.data[0].agentId
-                            this.basicdataForm.busicId = data.data[0].agent_no
-                            this.basicdataForm.agentName = data.data[0].company_name
-                            this.logoImageUrl = imgUrl.imgUrl + data.data[0].logo_url
-                            this.iconImageUrl = imgUrl.imgUrl + data.data[0].icon_url
-                            this.dqImageUrl = imgUrl.imgUrl + data.data[0].sign_url
-                            this.gzImageUrl = imgUrl.imgUrl + data.data[0].seal_url
-                            this.basicdataForm.messSign = data.data[0].sms_sign
-                            this.basicdataForm.agentDomain = data.data[0].name
-                            this.agentId = data.data[0].agentId
+                    this.logoImageUrl = ""
+                this.iconImageUrl = ""
+                this.dqImageUrl = ""
+                this.gzImageUrl = ""
+                // 获取基本信息
+                this.$http({
+                    url: this.$http.adornUrl(`agent/set/findBasicInfo?token=${this.$cookie.get('token')}`),
+                    method: 'post',
+                }).then(({ data }) => {
+                    if (data && data.code === 0) {
+                        if (data.data[0].setStatus == 'true') {
+                            this.seeflagVisibile = true
+                            this.flagVisibile = false
+                        } else if (data.data[0].setStatus == 'false') {
+                            this.flagVisibile = true
+                            this.seeflagVisibile = false
                         }
-                    })
+                        this.basicdataForm.agentId = data.data[0].agentId
+                        this.basicdataForm.busicId = data.data[0].agent_no
+                        this.basicdataForm.agentName = data.data[0].company_name
+                        this.logoImageUrl = imgUrl.imgUrl + data.data[0].logo_url
+                        this.iconImageUrl = imgUrl.imgUrl + data.data[0].icon_url
+                        this.dqImageUrl = imgUrl.imgUrl + data.data[0].sign_url
+                        this.gzImageUrl = imgUrl.imgUrl + data.data[0].seal_url
+                        this.basicdataForm.messSign = data.data[0].sms_sign
+                        this.basicdataForm.agentDomain = data.data[0].name
+                        this.agentId = data.data[0].agentId
+                    }
+                })
             },
             next() {  //点击基本信息
                 this.$refs['basicdataList'].validate((valid) => {
@@ -576,7 +580,7 @@
 
             // 获取下一步里面的内容（域名备案信息）
             getDomain() {
-                this.domainDataForm.id=""
+                this.domainDataForm.id = ""
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findDomainInfo?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                     method: 'post',
@@ -590,6 +594,12 @@
                             this.domainDataForm.icpInfo = data.data.icpRecord
                             this.domainDataForm.secrecord = data.data.policeRecord
                             this.domainDataForm.id = data.data.id
+                        } else {
+                            this.domainDataForm.copyinfo = ""
+                            this.domainDataForm.compAdress = ""
+                            this.domainDataForm.telservice = ""
+                            this.domainDataForm.icpInfo = ""
+                            this.domainDataForm.secrecord = ""
                         }
                     }
                 })
@@ -627,7 +637,7 @@
 
             // 获取客服资料
             getkfinfo() {
-                this.customerDataForm.id=""
+                this.customerDataForm.id = ""
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findCustService?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                     method: 'post',
@@ -639,6 +649,10 @@
                             this.customerDataForm.keyqq = data.data.qq
                             this.customerDataForm.businNO = data.data.bizNo
                             this.customerDataForm.id = data.data.id
+                        } else {
+                            this.customerDataForm.kfLine = ""
+                            this.customerDataForm.keyqq = ""
+                            this.customerDataForm.businNO = ""
                         }
                     }
                 })
@@ -672,7 +686,7 @@
             },
             // 获取合同信息
             getcontractinfo() {
-                this.contractdataForm.id=""
+                this.contractdataForm.id = ""
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findContract?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                     method: 'post',
@@ -687,6 +701,13 @@
                             this.contractdataForm.zipcode = data.data.postcode
                             this.contractdataForm.phone = data.data.mobile,
                                 this.contractdataForm.id = data.data.id
+                        } else {
+                            this.contractdataForm.comName = ""
+                            this.contractdataForm.comAdress = ""
+                            this.contractdataForm.comAccount = ""
+                            this.contractdataForm.openBank = ""
+                            this.contractdataForm.zipcode = ""
+                            this.contractdataForm.phone = ""
                         }
                     }
                 })
@@ -723,7 +744,7 @@
 
             // 获取支付宝信息
             getalipay() {
-                this.alipaydataForm.id =""
+                this.alipaydataForm.id = ""
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findAlipay?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                     method: 'post',
@@ -737,6 +758,13 @@
                             this.alipaydataForm.alipublicKey = data.data.publicKey
                             this.alipaydataForm.aliprivateKey = data.data.privateKey
                             this.alipaydataForm.id = data.data.id
+                        } else {
+                            // alert(33333)
+                            this.alipaydataForm.aliappid = ""
+                            this.alipaydataForm.alicallUrl = ""
+                            this.alipaydataForm.alicallbackUrl = ""
+                            this.alipaydataForm.alipublicKey = ""
+                            this.alipaydataForm.aliprivateKey = ""
                         }
                     }
                 })
@@ -766,7 +794,7 @@
             },
             //获取微信信息
             getweixinInfo() {
-                this.wxdataForm.id=""
+                this.wxdataForm.id = ""
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findWeixinpay?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                     method: 'post',
@@ -779,6 +807,13 @@
                             this.wxdataForm.wxcallbackUrl = data.data.callbackUrl
                             this.wxdataForm.wxcallUrl = data.data.callUrls
                             this.wxdataForm.id = data.data.id
+                        } else {
+
+                            this.wxdataForm.wxkey = ""
+                            this.wxdataForm.wxappid = ""
+                            this.wxdataForm.wxmchid = ""
+                            this.wxdataForm.wxcallbackUrl = ""
+                            this.wxdataForm.wxcallUrl = ""
                         }
                     }
                 })
@@ -1026,72 +1061,108 @@
             },
             handleChange(val) {
                 if (val == 2) {
+                    this.domainDataForm.copyinfo = ""
+                    this.domainDataForm.compAdress = ""
+                    this.domainDataForm.telservice = ""
+                    this.domainDataForm.icpInfo = ""
+                    this.domainDataForm.secrecord = ""
+                    this.domainDataForm.id = ""
                     this.$http({
                         url: this.$http.adornUrl(`agent/set/findDomainInfo?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                         method: 'post',
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
-                            this.domainDataForm.copyinfo = data.data.copyright
-                            this.domainDataForm.compAdress = data.data.address
-                            this.domainDataForm.telservice = data.data.licence
-                            this.domainDataForm.icpInfo = data.data.icpRecord
-                            this.domainDataForm.secrecord = data.data.policeRecord
-                            this.domainDataForm.id = data.data.id
+                            if (data.data !== null) {
+                                this.domainDataForm.copyinfo = data.data.copyright
+                                this.domainDataForm.compAdress = data.data.address
+                                this.domainDataForm.telservice = data.data.licence
+                                this.domainDataForm.icpInfo = data.data.icpRecord
+                                this.domainDataForm.secrecord = data.data.policeRecord
+                                this.domainDataForm.id = data.data.id
+                            }
+
                         }
                     })
                 } else if (val == 3) {
-
+                    this.customerDataForm.kfLine = ""
+                    this.customerDataForm.keyqq = ""
+                    this.customerDataForm.businNO = ""
                     this.$http({
                         url: this.$http.adornUrl(`agent/set/findCustService?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                         method: 'post',
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
-                            console.log(data)
-                            this.customerDataForm.kfLine = data.data.hotline
-                            this.customerDataForm.keyqq = data.data.qq
-                            this.customerDataForm.businNO = data.data.bizNo
+                            if (data.data !== null) {
+                                this.customerDataForm.kfLine = data.data.hotline
+                                this.customerDataForm.keyqq = data.data.qq
+                                this.customerDataForm.businNO = data.data.bizNo
+                            }
+
                         }
                     })
                 } else if (val == 4) {  //合同
+                    this.contractdataForm.comName = ""
+                    this.contractdataForm.comAdress = ""
+                    this.contractdataForm.comAccount = ""
+                    this.contractdataForm.openBank = ""
+                    this.contractdataForm.zipcode = ""
+                    this.contractdataForm.phone = ""
                     this.$http({
                         url: this.$http.adornUrl(`agent/set/findContract?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                         method: 'post',
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
-                            console.log(data)
-                            this.contractdataForm.comName = data.data.companyName
-                            this.contractdataForm.comAdress = data.data.companyAddress
-                            this.contractdataForm.comAccount = data.data.accountNo
-                            this.contractdataForm.openBank = data.data.bankName
-                            this.contractdataForm.zipcode = data.data.postcode
-                            this.contractdataForm.phone = data.data.mobile
+                            if (data.data !== null) {
+                                this.contractdataForm.comName = data.data.companyName
+                                this.contractdataForm.comAdress = data.data.companyAddress
+                                this.contractdataForm.comAccount = data.data.accountNo
+                                this.contractdataForm.openBank = data.data.bankName
+                                this.contractdataForm.zipcode = data.data.postcode
+                                this.contractdataForm.phone = data.data.mobile
+                            }
+
                         }
                     })
                 } else if (val == 5) { //支付宝资料
+                    this.alipaydataForm.aliappid = ""
+                    this.alipaydataForm.alicallUrl = ""
+                    this.alipaydataForm.alicallbackUrl = ""
+                    this.alipaydataForm.alipublicKey = ""
+                    this.alipaydataForm.aliprivateKey = ""
                     this.$http({
                         url: this.$http.adornUrl(`agent/set/findAlipay?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                         method: 'post',
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
-                            console.log(data)
-                            this.alipaydataForm.aliappid = data.data.appid
-                            this.alipaydataForm.alicallUrl = data.data.callUrl
-                            this.alipaydataForm.alicallbackUrl = data.data.callbackUrl
-                            this.alipaydataForm.alipublicKey = data.data.publicKey
-                            this.alipaydataForm.aliprivateKey = data.data.privateKey
+                            if (data.data !== null) {
+                                this.alipaydataForm.aliappid = data.data.appid
+                                this.alipaydataForm.alicallUrl = data.data.callUrl
+                                this.alipaydataForm.alicallbackUrl = data.data.callbackUrl
+                                this.alipaydataForm.alipublicKey = data.data.publicKey
+                                this.alipaydataForm.aliprivateKey = data.data.privateKey
+                            }
+
                         }
                     })
                 } else if (val == 6) {
+                    this.wxdataForm.wxkey = ""
+                    this.wxdataForm.wxappid = ""
+                    this.wxdataForm.wxmchid = ""
+                    this.wxdataForm.wxcallbackUrl = ""
+                    this.wxdataForm.wxcallUrl = ""
                     this.$http({
                         url: this.$http.adornUrl(`agent/set/findWeixinpay?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                         method: 'post',
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
-                            this.wxdataForm.wxkey = data.data.wxkey
-                            this.wxdataForm.wxappid = data.data.appid
-                            this.wxdataForm.wxmchid = data.data.mchid
-                            this.wxdataForm.wxcallbackUrl = data.data.callbackUrl
-                            this.wxdataForm.wxcallUrl = data.data.callUrl
+                            if (data.data !== null) {
+                                this.wxdataForm.wxkey = data.data.wxkey
+                                this.wxdataForm.wxappid = data.data.appid
+                                this.wxdataForm.wxmchid = data.data.mchid
+                                this.wxdataForm.wxcallbackUrl = data.data.callbackUrl
+                                this.wxdataForm.wxcallUrl = data.data.callUrl
+                            }
+
 
                         }
                     })

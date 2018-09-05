@@ -139,34 +139,40 @@
                 this.$refs['refundDataFormRef'].validate((valid) => {
                     if (valid) {
                         // console.log('表单验证通过')
-                        this.$http({
-                            url: this.$http.adornUrl(`agent/cust/refunds?token=${this.$cookie.get('token')}`),
-                            method: 'post',
-                            params: this.$http.adornParams({
-                                'creUserId': this.refundDataForm.creUserId,
-                                'number': this.refundDataForm.refunNumber,
-                                'amount': this.refundDataForm.refunMoney,
-                                'remark': this.refundDataForm.desc
+                        this.$confirm('确认要退款吗？')
+                            .then(_ => {
+                                this.refundSubmit()
                             })
-                        }).then(({ data }) => {
-                            if (data && data.code === 0) {
-                                this.disabled = true
-                                this.$message({
-                                    message: '操作成功',
-                                    type: 'success',
-                                    duration: 1500,
-                                    onClose: () => {
-                                        this.refundVisible = false
-                                        this.disabled = false
-                                        this.refundDataForm.desc = ""
-                                        this.$emit('refreshDataList')
-                                    }
-                                })
-                            } else {
-                                this.$message.error(data.msg)
+                            .catch(_ => { })
+                    }
+                })
+            },
+            refundSubmit() {
+                this.$http({
+                    url: this.$http.adornUrl(`agent/cust/refunds?token=${this.$cookie.get('token')}`),
+                    method: 'post',
+                    params: this.$http.adornParams({
+                        'creUserId': this.refundDataForm.creUserId,
+                        'number': this.refundDataForm.refunNumber,
+                        'amount': this.refundDataForm.refunMoney,
+                        'remark': this.refundDataForm.desc
+                    })
+                }).then(({ data }) => {
+                    if (data && data.code === 0) {
+                        this.disabled = true
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            duration: 1500,
+                            onClose: () => {
+                                this.refundVisible = false
+                                this.disabled = false
+                                this.refundDataForm.desc = ""
+                                this.$emit('refreshDataList')
                             }
                         })
-
+                    } else {
+                        this.$message.error(data.msg)
                     }
                 })
             }

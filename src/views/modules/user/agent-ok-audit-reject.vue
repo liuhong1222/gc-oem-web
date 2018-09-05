@@ -1,6 +1,6 @@
 <template>
     <div class="mainAess">
-        <el-dialog title="查看" :visible.sync="dialogVisible" width="50%" @close="closeDialog">
+        <el-dialog title="审核" :visible.sync="dialogVisible" width="50%" @close="closeDialog">
             <el-collapse v-model="activeNames" @change="handleChange" accordion>
                 <el-collapse-item title="基本信息  ✚" name="1">
                     <el-form :model="basicdataForm" ref="basicdataForm" label-width="150px" class="demo-ruleForm" :label-position="labelPosition">
@@ -258,6 +258,10 @@
                         this.gzImageUrl = imgUrl.imgUrl + data.data[0].seal_url
                     }
                 })
+
+                this.$nextTick(() => {
+                    this.$refs['auditruleForm'].resetFields();
+                })
             },
             handleChange(val) {
                 if (val == 2) {
@@ -272,12 +276,15 @@
                         method: 'post',
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
-                            this.domainDataForm.copyinfo = data.data.copyright
-                            this.domainDataForm.compAdress = data.data.address
-                            this.domainDataForm.telservice = data.data.licence
-                            this.domainDataForm.icpInfo = data.data.icpRecord
-                            this.domainDataForm.secrecord = data.data.policeRecord
-                            this.domainDataForm.id = data.data.id
+                            if (data.data !== null) {
+                                this.domainDataForm.copyinfo = data.data.copyright
+                                this.domainDataForm.compAdress = data.data.address
+                                this.domainDataForm.telservice = data.data.licence
+                                this.domainDataForm.icpInfo = data.data.icpRecord
+                                this.domainDataForm.secrecord = data.data.policeRecord
+                                this.domainDataForm.id = data.data.id
+                            }
+
                         }
                     })
                 } else if (val == 3) {
@@ -290,9 +297,12 @@
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
                             // console.log(data)
-                            this.customerDataForm.kfLine = data.data.hotline
-                            this.customerDataForm.keyqq = data.data.qq
-                            this.customerDataForm.businNO = data.data.bizNo
+                            if (data.data !== null) {
+                                this.customerDataForm.kfLine = data.data.hotline
+                                this.customerDataForm.keyqq = data.data.qq
+                                this.customerDataForm.businNO = data.data.bizNo
+                            }
+
                         }
                     })
                 } else if (val == 4) {  //合同
@@ -308,12 +318,14 @@
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
                             // console.log(data)
-                            this.contractdataForm.comName = data.data.companyName
-                            this.contractdataForm.comAdress = data.data.companyAddress
-                            this.contractdataForm.comAccount = data.data.accountNo
-                            this.contractdataForm.openBank = data.data.bankName
-                            this.contractdataForm.zipcode = data.data.postcode
-                            this.contractdataForm.phone = data.data.mobile
+                            if (data.data !== null) {
+                                this.contractdataForm.comName = data.data.companyName
+                                this.contractdataForm.comAdress = data.data.companyAddress
+                                this.contractdataForm.comAccount = data.data.accountNo
+                                this.contractdataForm.openBank = data.data.bankName
+                                this.contractdataForm.zipcode = data.data.postcode
+                                this.contractdataForm.phone = data.data.mobile
+                            }
                         }
                     })
                 } else if (val == 5) { //支付宝资料
@@ -328,11 +340,13 @@
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
                             // console.log(data)
-                            this.alipaydataForm.aliappid = data.data.appid
-                            this.alipaydataForm.alicallUrl = data.data.callUrl
-                            this.alipaydataForm.alicallbackUrl = data.data.callbackUrl
-                            this.alipaydataForm.alipublicKey = data.data.publicKey
-                            this.alipaydataForm.aliprivateKey = data.data.privateKey
+                            if (data.data !== null) {
+                                this.alipaydataForm.aliappid = data.data.appid
+                                this.alipaydataForm.alicallUrl = data.data.callUrl
+                                this.alipaydataForm.alicallbackUrl = data.data.callbackUrl
+                                this.alipaydataForm.alipublicKey = data.data.publicKey
+                                this.alipaydataForm.aliprivateKey = data.data.privateKey
+                            }
                         }
                     })
                 } else if (val == 6) {
@@ -346,11 +360,13 @@
                         method: 'post',
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
-                            this.wxdataForm.wxkey = data.data.wxkey
-                            this.wxdataForm.wxappid = data.data.appid
-                            this.wxdataForm.wxmchid = data.data.mchid
-                            this.wxdataForm.wxcallbackUrl = data.data.callbackUrl
-                            this.wxdataForm.wxcallUrl = data.data.callUrl
+                            if (data.data !== null) {
+                                this.wxdataForm.wxkey = data.data.wxkey
+                                this.wxdataForm.wxappid = data.data.appid
+                                this.wxdataForm.wxmchid = data.data.mchid
+                                this.wxdataForm.wxcallbackUrl = data.data.callbackUrl
+                                this.wxdataForm.wxcallUrl = data.data.callUrl
+                            }
                         }
                     })
                 }
