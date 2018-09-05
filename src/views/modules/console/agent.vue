@@ -43,7 +43,7 @@
           </ul>
         </div>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12" style="position: relative;">
         <div class="grid-content bg-purple">
           <div>
             <h2>充值套餐</h2>
@@ -758,7 +758,7 @@
   }
 
   .mealPackage li:last-child {
-    width: 48%;
+    width: 95%;
     position: absolute;
     bottom: 0;
     right: 12px;
