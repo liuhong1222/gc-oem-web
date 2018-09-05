@@ -11,13 +11,21 @@
                 <el-form-item label="代理商名称：" style="margin-left:5px;">
                     <el-input v-model="searchData.agentName" placeholder="代理商名称" clearable></el-input>
                 </el-form-item>
+                <el-form-item label="审核状态">
+                    <el-select v-model="searchData.auditStatusSer" placeholder="请选择审核状态">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option label="待审核" value="0"></el-option>
+                        <el-option label="使用中" value="1"></el-option>
+                        <el-option label="已驳回" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="getDataList()">查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
         <div class="agentTable">
-            <el-table :data="dataList" style="width: 100%" :header-cell-style="getRowClass">
+            <el-table :data="dataList" style="width: 100%" :header-cell-style="getRowClass" height="250">
                 <el-table-column type="index" header-align="center" align="center" width="50" fixed label="序号">
                 </el-table-column>
                 <!-- <el-table-column prop="agentId" label=" 代理商序号" width="100" align="center">
@@ -109,11 +117,19 @@
                         <div>电话:{{scope.row.htmobile}}</div>
                     </template> -->
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" align="center" width="130">
+                <el-table-column prop='auditState' label="状态" width="100" align="center">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.auditState === 0" size="small" type="warning">待审核</el-tag>
+                        <el-tag v-else-if="scope.row.auditState === 1" size="small" type="success">使用中</el-tag>
+                        <el-tag v-else size="small" type="danger">已驳回</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" align="center" width="200">
                     <template slot-scope="scope">
                         <el-button type="text" size="small" @click=seedialog(scope.row)>查看</el-button>
                         <el-button type="text" size="small" @click="seetingDialog(scope.row)">修改</el-button>
                         <el-button type="text" size="small" @click="del(scope.row.agentId)">删除</el-button>
+                        <el-button type="text" size="small" @click=auditDialog(scope.row) :disabled="scope.row.auditState == 0 ? false: true">{{scope.row.auditState == 0 ? '审核': ''}}</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -130,12 +146,15 @@
         <!-- 查看 -->
         <agent-see-dialog v-if="agentSeeDialogVisible" ref="agentSeeDialog"></agent-see-dialog>
 
+        <!-- 审核和驳回 -->
+        <ok-audit-reject v-if="okAuditRejectVisible" ref="okAuditRejectRef" @auditRefreshDataList="getDataList"></ok-audit-reject>
     </div>
 </template>
 
 <script>
     import AgentSettingDialog from './agent-setting-dialog.vue'
     import agentSeeDialog from './agent-see-dialog.vue'
+    import okAuditReject from './agent-ok-audit-reject.vue'
     export default {
         data() {
             return {
@@ -144,12 +163,14 @@
                     agentName: "",
                     custType: "",
                     custName: '',
-                    mobile: ""
+                    mobile: "",
+                    auditStatusSer: ""
                 },
-                
+
                 dataList: [],
                 agentSettingDialogVisible: false,
                 agentSeeDialogVisible: false,
+                okAuditRejectVisible: false,
                 pageIndex: 1,
                 pageSize: 10,
                 totalPage: 0,
@@ -162,7 +183,8 @@
         },
         components: {
             AgentSettingDialog,
-            agentSeeDialog
+            agentSeeDialog,
+            okAuditReject
         },
         activated() {
             this.getDataList();
@@ -185,6 +207,7 @@
                         'currentPage': this.pageIndex,
                         'pageSize': this.pageSize,
                         'agentName': this.searchData.agentName,
+                        'auditState': this.searchData.auditStatusSer,
                         'startTimeStr': '' || this.searchData.dateTime == null ? '' : this.searchData.dateTime[0],
                         'endTimeStr': '' || this.searchData.dateTime == null ? '' : this.searchData.dateTime[1]
 
@@ -215,9 +238,13 @@
                     this.$refs.agentSeeDialog.seeInit(e)
                 })
             },
-            // seetingData() {
-            //     console.log('seetingData  ')
-            // },
+            // 审核
+            auditDialog(e) {
+                this.okAuditRejectVisible = true
+                this.$nextTick(() => {
+                    this.$refs.okAuditRejectRef.seeInit(e)
+                })
+            },
             // 每页数
             sizeChangeHandle(val) {
                 this.pageSize = val

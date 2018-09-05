@@ -95,6 +95,7 @@
             'rechargeDataForm.rechargeMoney'() {
 
                 if (this.number == 1) {   //number为1才进行监控自动计算
+
                     if (this.rechargeDataForm.rechargeMoney !== "" && this.rechargeDataForm.price !== "") {
                         this.rechargeDataForm.rechargeCounts = Math.ceil(Number(this.rechargeDataForm.rechargeMoney) / (this.rechargeDataForm.price));
                     } else {
@@ -194,35 +195,42 @@
             rechargeDataSubmit() {
                 this.$refs['rechargeRef'].validate((valid) => {
                     if (valid) {
-                        this.$http({
-                            url: this.$http.adornUrl(`agent/cust/recharge?token=${this.$cookie.get('token')}`),
-                            method: 'post',
-                            params: this.$http.adornParams({
-                                'agentPackageId': this.rechargeDataForm.packageList,
-                                'creUserId': this.rechargeDataForm.creUserId,
-                                'number': this.rechargeDataForm.rechargeCounts,
-                                'amount': this.rechargeDataForm.rechargeMoney,
-                                'payType': this.rechargeDataForm.rechargeMethod,
-                                'remark': this.rechargeDataForm.rechargeDesc
+                        this.$confirm('确认要充值吗？')
+                            .then(_ => {
+                                this.regSubmit()
                             })
-                        }).then(({ data }) => {
-                            if (data && data.code === 0) {
-                                this.disabled = true
-                                this.$message({
-                                    message: '操作成功',
-                                    type: 'success',
-                                    duration: 1500,
-                                    onClose: () => {
-                                        this.chargeVisible = false
-                                        this.disabled = false
-                                        this.rechargeDataForm.rechargeDesc = ""
-                                        this.$emit('refreshDataList')
-                                    }
-                                })
-                            } else {
-                                this.$message.error(data.msg)
+                            .catch(_ => { })
+                    }
+                })
+            },
+            regSubmit() {
+                this.$http({
+                    url: this.$http.adornUrl(`agent/cust/recharge?token=${this.$cookie.get('token')}`),
+                    method: 'post',
+                    params: this.$http.adornParams({
+                        'agentPackageId': this.rechargeDataForm.packageList,
+                        'creUserId': this.rechargeDataForm.creUserId,
+                        'number': this.rechargeDataForm.rechargeCounts,
+                        'amount': this.rechargeDataForm.rechargeMoney,
+                        'payType': this.rechargeDataForm.rechargeMethod,
+                        'remark': this.rechargeDataForm.rechargeDesc
+                    })
+                }).then(({ data }) => {
+                    if (data && data.code === 0) {
+                        this.disabled = true
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            duration: 1500,
+                            onClose: () => {
+                                this.chargeVisible = false
+                                this.disabled = false
+                                this.rechargeDataForm.rechargeDesc = ""
+                                this.$emit('refreshDataList')
                             }
                         })
+                    } else {
+                        this.$message.error(data.msg)
                     }
                 })
             }

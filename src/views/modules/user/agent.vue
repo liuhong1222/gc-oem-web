@@ -122,7 +122,7 @@
         <!-- 修改,新增 -->
         <add-or-update v-if="addSeeUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
         <!--查看 对话框 -->
-        <see-dia-data v-if="agentseeVisible" ref="agentseecon"></see-dia-data>
+        <see-dia-data v-if="agentseeVisible" ref="agentseecon" ></see-dia-data>
     </div>
 </template>
 <script>
@@ -361,38 +361,45 @@
             chsubmit() {
                 this.$refs['chdataFormref'].validate((valid) => {
                     if (valid) {
-                        this.$http({
-                            url: this.$http.adornUrl(`agent/agentInfo/recharge?token=${this.$cookie.get('token')}`),
-                            method: 'post',
-                            params: this.$http.adornParams({
-                                'agentId': this.cdAgentId,
-                                'price': this.chdataForm.chPrice,
-                                'number': this.chdataForm.chCounts,
-                                'money': this.chdataForm.chMoney,
-                                'payType': this.chdataForm.type,
+                        this.$confirm('确认要充值吗？')
+                            .then(_ => {
+                                this.regAgentSubmit()
                             })
-                        }).then(({ data }) => {
-                            // console.log(data)
-                            if (data && data.code === 0) {
-                                this.disabledcz = true
-                                this.$message({
-                                    message: '操作成功',
-                                    type: 'success',
-                                    duration: 1500,
-                                    onClose: () => {
-                                        this.chdataFormVisible = false
-                                        this.disabledcz = false
-                                        this.chdataForm.remark = ""// 清空备注
-                                        this.getDataList()
-                                    }
-                                })
-                            } else {
-                                this.$message.error(data.msg)
-                            }
-                        })
+                            .catch(_ => { })
                     }
                 })
             },
+            regAgentSubmit() {
+                this.$http({
+                    url: this.$http.adornUrl(`agent/agentInfo/recharge?token=${this.$cookie.get('token')}`),
+                    method: 'post',
+                    params: this.$http.adornParams({
+                        'agentId': this.cdAgentId,
+                        'price': this.chdataForm.chPrice,
+                        'number': this.chdataForm.chCounts,
+                        'money': this.chdataForm.chMoney,
+                        'payType': this.chdataForm.type,
+                    })
+                }).then(({ data }) => {
+                    // console.log(data)
+                    if (data && data.code === 0) {
+                        this.disabledcz = true
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            duration: 1500,
+                            onClose: () => {
+                                this.chdataFormVisible = false
+                                this.disabledcz = false
+                                this.chdataForm.remark = ""// 清空备注
+                                this.getDataList()
+                            }
+                        })
+                    } else {
+                        this.$message.error(data.msg)
+                    }
+                })
+            }
         }
     }
 

@@ -70,7 +70,6 @@
               })
             }).then(({ data }) => {
               if (data && data.code === 0) {
-                console.log()
                 this.$cookie.set('token', data.token)
                 // 判断哪个，进入不同的工作台
                 if (data.roleIdList[0] == 1) {
@@ -79,6 +78,8 @@
                 } else if (data.roleIdList[0] == 2) {
                   this.$router.replace({ name: 'console-agent' })
                   sessionStorage.setItem('msjRoleName', '2')
+                  this.auditStatus()
+
                 }
               } else {
                 this.$message.error(data.msg)
@@ -89,6 +90,22 @@
       },
       forgetPwd() {
         this.$router.replace({ name: 'forget' })
+      },
+      // 查询审核状态
+      auditStatus() {
+        this.$http({
+          url: this.$http.adornUrl(`agent/set/audit/state?token=${this.$cookie.get('token')}`),
+          method: 'get',
+        }).then(({ data }) => {
+          if (data && data.code === 0) {
+            if (data.auditState == 2) { //驳回
+              sessionStorage.setItem('isExamine', 'reject')
+              sessionStorage.setItem('remarkCon', data.remark)
+            }
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       }
     }
   }

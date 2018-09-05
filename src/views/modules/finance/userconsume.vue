@@ -160,17 +160,31 @@
                     return ''
                 }
             },
+            // 导出
             consumeExport() {
                 let startTime;
                 let endTime;
                 if (this.consumeSearchData.dateTime == null) {
-                    startTime = ""
-                    endTime = ""
+                    this.$message.warning('请选择开始时间和结束时间，跨度最多为1个月!')
+                    return
+                    // alert(333)
+                    // startTime = ""
+                    // endTime = ""
                 } else {
                     if (this.consumeSearchData.dateTime.length == 0) {
-                        startTime = ""
-                        endTime = ""
+                        this.$message.warning('请选择开始时间和结束时间，跨度最多为1个月!')
+                        return
+                        // startTime = ""
+                        // endTime = ""
                     } else {
+                        let aDay = 24 * 60 * 60 * 1000;
+                        let diffDay = (new Date(this.consumeSearchData.dateTime[1]) - new Date(this.consumeSearchData.dateTime[0])) / aDay
+                        console.log(diffDay)
+                        // this.$message.success('跨度最多为'+diffDay+'天，可以进行导出')
+                        if (diffDay > 30) {
+                            this.$message.warning('跨度最多为1个月(30天)')
+                            return
+                        }
                         startTime = this.consumeSearchData.dateTime[0]
                         endTime = this.consumeSearchData.dateTime[1]
                     }
@@ -178,6 +192,7 @@
                 window.open(this.$http.adornUrl(`agent/finance/user/consume/list/export?token=${this.$cookie.get('token')}&currentPage=${this.pageIndex}&pageSize=${this.pageSize}&userName=${this.consumeSearchData.custName}&companyName=${this.consumeSearchData.agentName}&userMobile=${this.consumeSearchData.mobile}&startTime=${startTime}&endTime=${endTime}`))
 
             }
+
         }
     }
 

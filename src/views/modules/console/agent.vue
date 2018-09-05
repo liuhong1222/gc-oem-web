@@ -59,6 +59,19 @@
           </ul>
         </div>
       </el-col>
+      <el-col :span="12" v-if="myReject">
+        <div class="grid-content bg-purple">
+          <h2>我的待办</h2>
+          <div style="margin:20px;line-height:35px;" class="cf">
+            <span style="float:left">你的设置已被管理员驳回</span>
+            <el-button type="primary" style="float:right;background-color:#4680ff;" @click="rejectRet()">重新设置</el-button>
+          </div>
+          <div style="margin:20px">
+            <span>驳回原因：</span>
+            <span style="line-height:25px" id="remarkCon">{{remarksCon}}</span>
+          </div>
+        </div>
+      </el-col>
     </el-row>
     <!-- 充值弹框-->
     <el-dialog title="充值" :visible.sync="chdataFormVisible" @close='closeDialog' :close-on-click-modal="false">
@@ -103,7 +116,7 @@
         <el-button type="primary" @click="warnFormSubmit()">确 定</el-button>
       </div>
     </el-dialog>
-
+    
     <!-- 修改套餐 -->
     <el-dialog title="套餐修改" :visible.sync="editmealVisible" id="mealDialog">
       <div>
@@ -183,6 +196,8 @@
         }
       }
       return {
+        remarksCon: '',
+        myReject: false,  //我的代办
         copyinput: '',
         time: null,
         payUrl: '',
@@ -274,7 +289,7 @@
           // console.log('获取充值二维码')
           document.getElementById('qrcode').innerHTML = "";
           // let time = null
-          console.log(33333333)
+          // console.log(33333333)
           let that = this
           this.$http({
             url: this.$http.adornUrl(`agent/fund/recharge?token=${this.$cookie.get('token')}`),
@@ -335,7 +350,8 @@
     activated() {
       this.getAgentDeskInfo(),
         this.myRechargeList(),
-        this.findAgentPackage()
+        this.findAgentPackage(),
+        this.rejectVisibie()
     },
     // created: function () {
     //   // `this` 指向 vm 实例
@@ -343,6 +359,7 @@
 
     // },
     methods: {
+
       basicBtn(arrindex, btnCount) {
         // console.log(arrindex)
         if (arrindex == 1) { //余额充值
@@ -376,6 +393,12 @@
               this.$refs['reemailruleForm'].resetFields();
             })
           }
+        }
+      },
+
+      rejectVisibie() {
+        if ((sessionStorage.getItem('isExamine')) && (sessionStorage.getItem('isExamine') == 'reject')) {
+          this.myReject = true
         }
       },
       // 必须输入正整数
@@ -501,6 +524,11 @@
       },
 
 
+      // 驳回,重新设置
+      rejectRet() {
+        this.$router.push({ name: 'user-selfsetting' })
+      },
+
       // 提交修改套餐
 
       // 查看详情
@@ -510,6 +538,7 @@
 
       // 获取基本信息
       getAgentDeskInfo() {
+        this.remarksCon = sessionStorage.getItem('remarkCon')
         this.$http({
           url: this.$http.adornUrl(`agent/desk/getAgentDeskInfo?token=${this.$cookie.get('token')}`),
           method: 'post',
