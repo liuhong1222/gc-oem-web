@@ -372,6 +372,7 @@
                 }
             },
             closeDialog() {
+                this.auditDisable=false
                 this.activeNames = []
                 this.activeNames.push('1')  //获取第一步  关闭之前
             },
@@ -383,8 +384,7 @@
                     this.auditruleForm.desc = ""
                 }
             },
-
-
+            
             // 提交通过/驳回
             auditSubmitForm(formName) {
                 this.$refs[formName].validate((valid) => {
