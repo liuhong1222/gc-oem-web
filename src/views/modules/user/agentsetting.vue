@@ -2,14 +2,17 @@
     <div class="main">
         <div class="topSearch">
             <h2>OEM代理商设置</h2>
-            <el-form :inline="true" :model="searchData">
+            <el-form :inline="true" :model="searchData" @keyup.enter.native="getDataList()">
                 <el-form-item label="创建时间：">
                     <el-date-picker v-model="searchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
                         value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="代理商名称：" style="margin-left:5px;">
-                    <el-input v-model="searchData.agentName" placeholder="代理商名称" clearable></el-input>
+                    <el-input v-model="searchData.agentName" placeholder="请输入代理商名称" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="手机号：" style="margin-left:5px;">
+                    <el-input v-model="searchData.agentMobile" placeholder="请输入手机号" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="审核状态">
                     <el-select v-model="searchData.auditStatusSer" placeholder="请选择审核状态">
@@ -33,6 +36,8 @@
                 <el-table-column prop="mch_id" label=" 商户编号" width="100" align="center">
                 </el-table-column>
                 <el-table-column prop="company_name" label=" 代理商名称" width="100" align="center">
+                </el-table-column>
+                <el-table-column prop="agentMobile" label="手机号" width="100" align="center">
                 </el-table-column>
                 <el-table-column prop="create_time" label="创建时间" align="center" width="150">
                 </el-table-column>
@@ -117,6 +122,20 @@
                         <div>电话:{{scope.row.htmobile}}</div>
                     </template> -->
                 </el-table-column>
+                <el-table-column prop="" label="微信登录" align="center" width="150">
+                    <template slot-scope="scope">
+                        <div>APPID </div>
+                        <div>APPSECRET</div>
+                    </template>
+                    <!-- <template slot-scope="scope">
+                            <div>名称:{{scope.row.htcompany_name}}</div>
+                            <div>地址:{{scope.row.htcompany_address}}</div>
+                            <div>账户:{{scope.row.htaccount_no}}</div>
+                            <div>开户行:{{scope.row.htbank_name}}</div>
+                            <div>邮编:{{scope.row.htpostcode}}</div>
+                            <div>电话:{{scope.row.htmobile}}</div>
+                        </template> -->
+                </el-table-column>
                 <el-table-column prop='auditState' label="状态" width="100" align="center">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.auditState === 0" size="small" type="warning">待审核</el-tag>
@@ -161,6 +180,7 @@
                 searchData: {
                     dateTime: [],
                     agentName: "",
+                    agentMobile: "",
                     custType: "",
                     custName: '',
                     mobile: "",
@@ -207,6 +227,7 @@
                         'currentPage': this.pageIndex,
                         'pageSize': this.pageSize,
                         'agentName': this.searchData.agentName,
+                        'agentMobile': this.searchData.agentMobile,
                         'auditState': this.searchData.auditStatusSer,
                         'startTimeStr': '' || this.searchData.dateTime == null ? '' : this.searchData.dateTime[0],
                         'endTimeStr': '' || this.searchData.dateTime == null ? '' : this.searchData.dateTime[1]

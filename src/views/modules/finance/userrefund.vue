@@ -2,7 +2,7 @@
     <div class="main">
         <div class="topSearch">
             <h2>客户退款记录</h2>
-            <el-form :inline="true" :model="refundSearchData">
+            <el-form :inline="true" :model="refundSearchData" @keyup.enter.native="refundList()">
                 <el-form-item label="申请时间：">
                     <el-date-picker v-model="refundSearchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
                         value-format="yyyy-MM-dd" :picker-options="pickerOptions0">

@@ -2,7 +2,7 @@
   <div class="main">
     <div class="topSearch">
       <h2>客户列表</h2>
-      <el-form :inline="true" :model="searchData">
+      <el-form :inline="true" :model="searchData"  @keyup.enter.native="getCustomList()">
         <el-form-item label="创建时间：">
           <el-date-picker v-model="searchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
             value-format="yyyy-MM-dd" :picker-options="pickerOptions0">

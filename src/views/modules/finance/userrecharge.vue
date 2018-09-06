@@ -2,7 +2,7 @@
     <div class="main">
         <div class="topSearch">
             <h2>客户充值明细记录</h2>
-            <el-form :inline="true" :model="customerSearchData">
+            <el-form :inline="true" :model="customerSearchData" @keyup.enter.native="uerRechargeList()">
                 <el-form-item label="创建时间：">
                     <el-date-picker v-model="customerSearchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
                         value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
@@ -32,17 +32,17 @@
                 </el-table-column>
                 <!-- <el-table-column prop="userId" label=" 客户编号" align="center">
                 </el-table-column> -->
-                <el-table-column prop="userName" label=" 客户名称" align="center" >
+                <el-table-column prop="userName" label=" 客户名称" align="center">
                 </el-table-column>
                 <el-table-column prop="agentCompanyName" label="代理商名称" align="center" v-if="disableAgentName">
                 </el-table-column>
-                <el-table-column prop="userMobile" label="手机号" align="center" >
+                <el-table-column prop="userMobile" label="手机号" align="center">
                 </el-table-column>
-                <el-table-column prop="orderNo" label="订单编号" align="center" >
+                <el-table-column prop="orderNo" label="订单编号" align="center">
                 </el-table-column>
                 <el-table-column prop="packageName" label="套餐选择" align="center">
                 </el-table-column>
-                <el-table-column prop="price" label="单价（元/条）" align="center" >
+                <el-table-column prop="price" label="单价（元/条）" align="center">
                 </el-table-column>
                 <el-table-column prop="number" label="条数" align="center">
                 </el-table-column>

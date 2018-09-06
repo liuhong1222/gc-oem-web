@@ -2,7 +2,7 @@
     <div class="main">
         <div class="topSearch">
             <h2>客户消耗记录</h2>
-            <el-form :inline="true" :model="consumeSearchData">
+            <el-form :inline="true" :model="consumeSearchData" @keyup.enter.native="consumeList()">
                 <el-form-item label="创建时间：">
                     <el-date-picker v-model="consumeSearchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
                         value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
@@ -127,6 +127,7 @@
             },
             getTotal(param) {
                 const { columns, data } = param;
+                // console.log(param)
                 const sums = [];
                 columns.forEach((column, index) => {
                     if (index === 0) {
@@ -134,11 +135,13 @@
                         return;
                     }
                     const values = data.map(item => Number(item[column.property]));
-                    // console.log(column.property)
                     if (column.property === 'number') {
+                        // sums[index]=100
                         sums[index] = values.reduce((prev, curr) => {
                             const value = Number(curr);
                             if (!isNaN(value)) {
+                                // console.log(prev)
+                                // console.log(curr)
                                 return prev + curr;
                             } else {
                                 return prev;

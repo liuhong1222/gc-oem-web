@@ -2,7 +2,7 @@
     <div class="main">
         <div class="topSearch">
             <h2>账号管理</h2>
-            <el-form :inline="true" :model="accountData">
+            <el-form :inline="true" :model="accountData" @keyup.enter.native="agentSysUserList()">
                 <el-form-item label="手机号：">
                     <el-input v-model="accountData.mobile" placeholder="手机号" clearable></el-input>
                 </el-form-item>

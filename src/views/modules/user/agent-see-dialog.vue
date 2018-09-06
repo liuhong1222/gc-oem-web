@@ -2,7 +2,7 @@
     <div class="mainAess">
         <el-dialog title="查看" :visible.sync="dialogVisible" width="50%" @close="closeDialog">
             <el-collapse v-model="activeNames" @change="handleChange" accordion>
-                <el-collapse-item title="基本信息" name="1">
+                <el-collapse-item title="基本信息 ✚" name="1">
                     <el-form :model="basicdataForm" ref="basicdataForm" label-width="150px" class="demo-ruleForm" :label-position="labelPosition">
                         <!-- <el-form-item label="代理商序号：">
                             <el-input v-model="basicdataForm.agentNumber" placeholder="代理商序号" readonly></el-input>
@@ -46,7 +46,7 @@
                     </el-form>
 
                 </el-collapse-item>
-                <el-collapse-item title="域名备案信息" name="2">
+                <el-collapse-item title="域名备案信息 ✚" name="2">
                     <el-form label-width="180px" :model="domainDataForm" ref="domaindataList" class="demo-ruleForm">
                         <el-form-item label="版权信息：">
                             <el-input v-model="domainDataForm.copyinfo" placeholder="版权信息" readonly></el-input>
@@ -65,7 +65,7 @@
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
-                <el-collapse-item title="客服资料" name="3">
+                <el-collapse-item title="客服资料 ✚" name="3">
                     <el-form label-width="110px" :model="customerDataForm" ref="customerdataList" class="demo-ruleForm">
                         <el-form-item label="客服热线：">
                             <el-input v-model="customerDataForm.kfLine" placeholder="客服热线" readonly></el-input>
@@ -78,7 +78,7 @@
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
-                <el-collapse-item title="合同资料" name="4">
+                <el-collapse-item title="合同资料 ✚" name="4">
                     <el-form :model="contractdataForm" ref="contractdataFormref" label-width="110px" class="demo-ruleForm">
                         <el-form-item label="公司名称">
                             <el-input v-model="contractdataForm.comName" placeholder="公司名称" readonly></el-input>
@@ -100,7 +100,7 @@
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
-                <el-collapse-item title=" 支付宝资料" name="5">
+                <el-collapse-item title=" 支付宝资料 ✚" name="5">
                     <el-form :model="alipaydataForm" ref="alipaydataFormref" label-width="110px" class="demo-ruleForm">
                         <el-form-item label="appid">
                             <el-input v-model="alipaydataForm.aliappid" placeholder="appid" readonly></el-input>
@@ -119,7 +119,7 @@
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
-                <el-collapse-item title=" 微信资料" name="6">
+                <el-collapse-item title="微信收款资料 ✚" name="6">
                     <el-form :model="wxdataForm" ref="wxdataFormref" label-width="110px" class="demo-ruleForm">
                         <el-form-item label="微信调用地址">
                             <el-input v-model="wxdataForm.wxcallUrl" placeholder="微信调用地址" readonly></el-input>
@@ -135,6 +135,16 @@
                         </el-form-item>
                         <el-form-item label="key">
                             <el-input v-model="wxdataForm.wxkey" placeholder="key" readonly></el-input>
+                        </el-form-item>
+                    </el-form>
+                </el-collapse-item>
+                <el-collapse-item title="微信登录资料 ✚" name="7">
+                    <el-form :model="wxLoginForm" ref="wxLoginFormref" label-width="110px" class="demo-ruleForm">
+                        <el-form-item label="APPID">
+                            <el-input v-model="wxLoginForm.wxLoginAPPID" placeholder="APPID" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="APPSECRET">
+                            <el-input v-model="wxLoginForm.APPSECRETLogin" placeholder="APPSECRET" readonly></el-input>
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
@@ -199,6 +209,10 @@
                     wxcallbackUrl: '',
                     wxcallUrl: ''
                 },
+                wxLoginForm: {
+                    wxLoginAPPID: '',
+                    APPSECRETLogin: ''
+                }
             }
         },
         methods: {
@@ -330,6 +344,21 @@
                                 this.wxdataForm.wxmchid = data.data.mchid
                                 this.wxdataForm.wxcallbackUrl = data.data.callbackUrl
                                 this.wxdataForm.wxcallUrl = data.data.callUrl
+                            }
+                        }
+                    })
+                } else if (val == 7) {
+                    // alert('微信登录信息')
+                    this.wxLoginForm.wxLoginAPPID = ""
+                    this.wxLoginForm.APPSECRETLogin = ""
+                    this.$http({
+                        url: this.$http.adornUrl(`agent/set/findWxLogin?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
+                        method: 'post',
+                    }).then(({ data }) => {
+                        if (data && data.code === 0) {
+                            if (data.data !== null) {
+                                this.wxLoginForm.wxLoginAPPID = data.data.appid
+                                this.wxLoginForm.APPSECRETLogin = data.data.appSecret
                             }
                         }
                     })

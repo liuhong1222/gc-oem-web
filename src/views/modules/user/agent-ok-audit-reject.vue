@@ -138,6 +138,16 @@
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
+                <el-collapse-item title="微信登录资料 ✚" name="7">
+                    <el-form :model="wxLoginForm" ref="wxLoginFormref" label-width="110px" class="demo-ruleForm">
+                        <el-form-item label="APPID">
+                            <el-input v-model="wxLoginForm.wxLoginAPPID" placeholder="APPID" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="APPSECRET">
+                            <el-input v-model="wxLoginForm.APPSECRETLogin" placeholder="APPSECRET" readonly></el-input>
+                        </el-form-item>
+                    </el-form>
+                </el-collapse-item>
             </el-collapse>
 
             <el-form :model="auditruleForm" :rules="auditrules" ref="auditruleForm" label-width="100px" class="demo-ruleForm" style="margin-top:30px">
@@ -216,6 +226,10 @@
                     wxmchid: '',
                     wxcallbackUrl: '',
                     wxcallUrl: ''
+                },
+                wxLoginForm: {
+                    wxLoginAPPID: '',
+                    APPSECRETLogin: ''
                 },
                 auditruleForm: {
                     resource: '',
@@ -369,10 +383,25 @@
                             }
                         }
                     })
+                } else if (val == 7) {
+                    // alert('微信登录信息')
+                    this.wxLoginForm.wxLoginAPPID = ""
+                    this.wxLoginForm.APPSECRETLogin = ""
+                    this.$http({
+                        url: this.$http.adornUrl(`agent/set/findWxLogin?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
+                        method: 'post',
+                    }).then(({ data }) => {
+                        if (data && data.code === 0) {
+                            if (data.data !== null) {
+                                this.wxLoginForm.wxLoginAPPID = data.data.appid
+                                this.wxLoginForm.APPSECRETLogin = data.data.appSecret
+                            }
+                        }
+                    })
                 }
             },
             closeDialog() {
-                this.auditDisable=false
+                this.auditDisable = false
                 this.activeNames = []
                 this.activeNames.push('1')  //获取第一步  关闭之前
             },
@@ -384,7 +413,7 @@
                     this.auditruleForm.desc = ""
                 }
             },
-            
+
             // 提交通过/驳回
             auditSubmitForm(formName) {
                 this.$refs[formName].validate((valid) => {

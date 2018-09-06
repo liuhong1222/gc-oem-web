@@ -2,7 +2,7 @@
     <div class="main">
         <div class="topSearch">
             <h2>OEM充值明细记录</h2>
-            <el-form :inline="true" :model="OEMSearchData">
+            <el-form :inline="true" :model="OEMSearchData" @keyup.enter.native="agentRechargeList()">
                 <el-form-item label="创建时间：">
                     <el-date-picker v-model="OEMSearchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
                         value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
@@ -10,6 +10,9 @@
                 </el-form-item>
                 <el-form-item label="代理商名称：" style="margin-left:25px;">
                     <el-input v-model="OEMSearchData.agentName" placeholder="代理商名称" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="手机号：" style="margin-left:10px;">
+                    <el-input v-model="OEMSearchData.agentMobile" placeholder="手机号" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="充值方式：">
                     <el-select v-model="OEMSearchData.type" placeholder="代理商状态">
@@ -30,15 +33,17 @@
                 :header-cell-style="getRowClass">
                 <el-table-column type="index" header-align="center" align="center" width="80" label="序号">
                 </el-table-column>
-                <el-table-column prop="agentId" label="代理商序号" align="center" >
+                <el-table-column prop="agentId" label="代理商序号" align="center">
                 </el-table-column>
-                <el-table-column prop="companyName" label="代理商名称" align="center" >
+                <el-table-column prop="companyName" label="代理商名称" align="center">
+                </el-table-column>
+                <el-table-column prop="agentMobile" label="手机号" align="center">
                 </el-table-column>
                 <el-table-column prop="payTime" label="充值时间" align="center">
                 </el-table-column>
                 <el-table-column prop="orderNo" label=" 订单编号" align="center">
                 </el-table-column>
-                <el-table-column prop="levelName" label="代理等级"  align="center">
+                <el-table-column prop="levelName" label="代理等级" align="center">
                 </el-table-column>
                 <el-table-column prop="price" label="单价（元/条）" align="center">
                 </el-table-column>
@@ -67,7 +72,8 @@
                 OEMSearchData: {
                     dateTime: [],
                     agentName: "",
-                    type: ''
+                    type: '',
+                    agentMobile: ''
                 },
                 agentOemTableData: [],
                 pageIndex: 1,
@@ -94,6 +100,7 @@
                         'currentPage': this.pageIndex,
                         'pageSize': this.pageSize,
                         'companyName': this.OEMSearchData.agentName,
+                        'agentMobile': this.OEMSearchData.agentMobile,
                         'payType': this.OEMSearchData.type,
                         'startTime': '' || this.OEMSearchData.dateTime == null ? '' : this.OEMSearchData.dateTime[0],
                         'endTime': '' || this.OEMSearchData.dateTime == null ? '' : this.OEMSearchData.dateTime[1]
@@ -181,7 +188,7 @@
                         endTime = this.OEMSearchData.dateTime[1]
                     }
                 }
-                window.open(this.$http.adornUrl(`agent/finance/agent/recharge/list/export?token=${this.$cookie.get('token')}&currentPage=${this.pageIndex}&pageSize=${this.pageSize}&companyName=${this.OEMSearchData.agentName}&payType=${this.OEMSearchData.type}&startTime=${startTime}&endTime=${endTime}`))
+                window.open(this.$http.adornUrl(`agent/finance/agent/recharge/list/export?token=${this.$cookie.get('token')}&currentPage=${this.pageIndex}&pageSize=${this.pageSize}&companyName=${this.OEMSearchData.agentName}&agentMobile=${this.OEMSearchData.agentMobile}&payType=${this.OEMSearchData.type}&startTime=${startTime}&endTime=${endTime}`))
             }
         }
     }
