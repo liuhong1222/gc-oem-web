@@ -122,7 +122,7 @@
         <!-- 修改,新增 -->
         <add-or-update v-if="addSeeUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
         <!--查看 对话框 -->
-        <see-dia-data v-if="agentseeVisible" ref="agentseecon" ></see-dia-data>
+        <see-dia-data v-if="agentseeVisible" ref="agentseecon"></see-dia-data>
     </div>
 </template>
 <script>

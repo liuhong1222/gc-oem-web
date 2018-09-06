@@ -7,7 +7,7 @@
                   hasChecked: '${checked}/${total}'
                 }" @change="handleChange" :data="list">
                 <span slot-scope="{ option }">{{ option.key }} - {{ option.label }}</span>
-                <el-button class="transfer-footer" slot="right-footer" size="small" @click="trueSave">确定</el-button>
+                <el-button class="transfer-footer" slot="right-footer" size="small" type="primary" @click="trueSave" style="margin:3px 75px 0">确定</el-button>
                 <!-- <el-button class="transfer-footer" slot="right-footer" size="small">取消</el-button> -->
             </el-transfer>
         </div>
