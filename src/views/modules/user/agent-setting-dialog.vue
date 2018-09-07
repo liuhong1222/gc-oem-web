@@ -775,12 +775,10 @@
       },
       lastStep() {
         if (this.active == 1) {
-          // alert(this.active)
           let agentId = this.agentId
           this.$refs['domaindataList'].clearValidate()
           this.init(agentId)
         } else if (this.active == 2) {
-          // alert(this.active)
           this.$refs['customerdataList'].clearValidate()
           this.getDomain()
         } else if (this.active == 3) {
