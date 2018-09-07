@@ -58,6 +58,7 @@
                 disabled: false,
                 disableAgent: true,
                 disableAgentName: true,
+                number: '',
                 consumeSearchData: {
                     dateTime: [],
                     agentName: "",
@@ -102,6 +103,7 @@
                     if (data && data.code === 0) {
                         this.consumeTableData = data.data.list
                         this.totalPage = data.data.total
+                        this.number = data.data.totalInfo.number
                         if (data.data.list.length == 0) {
                             this.disabled = true
                         } else {
@@ -134,20 +136,8 @@
                         sums[index] = '合计';
                         return;
                     }
-                    const values = data.map(item => Number(item[column.property]));
                     if (column.property === 'number') {
-                        // sums[index]=100
-                        sums[index] = values.reduce((prev, curr) => {
-                            const value = Number(curr);
-                            if (!isNaN(value)) {
-                                // console.log(prev)
-                                // console.log(curr)
-                                return prev + curr;
-                            } else {
-                                return prev;
-                            }
-                        }, 0);
-                        // sums[index];])
+                        sums[index] = this.number
                         sums[index] += ' 条';
                     } else {
                         sums[index] = '--';

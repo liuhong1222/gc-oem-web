@@ -8,7 +8,8 @@
                 <el-step title="客服资料"></el-step>
                 <el-step title="合同信息"></el-step>
                 <el-step title="支付宝资料"></el-step>
-                <el-step title="微信资料"></el-step>
+                <el-step title="微信收款资料"></el-step>
+                <el-step title="微信登录资料"></el-step>
             </el-steps>
             <!-- 内容显示 -->
             <div>
@@ -168,7 +169,7 @@
                     </el-form>
                 </div>
 
-                <!-- 微信资料 -->
+                <!-- 微信收款资料 -->
                 <div class="weixinInformation" v-if="active === 5">
                     <el-form :model="wxdataForm" ref="wxdataFormref" label-width="110px" class="demo-ruleForm">
                         <el-form-item label="微信调用地址">
@@ -187,7 +188,20 @@
                             <el-input v-model="wxdataForm.wxkey" placeholder="key"></el-input>
                         </el-form-item>
                         <el-button style="margin-top: 12px;" @click="lastStep">上一步</el-button>
-                        <el-button style="margin-top: 12px;" @click="submitweixin">完成</el-button>
+                        <el-button style="margin-top: 12px;" @click="submitweixin">下一步</el-button>
+                    </el-form>
+                </div>
+                <!-- 微信登录资料 -->
+                <div class="weixinLoginInfo" v-if="active === 6">
+                    <el-form :model="wxLoginForm" ref="wxLoginFormref" label-width="110px" class="demo-ruleForm">
+                        <el-form-item label="APPID">
+                            <el-input v-model="wxLoginForm.APPID" placeholder="APPID"></el-input>
+                        </el-form-item>
+                        <el-form-item label="APPSECRET">
+                            <el-input v-model="wxLoginForm.APPSECRET" placeholder="APPSECRET"></el-input>
+                        </el-form-item>
+                        <el-button style="margin-top: 12px;" @click="lastStep">上一步</el-button>
+                        <el-button style="margin-top: 12px;" @click="submitweiLogin">完成</el-button>
                     </el-form>
                 </div>
             </div>
@@ -312,7 +326,7 @@
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
-                <el-collapse-item title="微信资料 ✚" name="6">
+                <el-collapse-item title="微信收款资料 ✚" name="6">
                     <el-form :model="wxdataForm" ref="wxdataFormref" label-width="110px" class="demo-ruleForm">
                         <el-form-item label="微信调用地址">
                             <el-input v-model="wxdataForm.wxcallUrl" placeholder="微信调用地址" readonly></el-input>
@@ -328,6 +342,16 @@
                         </el-form-item>
                         <el-form-item label="key">
                             <el-input v-model="wxdataForm.wxkey" placeholder="key" readonly></el-input>
+                        </el-form-item>
+                    </el-form>
+                </el-collapse-item>
+                <el-collapse-item title="微信登录资料 ✚" name="7">
+                    <el-form :model="wxLoginForm" ref="wxLoginFormref" label-width="110px" class="demo-ruleForm">
+                        <el-form-item label="APPID">
+                            <el-input v-model="wxLoginForm.APPID" placeholder="APPID" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="APPSECRET">
+                            <el-input v-model="wxLoginForm.APPSECRET" placeholder="APPSECRET" readonly></el-input>
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
@@ -484,6 +508,11 @@
                     wxcallUrl: '',
                     id: ''  //后端返回的id
                 },
+                wxLoginForm: {
+                    APPID: '',
+                    APPSECRET: '',
+                    id: ''
+                },
                 // imageUrlIcon: "",
                 // imageUrlLogo: "",
                 // imageUrlSignatures: "",  //代表签字
@@ -570,6 +599,9 @@
                         }).then(({ data }) => {
                             // console.log(data)
                             if (data && data.code === 0) {
+                                this.$nextTick(() => {
+                                    this.$refs['basicdataList'].clearValidate()
+                                })
                                 this.getDomain()  //获取域名备案信息
                                 if (this.active++ > 5) this.active = 0;
                             } else {
@@ -611,7 +643,6 @@
             nextDomain() {
                 this.$refs['domaindataList'].validate((valid) => {
                     if (valid) {
-
                         this.$http({
                             url: this.$http.adornUrl(`agent/set/updateDomainInfo?token=${this.$cookie.get('token')}`),
                             method: 'post',
@@ -627,6 +658,9 @@
                         }).then(({ data }) => {
                             // console.log(data)
                             if (data && data.code === 0) {
+                                this.$nextTick(() => {
+                                    this.$refs['domaindataList'].clearValidate()
+                                })
                                 this.getkfinfo()//获取客服资料
                                 if (this.active++ > 5) this.active = 0;
                             } else {
@@ -677,6 +711,9 @@
                         }).then(({ data }) => {
                             // console.log(data)
                             if (data && data.code === 0) {
+                                this.$nextTick(() => {
+                                    this.$refs['customerdataList'].clearValidate()
+                                })
                                 this.getcontractinfo()//获取合同信息
                                 if (this.active++ > 5) this.active = 0;
                             } else {
@@ -714,6 +751,7 @@
                     }
                 })
             },
+            // 提交合同
             nextcontract() {
                 this.$refs['contractdataFormref'].validate((valid) => {
                     if (valid) {
@@ -734,6 +772,9 @@
                         }).then(({ data }) => {
                             // console.log(data)
                             if (data && data.code === 0) {
+                                this.$nextTick(() => {
+                                    this.$refs['contractdataFormref'].clearValidate()
+                                })
                                 this.getalipay()//支付宝信息
                                 if (this.active++ > 5) this.active = 0;
                             } else {
@@ -771,6 +812,7 @@
                     }
                 })
             },
+            // 提交支付宝
             nextalipay() {
 
                 this.$http({
@@ -838,6 +880,46 @@
                     })
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
+                        this.getWxLoginInfo()//获取微信登录信息
+                        if (this.active++ > 5) this.active = 0;
+
+                    } else {
+                        this.$message.error(data.msg)
+                    }
+                })
+            },
+            // 获取微信登录信息
+            getWxLoginInfo() {
+                this.wxLoginForm.id = ""
+                this.$http({
+                    url: this.$http.adornUrl(`agent/set/findWxLogin?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
+                    method: 'post',
+                }).then(({ data }) => {
+                    if (data && data.code === 0) {
+                        if (data.data !== null) {
+                            this.wxLoginForm.APPID = data.data.appid
+                            this.wxLoginForm.APPSECRET = data.data.appSecret
+                            this.wxLoginForm.id = data.data.id
+                        } else {
+                            this.wxLoginForm.APPID = ""
+                            this.wxLoginForm.APPSECRET = ""
+                        }
+                    }
+                })
+            },
+            // 提交完成最后一步微信登录信息
+            submitweiLogin() {
+                this.$http({
+                    url: this.$http.adornUrl(`agent/set/updateWxLogin?token=${this.$cookie.get('token')}`),
+                    method: 'post',
+                    params: this.$http.adornParams({
+                        'agentId': this.agentId,
+                        'id': this.wxdataForm.id,
+                        'appid': this.wxLoginForm.APPID,
+                        'appSecret': this.wxLoginForm.APPSECRET,
+                    })
+                }).then(({ data }) => {
+                    if (data && data.code === 0) {
                         this.$message({
                             message: "操作成功",
                             type: "success",
@@ -855,7 +937,21 @@
                 })
             },
             lastStep() {
+                if (this.active == 1) {
+                    // alert(this.active)
+                    let agentId = this.agentId
+                    this.$refs['domaindataList'].clearValidate()
+                    this.init(agentId)
+                } else if (this.active == 2) {
+                    // alert(this.active)
+                    this.$refs['customerdataList'].clearValidate()
+                    this.getDomain()
+                } else if (this.active == 3) {
+                    this.$refs['contractdataFormref'].clearValidate()
+                    this.getkfinfo()
+                }
                 this.active--;
+
             },
             closeDialog() { },
             //上传 执行顺序：beforeAvatarUpload ---执行action提交----执行handleAvatarSuccess or uploadError
@@ -1168,6 +1264,21 @@
 
                         }
                     })
+                } else if (val == 7) {
+                    // alert('微信登录信息')
+                    this.wxLoginForm.APPID = ""
+                    this.wxLoginForm.APPSECRET = ""
+                    this.$http({
+                        url: this.$http.adornUrl(`agent/set/findWxLogin?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
+                        method: 'post',
+                    }).then(({ data }) => {
+                        if (data && data.code === 0) {
+                            if (data.data !== null) {
+                                this.wxLoginForm.APPID = data.data.appid
+                                this.wxLoginForm.APPSECRET = data.data.appSecret
+                            }
+                        }
+                    })
                 }
             }
 
@@ -1221,6 +1332,7 @@
     .customerInformation,
     .contractInformation,
     .alipayIInformation,
+    .weixinLoginInfo,
     .weixinInformation {
         min-width: 350px;
         min-height: 500px;

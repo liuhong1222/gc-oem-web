@@ -72,6 +72,8 @@
                 disabled: false,
                 disableAgent: true,
                 disableAgentName: true,
+                money: '',
+                number: '',
                 customerSearchData: {
                     dateTime: [],
                     agentName: "",
@@ -117,6 +119,8 @@
                         if (data && data.code === 0) {
                             this.customerTableData = data.data.list
                             this.totalPage = data.data.total
+                            this.money = data.data.totalInfo.money
+                            this.number = data.data.totalInfo.number
                             if (data.data.list.length == 0) {
                                 this.disabled = true
                             } else {
@@ -148,25 +152,12 @@
                         sums[index] = '合计';
                         return;
                     }
-                    const values = data.map(item => Number(item[column.property]));
-                    // console.log(column.property)
-                    if (column.property === 'number' || column.property === 'money') {
-                        sums[index] = values.reduce((prev, curr) => {
-                            const value = Number(curr);
-                            if (!isNaN(value)) {
-                                return prev + curr;
-                            } else {
-                                return prev;
-                            }
-                        }, 0);
-                        if (column.property === 'number') {
-                            sums[index] += ' 条';
-
-                            // console.log(sums[index])
-                        } else if (column.property === 'money') {
-                            sums[index] += ' 元';
-                        }
-
+                    if (column.property === 'number') {
+                        sums[index] = this.number
+                        sums[index] += ' 条';
+                    } else if (column.property === 'money') {
+                        sums[index] = this.money
+                        sums[index] += ' 元';
                     } else {
                         sums[index] = '--';
                     }

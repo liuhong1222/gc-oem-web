@@ -2,7 +2,7 @@
     <div class="main">
         <div class="topSearch">
             <h2>充值记录</h2>
-            <el-form :inline="true" :model="agentSearchData" >
+            <el-form :inline="true" :model="agentSearchData">
                 <el-form-item label="创建时间：">
                     <el-date-picker v-model="agentSearchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
                         value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
@@ -55,6 +55,8 @@
             return {
                 dataListLoading: false,
                 disabled: false,
+                number: '',
+                money: '',
                 agentSearchData: {
                     dateTime: [],
                     type: '',
@@ -91,6 +93,8 @@
                         // console.log(data)
                         this.agentRegTableData = data.data.list
                         this.totalPage = data.data.total
+                        this.money = data.data.totalInfo.money
+                        this.number = data.data.totalInfo.number
                         if (data.data.list.length == 0) {
                             this.disabled = true
                         } else {
@@ -122,29 +126,16 @@
                         sums[index] = '合计';
                         return;
                     }
-                    const values = data.map(item => Number(item[column.property]));
-                    // console.log(column.property)
-                    if (column.property === 'number' || column.property === 'money') {
-                        sums[index] = values.reduce((prev, curr) => {
-                            const value = Number(curr);
-                            if (!isNaN(value)) {
-                                return prev + curr;
-                            } else {
-                                return prev;
-                            }
-                        }, 0);
-                        // sums[index];])
-                        if (column.property === 'money') {
-                            sums[index] += ' 元';
-                        } else if (column.property === 'number') {
-                            sums[index] += ' 条';
-                        }
-
+                    if (column.property === 'number') {
+                        sums[index] = this.number
+                        sums[index] += ' 条';
+                    } else if (column.property === 'money') {
+                        sums[index] = this.money
+                        sums[index] += ' 元';
                     } else {
                         sums[index] = '--';
                     }
                 });
-
                 return sums;
             },
             getRowClass({ row, column, rowIndex, columnIndex }) {
