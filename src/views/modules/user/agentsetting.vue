@@ -146,7 +146,7 @@
                 <el-table-column fixed="right" label="操作" align="center" width="200">
                     <template slot-scope="scope">
                         <el-button type="text" size="small" @click=seedialog(scope.row)>查看</el-button>
-                        <el-button type="text" size="small" @click="seetingDialog(scope.row)">修改</el-button>
+                        <el-button type="text" size="small" @click="seetingDialog(scope.row.agentId)">修改</el-button>
                         <el-button type="text" size="small" @click="del(scope.row.agentId)">删除</el-button>
                         <el-button type="text" size="small" @click=auditDialog(scope.row) :disabled="scope.row.auditState == 0 ? false: true">{{scope.row.auditState == 0 ? '审核': ''}}</el-button>
                     </template>
@@ -157,7 +157,7 @@
                     :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
                 </el-pagination>
             </div>
-
+            
         </div>
         <!-- 修改 -->
         <agent-setting-dialog v-if="agentSettingDialogVisible" ref="agentSettingDialog" @refreshDataList="getDataList"></agent-setting-dialog>
