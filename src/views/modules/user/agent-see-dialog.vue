@@ -46,7 +46,20 @@
                     </el-form>
 
                 </el-collapse-item>
-                <el-collapse-item title="域名备案信息 ✚" name="2">
+                <el-collapse-item title="客服资料 ✚" name="2">
+                    <el-form label-width="110px" :model="customerDataForm" ref="customerdataList" class="demo-ruleForm">
+                        <el-form-item label="客服热线：">
+                            <el-input v-model="customerDataForm.kfLine" placeholder="客服热线" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="客服qq：">
+                            <el-input v-model="customerDataForm.keyqq" placeholder="客服qq" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="商务合作号：">
+                            <el-input v-model="customerDataForm.businNO" placeholder="商务合作号" readonly></el-input>
+                        </el-form-item>
+                    </el-form>
+                </el-collapse-item>
+                <el-collapse-item title="域名备案信息 ✚" name="3">
                     <el-form label-width="180px" :model="domainDataForm" ref="domaindataList" class="demo-ruleForm">
                         <el-form-item label="版权信息：">
                             <el-input v-model="domainDataForm.copyinfo" placeholder="版权信息" readonly></el-input>
@@ -65,19 +78,7 @@
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
-                <el-collapse-item title="客服资料 ✚" name="3">
-                    <el-form label-width="110px" :model="customerDataForm" ref="customerdataList" class="demo-ruleForm">
-                        <el-form-item label="客服热线：">
-                            <el-input v-model="customerDataForm.kfLine" placeholder="客服热线" readonly></el-input>
-                        </el-form-item>
-                        <el-form-item label="客服qq：">
-                            <el-input v-model="customerDataForm.keyqq" placeholder="客服qq" readonly></el-input>
-                        </el-form-item>
-                        <el-form-item label="商务合作号：">
-                            <el-input v-model="customerDataForm.businNO" placeholder="商务合作号" readonly></el-input>
-                        </el-form-item>
-                    </el-form>
-                </el-collapse-item>
+
                 <el-collapse-item title="合同资料 ✚" name="4">
                     <el-form :model="contractdataForm" ref="contractdataFormref" label-width="110px" class="demo-ruleForm">
                         <el-form-item label="公司名称">
@@ -244,7 +245,24 @@
                 })
             },
             handleChange(val) {
-                if (val == 2) {
+                if (val == 2) {  //客服
+                    this.customerDataForm.kfLine = ""
+                    this.customerDataForm.keyqq = ""
+                    this.customerDataForm.businNO = ""
+                    this.$http({
+                        url: this.$http.adornUrl(`agent/set/findCustService?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
+                        method: 'post',
+                    }).then(({ data }) => {
+                        if (data && data.code === 0) {
+                            // console.log(data)
+                            if (data.data !== null) {
+                                this.customerDataForm.kfLine = data.data.hotline
+                                this.customerDataForm.keyqq = data.data.qq
+                                this.customerDataForm.businNO = data.data.bizNo
+                            }
+                        }
+                    })
+                } else if (val == 3) {  //域名
                     this.domainDataForm.copyinfo = ""
                     this.domainDataForm.compAdress = ""
                     this.domainDataForm.telservice = ""
@@ -263,23 +281,6 @@
                                 this.domainDataForm.icpInfo = data.data.icpRecord
                                 this.domainDataForm.secrecord = data.data.policeRecord
                                 this.domainDataForm.id = data.data.id
-                            }
-                        }
-                    })
-                } else if (val == 3) {
-                    this.customerDataForm.kfLine = ""
-                    this.customerDataForm.keyqq = ""
-                    this.customerDataForm.businNO = ""
-                    this.$http({
-                        url: this.$http.adornUrl(`agent/set/findCustService?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
-                        method: 'post',
-                    }).then(({ data }) => {
-                        if (data && data.code === 0) {
-                            // console.log(data)
-                            if (data.data !== null) {
-                                this.customerDataForm.kfLine = data.data.hotline
-                                this.customerDataForm.keyqq = data.data.qq
-                                this.customerDataForm.businNO = data.data.bizNo
                             }
                         }
                     })

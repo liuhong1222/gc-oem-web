@@ -1,6 +1,6 @@
 <template>
     <el-dialog :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="visible" :before-close="closeDialog"
-    v-loading.fullscreen.lock="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.4)">
+        v-loading.fullscreen.lock="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.4)">
         <el-form :model="dataForm" :rules="datarules" ref="dataForm" label-width="150px" class="demo-ruleForm" :label-position="labelPosition">
             <h3>基本信息</h3>
             <!-- <el-form-item label="代理商编号：" prop="agentNumber" v-show="agentNumberFlag" id="agentNumberCss">
@@ -338,8 +338,6 @@
                     this.$message.error(res.msg)
                     this.loading = false
                 }
-
-
                 // console.log(this.priseimageUrl)
             },
             closeDialog(done) {
