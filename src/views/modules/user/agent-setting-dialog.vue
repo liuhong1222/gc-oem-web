@@ -788,7 +788,7 @@
         this.active--;
 
       },
-      
+
       closeDialog() {
         this.active = 0  //修改回到第一步
       },

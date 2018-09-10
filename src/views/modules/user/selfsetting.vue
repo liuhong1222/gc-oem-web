@@ -914,7 +914,7 @@
                     method: 'post',
                     params: this.$http.adornParams({
                         'agentId': this.agentId,
-                        'id': this.wxdataForm.id,
+                        'id': this.wxLoginForm.id,
                         'appid': this.wxLoginForm.APPID,
                         'appSecret': this.wxLoginForm.APPSECRET,
                     })

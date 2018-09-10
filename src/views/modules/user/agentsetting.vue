@@ -51,7 +51,7 @@
                 </el-table-column>
                 <el-table-column prop="sms_sign" label="短信签名" align="center">
                 </el-table-column>
-                <el-table-column prop="dayuming" label="代理商域名" align="center">
+                <el-table-column prop="domain" label="代理商域名" align="center">
                 </el-table-column>
                 <el-table-column prop="beian" label="域名备案信息" id="infoHeight" align="center" width="150">
                     <template slot-scope="scope">
