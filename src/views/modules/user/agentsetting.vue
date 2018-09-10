@@ -157,7 +157,7 @@
                     :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
                 </el-pagination>
             </div>
-            
+
         </div>
         <!-- 修改 -->
         <agent-setting-dialog v-if="agentSettingDialogVisible" ref="agentSettingDialog" @refreshDataList="getDataList"></agent-setting-dialog>
@@ -186,7 +186,6 @@
                     mobile: "",
                     auditStatusSer: ""
                 },
-
                 dataList: [],
                 agentSettingDialogVisible: false,
                 agentSeeDialogVisible: false,
