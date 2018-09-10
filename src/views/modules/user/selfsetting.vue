@@ -4,10 +4,10 @@
         <div v-show="flagVisibile">
             <el-steps :active="active" finish-status="success" align-center class="settingSteps">
                 <el-step title="基本信息"></el-step>
-                <el-step title="域名备案信息"></el-step>
                 <el-step title="客服资料"></el-step>
-                <el-step title="合同信息"></el-step>
+                <el-step title="域名备案信息"></el-step>
                 <el-step title="支付宝资料"></el-step>
+                <el-step title="合同信息"></el-step>
                 <el-step title="微信收款资料"></el-step>
                 <el-step title="微信登录资料"></el-step>
             </el-steps>
@@ -78,9 +78,26 @@
                         <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
                     </el-form>
                 </div>
+                <!-- 客服资料 -->
+                <!-- class="customerInformation" 注释掉 要不验证 不出来-->
+                <div v-if="active === 1" style="padding: 30px 30px;">
+                    <el-form label-width="110px" :model="customerDataForm" :rules="customerDatarules" ref="customerdataList" class="demo-ruleForm">
+                        <el-form-item label="客服热线" prop="kfLine">
+                            <el-input v-model="customerDataForm.kfLine" placeholder="客服热线"></el-input>
+                        </el-form-item>
+                        <el-form-item label="客服qq" prop="keyqq">
+                            <el-input v-model="customerDataForm.keyqq" placeholder="客服qq"></el-input>
+                        </el-form-item>
+                        <el-form-item label="商务合作号" prop="businNO">
+                            <el-input v-model="customerDataForm.businNO" placeholder="商务合作号"></el-input>
+                        </el-form-item>
+                        <el-button style="margin-top: 12px;" @click="lastStep">上一步</el-button>
+                        <el-button style="margin-top: 12px;" @click="nextcustomer">下一步</el-button>
+                    </el-form>
+                </div>
                 <!-- 域名备案信息 -->
                 <!-- class="domainNameFiling" 注释掉 要不验证 不出来 -->
-                <div v-if="active === 1 " style="padding: 30px 30px;">
+                <div v-if="active === 2" style="padding: 30px 30px;">
                     <el-form label-width="110px" :model="domainDataForm" :rules="domainDatarules" ref="domaindataList" class="demo-ruleForm">
                         <el-form-item label="版权信息：" prop="copyinfo">
                             <el-input v-model="domainDataForm.copyinfo" placeholder="请输入版权信息"></el-input>
@@ -102,26 +119,31 @@
                     </el-form>
                 </div>
 
-                <!-- 客服资料 -->
-                <!-- class="customerInformation" 注释掉 要不验证 不出来-->
-                <div v-if="active === 2" style="padding: 30px 30px;">
-                    <el-form label-width="110px" :model="customerDataForm" :rules="customerDatarules" ref="customerdataList" class="demo-ruleForm">
-                        <el-form-item label="客服热线" prop="kfLine">
-                            <el-input v-model="customerDataForm.kfLine" placeholder="客服热线"></el-input>
+                <!-- 支付宝资料 -->
+                <div class="alipayIInformation" v-if="active === 3 ">
+                    <el-form :model="alipaydataForm" ref="alipaydataFormref" label-width="110px" class="demo-ruleForm">
+                        <el-form-item label="appid">
+                            <el-input v-model="alipaydataForm.aliappid" placeholder="appid"></el-input>
                         </el-form-item>
-                        <el-form-item label="客服qq" prop="keyqq">
-                            <el-input v-model="customerDataForm.keyqq" placeholder="客服qq"></el-input>
+                        <el-form-item label="支付宝调用地址">
+                            <el-input v-model="alipaydataForm.alicallUrl" placeholder="支付宝调用地址"></el-input>
                         </el-form-item>
-                        <el-form-item label="商务合作号" prop="businNO">
-                            <el-input v-model="customerDataForm.businNO" placeholder="商务合作号"></el-input>
+                        <el-form-item label="支付回调地址">
+                            <el-input v-model="alipaydataForm.alicallbackUrl" placeholder="支付回调地址"></el-input>
+                        </el-form-item>
+                        <el-form-item label="支付宝公钥">
+                            <el-input type="textarea" v-model="alipaydataForm.alipublicKey" placeholder="支付宝公钥" :rows="5"></el-input>
+                        </el-form-item>
+                        <el-form-item label="应用私钥">
+                            <el-input type="textarea" v-model="alipaydataForm.aliprivateKey" placeholder="应用私钥" :rows="5"></el-input>
                         </el-form-item>
                         <el-button style="margin-top: 12px;" @click="lastStep">上一步</el-button>
-                        <el-button style="margin-top: 12px;" @click="nextcustomer">下一步</el-button>
+                        <el-button style="margin-top: 12px;" @click="nextalipay">下一步</el-button>
                     </el-form>
                 </div>
 
                 <!-- 合同信息 -->
-                <div v-if="active === 3" class="contractInformation">
+                <div v-if="active === 4" class="contractInformation">
                     <el-form :model="contractdataForm" :rules="contractdatarules" ref="contractdataFormref" label-width="110px" class="demo-ruleForm">
                         <el-form-item label="公司名称" prop="comName">
                             <el-input v-model="contractdataForm.comName" placeholder="公司名称"></el-input>
@@ -143,29 +165,6 @@
                         </el-form-item>
                         <el-button style="margin-top: 12px;" @click="lastStep">上一步</el-button>
                         <el-button style="margin-top: 12px;" @click="nextcontract">下一步</el-button>
-                    </el-form>
-                </div>
-
-                <!-- 支付宝资料 -->
-                <div class="alipayIInformation" v-if="active === 4 ">
-                    <el-form :model="alipaydataForm" ref="alipaydataFormref" label-width="110px" class="demo-ruleForm">
-                        <el-form-item label="appid">
-                            <el-input v-model="alipaydataForm.aliappid" placeholder="appid"></el-input>
-                        </el-form-item>
-                        <el-form-item label="支付宝调用地址">
-                            <el-input v-model="alipaydataForm.alicallUrl" placeholder="支付宝调用地址"></el-input>
-                        </el-form-item>
-                        <el-form-item label="支付回调地址">
-                            <el-input v-model="alipaydataForm.alicallbackUrl" placeholder="支付回调地址"></el-input>
-                        </el-form-item>
-                        <el-form-item label="支付宝公钥">
-                            <el-input type="textarea" v-model="alipaydataForm.alipublicKey" placeholder="支付宝公钥" :rows="5"></el-input>
-                        </el-form-item>
-                        <el-form-item label="应用私钥">
-                            <el-input type="textarea" v-model="alipaydataForm.aliprivateKey" placeholder="应用私钥" :rows="5"></el-input>
-                        </el-form-item>
-                        <el-button style="margin-top: 12px;" @click="lastStep">上一步</el-button>
-                        <el-button style="margin-top: 12px;" @click="nextalipay">下一步</el-button>
                     </el-form>
                 </div>
 
@@ -604,7 +603,7 @@
                                 this.$nextTick(() => {
                                     this.$refs['basicdataList'].clearValidate()
                                 })
-                                this.getDomain()  //获取域名备案信息
+                                this.getkfinfo()  //获取客服信息
                                 if (this.active++ > 5) this.active = 0;
                             } else {
                                 this.$message.error(data.msg)
@@ -613,7 +612,58 @@
                     }
                 })
             },
+            // 获取客服资料
+            getkfinfo() {
+                this.customerDataForm.id = ""
+                this.$http({
+                    url: this.$http.adornUrl(`agent/set/findCustService?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
+                    method: 'post',
+                }).then(({ data }) => {
+                    if (data && data.code === 0) {
+                        // console.log(data)
+                        if (data.data !== null) {
+                            this.customerDataForm.kfLine = data.data.hotline
+                            this.customerDataForm.keyqq = data.data.qq
+                            this.customerDataForm.businNO = data.data.bizNo
+                            this.customerDataForm.id = data.data.id
+                        } else {
+                            this.customerDataForm.kfLine = ""
+                            this.customerDataForm.keyqq = ""
+                            this.customerDataForm.businNO = ""
+                        }
+                    }
+                })
+            },
+            // 提交客服资料
+            nextcustomer() {
+                this.$refs['customerdataList'].validate((valid) => {
+                    if (valid) {
 
+                        this.$http({
+                            url: this.$http.adornUrl(`agent/set/updateCustService?token=${this.$cookie.get('token')}`),
+                            method: 'post',
+                            params: this.$http.adornParams({
+                                'agentId': this.agentId,
+                                'id': this.customerDataForm.id,
+                                'bizNo': this.customerDataForm.businNO,
+                                'qq': this.customerDataForm.keyqq,
+                                'hotline': this.customerDataForm.kfLine
+                            })
+                        }).then(({ data }) => {
+                            // console.log(data)
+                            if (data && data.code === 0) {
+                                this.$nextTick(() => {
+                                    this.$refs['customerdataList'].clearValidate()
+                                })
+                                this.getDomain()//获取域名备案信息
+                                if (this.active++ > 5) this.active = 0;
+                            } else {
+                                this.$message.error(data.msg)
+                            }
+                        })
+                    }
+                })
+            },
             // 获取下一步里面的内容（域名备案信息）
             getDomain() {
                 this.domainDataForm.id = ""
@@ -663,7 +713,7 @@
                                 this.$nextTick(() => {
                                     this.$refs['domaindataList'].clearValidate()
                                 })
-                                this.getkfinfo()//获取客服资料
+                                this.getalipay() //获取支付宝信息
                                 if (this.active++ > 5) this.active = 0;
                             } else {
                                 this.$message.error(data.msg)
@@ -672,59 +722,71 @@
                     }
                 })
             },
-
-            // 获取客服资料
-            getkfinfo() {
-                this.customerDataForm.id = ""
+            // 获取支付宝信息
+            getalipay() {
+                this.alipaydataForm.id = ""
                 this.$http({
-                    url: this.$http.adornUrl(`agent/set/findCustService?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
+                    url: this.$http.adornUrl(`agent/set/findAlipay?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                     method: 'post',
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
                         // console.log(data)
                         if (data.data !== null) {
-                            this.customerDataForm.kfLine = data.data.hotline
-                            this.customerDataForm.keyqq = data.data.qq
-                            this.customerDataForm.businNO = data.data.bizNo
-                            this.customerDataForm.id = data.data.id
+                            this.alipaydataForm.aliappid = data.data.appid
+                            this.alipaydataForm.alicallUrl = data.data.callUrl
+                            this.alipaydataForm.alicallbackUrl = data.data.callbackUrl
+                            this.alipaydataForm.alipublicKey = data.data.publicKey
+                            this.alipaydataForm.aliprivateKey = data.data.privateKey
+                            this.alipaydataForm.id = data.data.id
                         } else {
-                            this.customerDataForm.kfLine = ""
-                            this.customerDataForm.keyqq = ""
-                            this.customerDataForm.businNO = ""
+                            // alert(33333)
+                            this.alipaydataForm.aliappid = ""
+                            this.alipaydataForm.alicallUrl = ""
+                            this.alipaydataForm.alicallbackUrl = ""
+                            this.alipaydataForm.alipublicKey = ""
+                            this.alipaydataForm.aliprivateKey = ""
                         }
                     }
                 })
             },
-            // 提交客服资料
-            nextcustomer() {
-                this.$refs['customerdataList'].validate((valid) => {
-                    if (valid) {
+            // 提交支付宝
+            nextalipay() {
 
-                        this.$http({
-                            url: this.$http.adornUrl(`agent/set/updateCustService?token=${this.$cookie.get('token')}`),
-                            method: 'post',
-                            params: this.$http.adornParams({
-                                'agentId': this.agentId,
-                                'id': this.customerDataForm.id,
-                                'bizNo': this.customerDataForm.businNO,
-                                'qq': this.customerDataForm.keyqq,
-                                'hotline': this.customerDataForm.kfLine
-                            })
-                        }).then(({ data }) => {
-                            // console.log(data)
-                            if (data && data.code === 0) {
-                                this.$nextTick(() => {
-                                    this.$refs['customerdataList'].clearValidate()
-                                })
-                                this.getcontractinfo()//获取合同信息
-                                if (this.active++ > 5) this.active = 0;
-                            } else {
-                                this.$message.error(data.msg)
+                this.$http({
+                    url: this.$http.adornUrl(`agent/set/updateAlipay?token=${this.$cookie.get('token')}`),
+                    method: 'post',
+                    params: this.$http.adornParams({
+                        'agentId': this.agentId,
+                        'id': this.alipaydataForm.id,
+                        'appid': this.alipaydataForm.aliappid,
+                        'callUrl': this.alipaydataForm.alicallUrl,
+                        'callbackUrl': this.alipaydataForm.alicallbackUrl,
+                        'publicKey': this.alipaydataForm.alipublicKey,
+                        'privateKey': this.alipaydataForm.aliprivateKey,
+                    })
+                }).then(({ data }) => {
+                    if (data && data.code === 0) {
+                        let keys = [];
+                        for (var key in this.contractdatarules) {
+                            keys.push(this.contractdatarules[key]);
+                        }
+                        if (this.alipaydataForm.aliappid !== "" && this.alipaydataForm.alicallUrl !== "" && this.alipaydataForm.alicallbackUrl !== "" && this.alipaydataForm.alipublicKey !== "" && this.alipaydataForm.aliprivateKey !== "") {
+                            for (var i = 0; i < keys.length; i++) {
+                                keys[i][0].required = true
                             }
-                        })
+                        } else {
+                            for (var i = 0; i < keys.length; i++) {
+                                keys[i][0].required = false
+                            }
+                        }
+                        this.getcontractinfo()//获取合同信息
+                        if (this.active++ > 5) this.active = 0;
+                    } else {
+                        this.$message.error(data.msg)
                     }
                 })
             },
+
             // 获取合同信息
             getcontractinfo() {
                 this.contractdataForm.id = ""
@@ -777,7 +839,7 @@
                                 this.$nextTick(() => {
                                     this.$refs['contractdataFormref'].clearValidate()
                                 })
-                                this.getalipay()//支付宝信息
+                                this.getweixinInfo()  //获取微信收款信息
                                 if (this.active++ > 5) this.active = 0;
                             } else {
                                 this.$message.error(data.msg)
@@ -787,57 +849,7 @@
                 })
             },
 
-            // 获取支付宝信息
-            getalipay() {
-                this.alipaydataForm.id = ""
-                this.$http({
-                    url: this.$http.adornUrl(`agent/set/findAlipay?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
-                    method: 'post',
-                }).then(({ data }) => {
-                    if (data && data.code === 0) {
-                        // console.log(data)
-                        if (data.data !== null) {
-                            this.alipaydataForm.aliappid = data.data.appid
-                            this.alipaydataForm.alicallUrl = data.data.callUrl
-                            this.alipaydataForm.alicallbackUrl = data.data.callbackUrl
-                            this.alipaydataForm.alipublicKey = data.data.publicKey
-                            this.alipaydataForm.aliprivateKey = data.data.privateKey
-                            this.alipaydataForm.id = data.data.id
-                        } else {
-                            // alert(33333)
-                            this.alipaydataForm.aliappid = ""
-                            this.alipaydataForm.alicallUrl = ""
-                            this.alipaydataForm.alicallbackUrl = ""
-                            this.alipaydataForm.alipublicKey = ""
-                            this.alipaydataForm.aliprivateKey = ""
-                        }
-                    }
-                })
-            },
-            // 提交支付宝
-            nextalipay() {
 
-                this.$http({
-                    url: this.$http.adornUrl(`agent/set/updateAlipay?token=${this.$cookie.get('token')}`),
-                    method: 'post',
-                    params: this.$http.adornParams({
-                        'agentId': this.agentId,
-                        'id': this.alipaydataForm.id,
-                        'appid': this.alipaydataForm.aliappid,
-                        'callUrl': this.alipaydataForm.alicallUrl,
-                        'callbackUrl': this.alipaydataForm.alicallbackUrl,
-                        'publicKey': this.alipaydataForm.alipublicKey,
-                        'privateKey': this.alipaydataForm.aliprivateKey,
-                    })
-                }).then(({ data }) => {
-                    if (data && data.code === 0) {
-                        this.getweixinInfo()//获取微信信息
-                        if (this.active++ > 5) this.active = 0;
-                    } else {
-                        this.$message.error(data.msg)
-                    }
-                })
-            },
             //获取微信信息
             getweixinInfo() {
                 this.wxdataForm.id = ""
@@ -940,26 +952,23 @@
             },
             lastStep() {
                 if (this.active == 1) {
-                    // alert(this.active)
                     let agentId = this.agentId
-                    this.$refs['domaindataList'].clearValidate()
+                    this.$refs['customerdataList'].clearValidate()
                     this.getBasicInfo(agentId)
                 } else if (this.active == 2) {
-                    // alert(this.active)
-                    this.$refs['customerdataList'].clearValidate()
-                    this.getDomain()
-                } else if (this.active == 3) {
+                    this.$refs['domaindataList'].clearValidate()
+                    this.getcontractinfo()
+                } else if (this.active == 4) {
                     this.$refs['contractdataFormref'].clearValidate()
-                    this.getkfinfo()
+                    this.getalipay()
                 }
                 this.active--;
-
             },
             closeDialog() { },
             //上传 执行顺序：beforeAvatarUpload ---执行action提交----执行handleAvatarSuccess or uploadError
             actionLogo() {
                 let url = this.$http.adornUrl(`file/image/upload?token=${this.$cookie.get('token')}`);
-                
+
                 return url;
             },
             beforeAvatarUploadLogo(file) {
