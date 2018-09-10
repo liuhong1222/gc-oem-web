@@ -941,7 +941,7 @@
                     // alert(this.active)
                     let agentId = this.agentId
                     this.$refs['domaindataList'].clearValidate()
-                    this.init(agentId)
+                    this.getBasicInfo(agentId)
                 } else if (this.active == 2) {
                     // alert(this.active)
                     this.$refs['customerdataList'].clearValidate()
