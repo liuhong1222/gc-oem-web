@@ -652,6 +652,7 @@
           }
         })
       },
+
       // 提交合同
       nextcontract() {
         this.$refs['contractdataFormref'].validate((valid) => {
@@ -713,10 +714,9 @@
           }
         })
       },
-
+      
       // 提交微信信息
       submitweixin() {
-
         this.$http({
           url: this.$http.adornUrl(`agent/set/updateWeixinpay?token=${this.$cookie.get('token')}`),
           method: 'post',
@@ -792,17 +792,20 @@
           this.init(agentId)
         } else if (this.active == 2) {
           this.$refs['domaindataList'].clearValidate()
-          this.getcontractinfo()
+          this.getkfinfo()
         } else if (this.active == 4) {
           this.$refs['contractdataFormref'].clearValidate()
           this.getalipay()
+        } else if (this.active == 6) {
+            this.getweixinInfo()
         }
         this.active--;
       },
-
+      
       closeDialog() {
         this.active = 0  //修改回到第一步
       },
+
       //上传 执行顺序：beforeAvatarUpload ---执行action提交----执行handleAvatarSuccess or uploadError
       actionLogo() {
         let url = this.$http.adornUrl(`file/image/upload?token=${this.$cookie.get('token')}&imageType=3`);
