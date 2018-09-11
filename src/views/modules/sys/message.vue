@@ -15,9 +15,9 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="发送对象" prop="object">
-                <el-radio-group v-model="ruleForm.object" @change="changeHandler">
-                    <el-radio :label="0">所有用户</el-radio>
-                    <el-radio :label="1">选定用户</el-radio>
+                <el-radio-group v-model="ruleForm.object">
+                    <el-radio @click.native.prevent="clickitem(0)" :label="0">所有用户</el-radio>
+                    <el-radio @click.native.prevent="clickitem(1)" :label="1">选定用户</el-radio>
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="消息内容" prop="desc">
@@ -30,7 +30,8 @@
         </el-form>
 
         <!-- 选定用户弹窗 -->
-        <select-user v-if="selectUserVisible" ref="selectUserRef" v-on:childByValue="childByValue"></select-user>
+        <!-- v-on:childByValue  子给父传值 -->
+        <select-user v-if="selectUserVisible" ref="selectUserRef" v-on:childByValue="childByValue" v-bind:param="messageList"></select-user>
     </div>
 </template>
 <script>
@@ -40,6 +41,7 @@
             return {
                 selectUserVisible: false,
                 childValues: "",
+                messageList: [],
                 ruleForm: {
                     name: '',
                     type: '',
@@ -66,20 +68,36 @@
             selectUser
         },
         methods: {
-            changeHandler(val) {
-                if (val == 1) {
-                    // console.log('显示弹窗')
+            clickitem(e) {
+                // alert(e)
+                if (e == 1) {
+                    e === this.ruleForm.object ? this.ruleForm.object = e : this.ruleForm.object = e
                     this.selectUserVisible = true
                     this.$nextTick(() => {
                         this.$refs.selectUserRef.showInit()
                     })
-                } else {
+                } else if (e == 0) {
+                    e === this.ruleForm.object ? this.ruleForm.object = '' : this.ruleForm.object = e
                     this.childValues = ""
-                    // console.log('隐藏弹窗')
                 }
             },
+            // changeHandler(val) {
+            //     alert(val)
+            //     if (val == 1) {
+            //         // console.log('显示弹窗')
+            //         this.selectUserVisible = true
+            //         this.$nextTick(() => {
+            //             this.$refs.selectUserRef.showInit()
+            //         })
+            //     } else {
+            //         this.childValues = ""
+            //         // console.log('隐藏弹窗')
+            //     }
+            // },
+
             childByValue(childValue) {
                 this.childValues = childValue
+                this.messageList = childValue
             },
             submitForm(formName) {
                 console.log(this.childValues)  //选定的手机号
@@ -107,9 +125,11 @@
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
                         this.$message.success('消息发布成功!')
+                        this.messageList = []
                         this.$nextTick(() => {
                             this.$refs['ruleForm'].resetFields();
                         })
+                        // 清空选定的用户
                     } else {
                         this.$message.error(data.msg)
                         this.$nextTick(() => {

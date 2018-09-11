@@ -20,6 +20,7 @@
                         <el-option label="待审核" value="0"></el-option>
                         <el-option label="使用中" value="1"></el-option>
                         <el-option label="已驳回" value="2"></el-option>
+                        <el-option label="待设置" value="-1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -140,6 +141,7 @@
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.auditState === 0" size="small" type="warning">待审核</el-tag>
                         <el-tag v-else-if="scope.row.auditState === 1" size="small" type="success">使用中</el-tag>
+                         <el-tag v-else-if="scope.row.auditState === -1" size="small" type="danger">待设置</el-tag>
                         <el-tag v-else size="small" type="danger">已驳回</el-tag>
                     </template>
                 </el-table-column>

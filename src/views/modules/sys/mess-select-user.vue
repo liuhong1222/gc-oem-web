@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="选定用户" :visible.sync="dialogTableVisible" width="50%" @close="clseoeoe">
+    <el-dialog title="选定用户" :visible.sync="dialogTableVisible" width="50%" :before-close="clseoeoe">
         <div style="text-align: center">
             <el-transfer style="text-align: left; display: inline-block" v-model="value4" filterable :titles="['全部', '已选中']" :button-texts="['删除', '选中']"
                 :format="{
@@ -7,9 +7,11 @@
                   hasChecked: '${checked}/${total}'
                 }" @change="handleChange" :data="list">
                 <span slot-scope="{ option }">{{ option.key }} - {{ option.label }}</span>
-                <el-button class="transfer-footer" slot="right-footer" size="small" type="primary" @click="trueSave" style="margin:3px 75px 0">确定</el-button>
+                <el-button class="transfer-footer" slot="right-footer" size="small" type="primary" @click="trueSave" style="margin:3px 75px 0">保存</el-button>
                 <!-- <el-button class="transfer-footer" slot="right-footer" size="small">取消</el-button> -->
             </el-transfer>
+
+            <!-- <span>{{param}}</span> -->
         </div>
     </el-dialog>
 </template>
@@ -21,14 +23,18 @@
                 dialogTableVisible: false,
                 list: [],
                 value4: [],   //选定的用户
+                isClick: false,
+                // 保存选中的用户
+                trueSaveList: []
             };
         },
-
+        props: ['param'],  //子接收父传过来的值
         methods: {
             showInit() {
                 this.dialogTableVisible = true
+                this.isClick = false
                 this.list = this.generateData()
-                // console.log(this.list)
+                this.value4 = this.param
                 // this.findUserIdMobile()
             },
             handleChange(value, direction, movedKeys) {
@@ -42,8 +48,11 @@
                     this.$message.warning('请先选择用户!');
                     return
                 }
-                this.dialogTableVisible=false
-                this.$emit('childByValue', this.value4)  //子给父传值
+                this.isClick = true
+                this.dialogTableVisible = false
+
+                this.trueSaveList = this.value4
+                this.$emit('childByValue', this.trueSaveList)  //子给父传值
             },
             // 获取数据
             generateData() {
@@ -66,9 +75,29 @@
                 })
                 return dataList;
             },
-            clseoeoe() {  //关闭弹窗
-                this.value4 = []  //清空右面数据
-                this.list = []  //清空数据
+            clseoeoe(done) {  //关闭弹窗
+                if (this.value4.length == 0) {
+                    this.$confirm('确认不选择指定用户？')
+                        .then(_ => {
+                            done();
+                        })
+                        .catch(_ => { });
+                } else {
+                    
+                    if (!(this.isClick)) {
+                        this.$confirm('确认不保存修改么？')
+                            .then(_ => {
+                                done();
+                                this.value4 = this.trueSaveList   //点击确定后的数据
+                                console.log(this.value4)
+                                // this.value4 = []  //清空右面数据
+                                this.list = []  //清空数据
+                            })
+                            .catch(_ => { });
+                    }
+                }
+
+
             }
         },
     };

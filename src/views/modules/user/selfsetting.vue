@@ -221,25 +221,25 @@
                         </el-form-item>
                         <el-form-item label="logo：" id="logoseeImg">
                             <el-upload class="avatar-uploader" action="" :show-file-list="false" disabled>
-                                <img v-if="logoImageUrl" :src="logoImageUrl" class="avatar">
+                                <img v-if="basicdataForm.imageUrlLogo" :src="basicdataForm.imageUrlLogo" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </el-form-item>
                         <el-form-item label="icon：" id="iconseeImg">
                             <el-upload class="avatar-uploader" action="" :show-file-list="false" disabled>
-                                <img v-if="iconImageUrl" :src="iconImageUrl" class="avatar">
+                                <img v-if="basicdataForm.imageUrlIcon" :src="basicdataForm.imageUrlIcon" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </el-form-item>
                         <el-form-item label="代表签字：">
                             <el-upload class="avatar-uploader" action="" :show-file-list="false" disabled>
-                                <img v-if="dqImageUrl" :src="dqImageUrl" class="avatar">
+                                <img v-if="basicdataForm.imageUrlSignatures" :src="basicdataForm.imageUrlSignatures" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </el-form-item>
                         <el-form-item label="公司红章：">
                             <el-upload class="avatar-uploader" action="" :show-file-list="false" disabled>
-                                <img v-if="gzImageUrl" :src="gzImageUrl" class="avatar">
+                                <img v-if="basicdataForm.imageUrlChapter" :src="basicdataForm.imageUrlChapter" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </el-form-item>
@@ -370,10 +370,7 @@
                 flagVisibile: false,
                 seeflagVisibile: false,
                 labelPosition: 'right',
-                logoImageUrl: '',
-                iconImageUrl: '',
-                dqImageUrl: '',
-                gzImageUrl: '',
+                
                 agentId: null,
                 activeNames: ['1'],
                 active: 0,
@@ -549,10 +546,10 @@
                     this.iconUrl = '',
                     this.signUrl = '',
                     this.sealUrl = '',
-                    this.logoImageUrl = ""
-                this.iconImageUrl = ""
-                this.dqImageUrl = ""
-                this.gzImageUrl = ""
+                    this.basicdataForm.imageUrlLogo = ""
+                this.basicdataForm.imageUrlIcon = ""
+                this.basicdataForm.imageUrlSignatures = ""
+                this.basicdataForm.imageUrlChapter = ""
                 // 获取基本信息
                 this.$http({
                     url: this.$http.adornUrl(`agent/set/findBasicInfo?token=${this.$cookie.get('token')}`),
@@ -573,10 +570,10 @@
                         this.basicdataForm.agentDomain = data.data[0].name
                         this.agentId = data.data[0].agentId
                         if (data.data[0].logo_url && data.data[0].icon_url && data.data[0].sign_url && data.data[0].seal_url) {
-                            this.logoImageUrl = imgUrl.imgUrl + data.data[0].logo_url
-                            this.iconImageUrl = imgUrl.imgUrl + data.data[0].icon_url
-                            this.dqImageUrl = imgUrl.imgUrl + data.data[0].sign_url
-                            this.gzImageUrl = imgUrl.imgUrl + data.data[0].seal_url
+                           this.basicdataForm.imageUrlLogo = imgUrl.imgUrl + data.data[0].logo_url
+                            this.basicdataForm.imageUrlIcon = imgUrl.imgUrl + data.data[0].icon_url
+                            this.basicdataForm.imageUrlSignatures = imgUrl.imgUrl + data.data[0].sign_url
+                            this.basicdataForm.imageUrlChapter = imgUrl.imgUrl + data.data[0].seal_url
                         }
                     }
                 })
@@ -863,7 +860,7 @@
                             this.wxdataForm.wxappid = data.data.appid
                             this.wxdataForm.wxmchid = data.data.mchid
                             this.wxdataForm.wxcallbackUrl = data.data.callbackUrl
-                            this.wxdataForm.wxcallUrl = data.data.callUrls
+                            this.wxdataForm.wxcallUrl = data.data.callUrl
                             this.wxdataForm.id = data.data.id
                         } else {
 
@@ -957,7 +954,7 @@
                     this.getBasicInfo(agentId)
                 } else if (this.active == 2) {
                     this.$refs['domaindataList'].clearValidate()
-                    this.getcontractinfo()
+                    this.getkfinfo()
                 } else if (this.active == 4) {
                     this.$refs['contractdataFormref'].clearValidate()
                     this.getalipay()
