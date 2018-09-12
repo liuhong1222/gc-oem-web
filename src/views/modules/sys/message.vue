@@ -16,8 +16,13 @@
             </el-form-item>
             <el-form-item label="发送对象" prop="object">
                 <el-radio-group v-model="ruleForm.object">
+<<<<<<< HEAD
                     <el-radio @click.native.prevent="clickitem(1)" :label="1">所有用户</el-radio>
                     <el-radio @click.native.prevent="clickitem(2)" :label="2">选定用户</el-radio>
+=======
+                    <el-radio @click.native.prevent="clickitem(0)" :label="0">所有用户</el-radio>
+                    <el-radio @click.native.prevent="clickitem(1)" :label="1">选定用户</el-radio>
+>>>>>>> 5923717479a51bdbc79456cdabafef2a4b575175
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="消息内容" prop="desc">
