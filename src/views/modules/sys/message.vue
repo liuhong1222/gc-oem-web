@@ -16,13 +16,8 @@
             </el-form-item>
             <el-form-item label="发送对象" prop="object">
                 <el-radio-group v-model="ruleForm.object">
-<<<<<<< HEAD
                     <el-radio @click.native.prevent="clickitem(1)" :label="1">所有用户</el-radio>
                     <el-radio @click.native.prevent="clickitem(2)" :label="2">选定用户</el-radio>
-=======
-                    <el-radio @click.native.prevent="clickitem(0)" :label="0">所有用户</el-radio>
-                    <el-radio @click.native.prevent="clickitem(1)" :label="1">选定用户</el-radio>
->>>>>>> 5923717479a51bdbc79456cdabafef2a4b575175
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="消息内容" prop="desc">
@@ -86,19 +81,6 @@
                     this.childValues = ""
                 }
             },
-            // changeHandler(val) {
-            //     alert(val)
-            //     if (val == 1) {
-            //         // console.log('显示弹窗')
-            //         this.selectUserVisible = true
-            //         this.$nextTick(() => {
-            //             this.$refs.selectUserRef.showInit()
-            //         })
-            //     } else {
-            //         this.childValues = ""
-            //         // console.log('隐藏弹窗')
-            //     }
-            // },
 
             childByValue(childValue) {
                 this.childValues = childValue
@@ -106,9 +88,13 @@
             },
             submitForm(formName) {
                 console.log(this.childValues)  //选定的手机号
-                console.log(this.ruleForm.type)
+                console.log(this.ruleForm.object)
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        if (this.childValues == "" && this.ruleForm.object == 2) {
+                            this.$message.warning('选定的用户为空，请选定用户或者选择所有用户！')
+                            return
+                        }
                         this.$confirm('确认要发布吗？')
                             .then(_ => {
                                 this.message()
@@ -118,11 +104,13 @@
                 });
             },
             message() {
+
                 this.$http({
                     url: this.$http.adornUrl(`agent/message/addMessage?token=${this.$cookie.get('token')}`),
                     method: 'post',
                     params: this.$http.adornParams({
                         'type': this.ruleForm.type,
+                        'selectType': this.ruleForm.object,
                         'userIdList': JSON.stringify(this.childValues),
                         'title': this.ruleForm.name,
                         'message': this.ruleForm.desc
@@ -131,12 +119,15 @@
                     if (data && data.code === 0) {
                         this.$message.success('消息发布成功!')
                         this.messageList = []
+                        this.childValues = []
                         this.$nextTick(() => {
                             this.$refs['ruleForm'].resetFields();
                         })
                         // 清空选定的用户
                     } else {
                         this.$message.error(data.msg)
+                        this.messageList = []
+                        this.childValues = []
                         this.$nextTick(() => {
                             this.$refs['ruleForm'].resetFields();
                         })

@@ -39,18 +39,14 @@
             },
             handleChange(value, direction, movedKeys) {
                 this.value4 = value
-                // console.log(value)
-                // console.log(value, direction, movedKeys);
-                // 点击确定
             },
             trueSave() {
-                if (this.value4.length == 0) {
-                    this.$message.warning('请先选择用户!');
-                    return
-                }
+                // if (this.value4.length == 0) {
+                //     this.$message.warning('请先选择用户!');
+                //     return
+                // }
                 this.isClick = true
                 this.dialogTableVisible = false
-
                 this.trueSaveList = this.value4
                 this.$emit('childByValue', this.trueSaveList)  //子给父传值
             },
@@ -83,7 +79,6 @@
                         })
                         .catch(_ => { });
                 } else {
-                    
                     if (!(this.isClick)) {
                         this.$confirm('确认不保存修改么？')
                             .then(_ => {
