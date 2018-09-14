@@ -78,8 +78,26 @@
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
-
-                <el-collapse-item title="合同资料 ✚" name="4">
+                <el-collapse-item title=" 支付宝资料 ✚" name="4">
+                    <el-form :model="alipaydataForm" ref="alipaydataFormref" label-width="110px" class="demo-ruleForm">
+                        <el-form-item label="appid">
+                            <el-input v-model="alipaydataForm.aliappid" placeholder="appid" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="支付宝调用地址">
+                            <el-input v-model="alipaydataForm.alicallUrl" placeholder="支付宝调用地址" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="支付回调地址">
+                            <el-input v-model="alipaydataForm.alicallbackUrl" placeholder="支付回调地址" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="公钥">
+                            <el-input type="textarea" v-model="alipaydataForm.alipublicKey" placeholder="公钥" :rows="5" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="私钥">
+                            <el-input type="textarea" v-model="alipaydataForm.aliprivateKey" placeholder="私钥" :rows="5" readonly></el-input>
+                        </el-form-item>
+                    </el-form>
+                </el-collapse-item>
+                <el-collapse-item title="合同资料 ✚" name="5">
                     <el-form :model="contractdataForm" ref="contractdataFormref" label-width="110px" class="demo-ruleForm">
                         <el-form-item label="公司名称">
                             <el-input v-model="contractdataForm.comName" placeholder="公司名称" readonly></el-input>
@@ -101,25 +119,7 @@
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
-                <el-collapse-item title=" 支付宝资料 ✚" name="5">
-                    <el-form :model="alipaydataForm" ref="alipaydataFormref" label-width="110px" class="demo-ruleForm">
-                        <el-form-item label="appid">
-                            <el-input v-model="alipaydataForm.aliappid" placeholder="appid" readonly></el-input>
-                        </el-form-item>
-                        <el-form-item label="支付宝调用地址">
-                            <el-input v-model="alipaydataForm.alicallUrl" placeholder="支付宝调用地址" readonly></el-input>
-                        </el-form-item>
-                        <el-form-item label="支付回调地址">
-                            <el-input v-model="alipaydataForm.alicallbackUrl" placeholder="支付回调地址" readonly></el-input>
-                        </el-form-item>
-                        <el-form-item label="公钥">
-                            <el-input type="textarea" v-model="alipaydataForm.alipublicKey" placeholder="公钥" :rows="5" readonly></el-input>
-                        </el-form-item>
-                        <el-form-item label="私钥">
-                            <el-input type="textarea" v-model="alipaydataForm.aliprivateKey" placeholder="私钥" :rows="5" readonly></el-input>
-                        </el-form-item>
-                    </el-form>
-                </el-collapse-item>
+
                 <el-collapse-item title="微信收款资料 ✚" name="6">
                     <el-form :model="wxdataForm" ref="wxdataFormref" label-width="110px" class="demo-ruleForm">
                         <el-form-item label="微信调用地址">
@@ -307,7 +307,7 @@
                             }
                         }
                     })
-                } else if (val == 5) { //支付宝资料
+                } else if (val == 4) { //支付宝资料
                     this.alipaydataForm.aliappid = ""
                     this.alipaydataForm.alicallUrl = ""
                     this.alipaydataForm.alicallbackUrl = ""
@@ -328,7 +328,31 @@
                             }
                         }
                     })
-                } else if (val == 6) {
+                } else if (val == 5) {  //合同
+                    this.contractdataForm.comName = ""
+                    this.contractdataForm.comAdress = ""
+                    this.contractdataForm.comAccount = ""
+                    this.contractdataForm.openBank = ""
+                    this.contractdataForm.zipcode = ""
+                    this.contractdataForm.phone = ""
+                    this.$http({
+                        url: this.$http.adornUrl(`agent/set/findContract?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
+                        method: 'post',
+                    }).then(({ data }) => {
+                        if (data && data.code === 0) {
+                            // console.log(data)
+                            if (data.data !== null) {
+                                this.contractdataForm.comName = data.data.companyName
+                                this.contractdataForm.comAdress = data.data.companyAddress
+                                this.contractdataForm.comAccount = data.data.accountNo
+                                this.contractdataForm.openBank = data.data.bankName
+                                this.contractdataForm.zipcode = data.data.postcode
+                                this.contractdataForm.phone = data.data.mobile
+                            }
+                        }
+                    })
+                }
+                else if (val == 6) {
                     this.wxdataForm.wxkey = ""
                     this.wxdataForm.wxappid = ""
                     this.wxdataForm.wxmchid = ""
