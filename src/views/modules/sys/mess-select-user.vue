@@ -22,7 +22,7 @@
                 disable: true,
                 dialogTableVisible: false,
                 list: [],
-                value4: [],   //选定的用户
+                value4: [], //选定的用户
                 isClick: false,
                 // 保存选中的用户
                 trueSaveList: []
