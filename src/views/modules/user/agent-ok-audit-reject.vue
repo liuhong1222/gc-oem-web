@@ -119,7 +119,7 @@
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
-                
+
                 <el-collapse-item title="微信收款资料 ✚" name="6">
                     <el-form :model="wxdataForm" ref="wxdataFormref" label-width="110px" class="demo-ruleForm">
                         <el-form-item label="微信调用地址">
@@ -175,7 +175,6 @@
         data() {
             return {
                 agentId: "",
-
                 // activeNames: ['1'],
                 activeNames: [],
                 auditDisable: false,

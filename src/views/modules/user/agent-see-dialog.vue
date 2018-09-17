@@ -284,30 +284,8 @@
                             }
                         }
                     })
-                } else if (val == 4) {  //合同
-                    this.contractdataForm.comName = ""
-                    this.contractdataForm.comAdress = ""
-                    this.contractdataForm.comAccount = ""
-                    this.contractdataForm.openBank = ""
-                    this.contractdataForm.zipcode = ""
-                    this.contractdataForm.phone = ""
-                    this.$http({
-                        url: this.$http.adornUrl(`agent/set/findContract?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
-                        method: 'post',
-                    }).then(({ data }) => {
-                        if (data && data.code === 0) {
-                            // console.log(data)
-                            if (data.data !== null) {
-                                this.contractdataForm.comName = data.data.companyName
-                                this.contractdataForm.comAdress = data.data.companyAddress
-                                this.contractdataForm.comAccount = data.data.accountNo
-                                this.contractdataForm.openBank = data.data.bankName
-                                this.contractdataForm.zipcode = data.data.postcode
-                                this.contractdataForm.phone = data.data.mobile
-                            }
-                        }
-                    })
                 } else if (val == 4) { //支付宝资料
+
                     this.alipaydataForm.aliappid = ""
                     this.alipaydataForm.alicallUrl = ""
                     this.alipaydataForm.alicallbackUrl = ""
@@ -329,6 +307,7 @@
                         }
                     })
                 } else if (val == 5) {  //合同
+
                     this.contractdataForm.comName = ""
                     this.contractdataForm.comAdress = ""
                     this.contractdataForm.comAccount = ""
