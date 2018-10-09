@@ -47,7 +47,7 @@
         <div class="grid-content bg-purple">
           <div>
             <h2>充值套餐</h2>
-            <!-- <el-button type="text" style="float:right" @click="editMeal">修改</el-button> -->
+            <el-button type="text" style="float:right" @click="editMeal">修改</el-button>
           </div>
           <ul class="cf mealPackage">
             <li v-for="(item,index) in mealList" :key="index">
@@ -127,7 +127,7 @@
     </el-dialog>
 
     <!-- 修改套餐 -->
-    <el-dialog title="套餐修改" :visible.sync="editmealVisible" id="mealDialog">
+    <el-dialog title="套餐修改" :visible.sync="editmealVisible" id="mealDialog" width="460px">
       <div>
         <div class="divInput" v-for="(item,i) in mealList" :key="i">
           <span class="label" style="width:50px;display:inline-block">{{item.packageName}}</span>
