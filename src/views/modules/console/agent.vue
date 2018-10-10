@@ -131,20 +131,23 @@
     <el-dialog title="套餐修改" :visible.sync="editmealVisible" id="mealDialog" width="460px">
       <div>
         <div class="divInput" v-for="(item,i) in mealList" :key="i">
-          <span class="label" style="width:50px;display:inline-block">{{item.packageName}}</span>
+          <span class="label" style="width:90px;display:inline-block;text-align: right;margin-right: 5px">{{item.packageName}}：</span>
           <div class="mealinput">
-            <input type="text" v-if="i == '3'" v-model="dat.mealMoney[i]" id="customValue">
-            <input type="text" v-else v-model="dat.mealMoney[i]">
+            <input type="text" v-if="i == '3'" v-model="dat.mealMoney[i]" id="customValue" oninput="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')">
+            <input type="text" v-else v-model="dat.mealMoney[i]" oninput="value=value.replace(/[^\d]/g,'')">
           </div>
           <span>元</span>
-          <div class="mealinput">
-            <input type="text" v-if="i == '3'" v-model="dat.count[i]" readonly>
-            <input type="text" v-else v-model="dat.count[i]">
+          <div class="mealinput" style="width: 40px;">
+            <input type="text" v-if="i == '3'" v-model="dat.count[i]" style="border:none;text-align: center;" readonly>
+            <input type="text" v-else v-model="dat.count[i]" style="border:none;text-align: center" readonly>
           </div>
           <span class="label" v-if="i == '3'">条</span>
           <span class="label" v-else>万条</span>
         </div>
-        <p style="margin-left: 40px">注：自定义充值单价不得低于<span style="color:red">0.001</span>元/条</p>
+        <p style="margin-left: 40px">注意：
+          <p style="margin-left: 80px;margin-top: -37px">1. 充值单价不得低于<span style="color:red">0.001</span>元/条；</p>
+          <p style="margin-left: 80px;line-height:2px">2.套餐价格必须为正整数。</p>
+        </p>
       </div>
 
       <span slot="footer" class="dialog-footer">
@@ -628,7 +631,7 @@
         //设置最小自定义充值
         var min = 0.001;
         var customVal = document.getElementById('customValue').value;
-        if (customVal <= min) {
+        if (customVal < min) {
           this.$message.error('自定义充值单价不得低于0.001元/条');
           return
         }

@@ -14,15 +14,15 @@ module.exports = {
     // 代理列表, 是否开启代理通过[./dev.env.js]配置
     proxyTable: devEnv.OPEN_PROXY === false ? {} : {
       '/proxyApi': {
-        target:'http://172.16.20.33:9999/',
-    //target:'http://oem.haifou.com/open/',
+    //target:'http://172.16.20.33:9999/',
+    target:'http://testoem.haifou.com/open/',
         changeOrigin: true,
         pathRewrite: {
           '^/proxyApi': '/'
         }
       }
     },
-
+    
     // Various Dev Server settings
     host: '0.0.0.0', // can be overwritten by process.env.HOST
     port: 8001, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
