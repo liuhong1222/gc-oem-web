@@ -3,7 +3,8 @@
         <el-dialog title="查看" :visible.sync="dialogVisible" width="50%" @close="closeDialog">
             <el-collapse v-model="activeNames" @change="handleChange" accordion>
                 <el-collapse-item title="基本信息 ✚" name="1">
-                    <el-form :model="basicdataForm" ref="basicdataForm" label-width="150px" class="demo-ruleForm" :label-position="labelPosition">
+                    <el-form :model="basicdataForm" ref="basicdataForm" label-width="150px" class="demo-ruleForm"
+                        :label-position="labelPosition">
                         <!-- <el-form-item label="代理商序号：">
                             <el-input v-model="basicdataForm.agentNumber" placeholder="代理商序号" readonly></el-input>
                         </el-form-item> -->
@@ -54,6 +55,9 @@
                         <el-form-item label="客服qq：">
                             <el-input v-model="customerDataForm.keyqq" placeholder="客服qq" readonly></el-input>
                         </el-form-item>
+                        <el-form-item label="美洽ID：">
+                            <el-input v-model="customerDataForm.beautyID" placeholder="美洽ID" readonly></el-input>
+                        </el-form-item>
                         <el-form-item label="商务合作号：">
                             <el-input v-model="customerDataForm.businNO" placeholder="商务合作号" readonly></el-input>
                         </el-form-item>
@@ -90,10 +94,12 @@
                             <el-input v-model="alipaydataForm.alicallbackUrl" placeholder="支付回调地址" readonly></el-input>
                         </el-form-item>
                         <el-form-item label="公钥">
-                            <el-input type="textarea" v-model="alipaydataForm.alipublicKey" placeholder="公钥" :rows="5" readonly></el-input>
+                            <el-input type="textarea" v-model="alipaydataForm.alipublicKey" placeholder="公钥" :rows="5"
+                                readonly></el-input>
                         </el-form-item>
                         <el-form-item label="私钥">
-                            <el-input type="textarea" v-model="alipaydataForm.aliprivateKey" placeholder="私钥" :rows="5" readonly></el-input>
+                            <el-input type="textarea" v-model="alipaydataForm.aliprivateKey" placeholder="私钥" :rows="5"
+                                readonly></el-input>
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
@@ -172,7 +178,7 @@
                     businNumber: '',
                     agentName: '',
                     dxName: '',
-                    domaintName: ''
+                    domaintName: '',
 
                 },
                 domainDataForm: { //域名备案信息
@@ -186,7 +192,8 @@
                 customerDataForm: {  //客服资料信息
                     kfLine: '',
                     keyqq: '',
-                    businNO: ''
+                    businNO: '',
+                    beautyID: ''
                 },
                 contractdataForm: {  //合同信息
                     comName: '',
@@ -248,6 +255,7 @@
                 if (val == 2) {  //客服
                     this.customerDataForm.kfLine = ""
                     this.customerDataForm.keyqq = ""
+                    this.customerDataForm.beautyID = ""
                     this.customerDataForm.businNO = ""
                     this.$http({
                         url: this.$http.adornUrl(`agent/set/findCustService?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
@@ -258,6 +266,7 @@
                             if (data.data !== null) {
                                 this.customerDataForm.kfLine = data.data.hotline
                                 this.customerDataForm.keyqq = data.data.qq
+                                this.customerDataForm.beautyID = data.data.meiqiaEntid
                                 this.customerDataForm.businNO = data.data.bizNo
                             }
                         }

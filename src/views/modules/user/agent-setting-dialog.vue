@@ -86,6 +86,9 @@
           <el-form-item label="客服qq" prop="keyqq">
             <el-input v-model="customerDataForm.keyqq" placeholder="客服qq"></el-input>
           </el-form-item>
+          <el-form-item label="美洽ID" prop="beautyID">
+            <el-input v-model="customerDataForm.beautyID" placeholder="美洽ID"></el-input>
+          </el-form-item>
           <el-form-item label="商务合作号" prop="businNO">
             <el-input v-model="customerDataForm.businNO" placeholder="商务合作号"></el-input>
           </el-form-item>
@@ -301,6 +304,7 @@
         customerDataForm: {  //客服资料信息
           kfLine: '',
           keyqq: '',
+          beautyID: '',
           businNO: '',
           id: ''  //后端返回的id
         },
@@ -483,11 +487,13 @@
             if (data.data !== null) {
               this.customerDataForm.kfLine = data.data.hotline
               this.customerDataForm.keyqq = data.data.qq
+              this.customerDataForm.beautyID = data.data.meiqiaEntid
               this.customerDataForm.businNO = data.data.bizNo
               this.customerDataForm.id = data.data.id
             } else {
               this.customerDataForm.kfLine = ""
               this.customerDataForm.keyqq = ""
+              this.customerDataForm.beautyID = ""
               this.customerDataForm.businNO = ""
             }
           }
@@ -506,6 +512,7 @@
                 'id': this.customerDataForm.id,
                 'bizNo': this.customerDataForm.businNO,
                 'qq': this.customerDataForm.keyqq,
+                'meiqiaEntid':this.customerDataForm.beautyID,
                 'hotline': this.customerDataForm.kfLine
               })
             }).then(({ data }) => {
@@ -822,10 +829,10 @@
           this.getalipay()
         } else if (this.active == 6) {
           this.getweixinInfo()
-        }else if(this.active == 5){
+        } else if (this.active == 5) {
           this.$refs['wxdataFormref'].clearValidate()
-            this.getcontractinfo()
-          
+          this.getcontractinfo()
+
         }
         this.active--;
       },

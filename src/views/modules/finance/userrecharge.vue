@@ -4,8 +4,9 @@
             <h2>客户充值明细记录</h2>
             <el-form :inline="true" :model="customerSearchData" @keyup.enter.native="uerRechargeList()">
                 <el-form-item label="创建时间：">
-                    <el-date-picker v-model="customerSearchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
+                    <el-date-picker v-model="customerSearchData.dateTime" type="daterange" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" :picker-options="pickerOptions0"
+                        onPick="uerRechargeList()">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="代理商名称：" style="margin-left:5px;" v-if="disableAgent">
@@ -18,7 +19,7 @@
                     <el-input v-model="customerSearchData.custMobile" placeholder="手机号" clearable></el-input>
                 </el-form-item>
                 <el-form-item style="margin-left:6px">
-                    <el-button type="primary" @click="uerRechargeList">查询</el-button>
+                    <el-button type="primary" @click="uerRechargeList()">查询</el-button>
                     <el-button type="primary" @click="regExport()" :disabled="disabled">导出</el-button>
                 </el-form-item>
             </el-form>
@@ -55,8 +56,8 @@
             </el-table>
         </div>
         <div class="agentPage">
-            <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex" :page-sizes="[10,20,30,50]"
-                :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
+            <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex"
+                :page-sizes="[10,20,30,50]" :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
             </el-pagination>
         </div>
 
@@ -92,46 +93,68 @@
             }
         },
         activated() {
-            this.uerRechargeList()
+            if (!this.customerSearchData.dateTime) {
+                this.customerSearchData.dateTime = [];
+                var date = new Date()
+                this.customerSearchData.dateTime[0] = this.customerSearchData.dateTime[1] = this.formatDate(date)
+            }
+            this.uerRechargeList();
+        },
+        created() {
+            var date = new Date()
+            this.customerSearchData.dateTime[0] = this.customerSearchData.dateTime[1] = this.formatDate(date)
         },
         methods: {
+            formatDate(date) {
+                var seperator1 = '-'
+                var year = date.getFullYear()
+                var month = date.getMonth() + 1
+                var strDate = date.getDate()
+                if (month >= 1 && month <= 9) {
+                    month = '0' + month
+                }
+                if (strDate >= 0 && strDate <= 9) {
+                    strDate = '0' + strDate
+                }
+                var currentdate = year + seperator1 + month + seperator1 + strDate
+                return currentdate
+            },
+            // 获取数据列表
             uerRechargeList() {
-
                 if (sessionStorage.getItem('msjRoleName') == '2') {
                     this.disableAgent = false
                     this.disableAgentName = false
                 }
                 this.dataListLoading = true;
-                disabled: false,
-                    this.$http({
-                        url: this.$http.adornUrl(`agent/finance/user/recharge/list?token=${this.$cookie.get('token')}`),
-                        method: 'get',
-                        params: this.$http.adornParams({
-                            'currentPage': this.pageIndex,
-                            'pageSize': this.pageSize,
-                            'companyName': this.customerSearchData.agentName,
-                            'userName': this.customerSearchData.custName,
-                            'userMobile': this.customerSearchData.custMobile,
-                            'startTime': '' || this.customerSearchData.dateTime == null ? '' : this.customerSearchData.dateTime[0],
-                            'endTime': '' || this.customerSearchData.dateTime == null ? '' : this.customerSearchData.dateTime[1]
-                        })
-                    }).then(({ data }) => {
-                        if (data && data.code === 0) {
-                            this.customerTableData = data.data.list
-                            this.totalPage = data.data.total
-                            this.money = data.data.totalInfo.money
-                            this.number = data.data.totalInfo.number
-                            if (data.data.list.length == 0) {
-                                this.disabled = true
-                            } else {
-                                this.disabled = false
-                            }
-                        } else {
-                            this.customerTableData = []
-                            this.totalPage = 0
-                        }
-                        this.dataListLoading = false
+                this.$http({
+                    url: this.$http.adornUrl(`agent/finance/user/recharge/list?token=${this.$cookie.get('token')}`),
+                    method: 'get',
+                    params: this.$http.adornParams({
+                        'currentPage': this.pageIndex,
+                        'pageSize': this.pageSize,
+                        'companyName': this.customerSearchData.agentName,
+                        'userName': this.customerSearchData.custName,
+                        'userMobile': this.customerSearchData.custMobile,
+                        'startTime': '' || this.customerSearchData.dateTime == null ? '' : this.customerSearchData.dateTime[0],
+                        'endTime': '' || this.customerSearchData.dateTime == null ? '' : this.customerSearchData.dateTime[1]
                     })
+                }).then(({ data }) => {
+                    if (data && data.code === 0) {
+                        this.customerTableData = data.data.list
+                        this.totalPage = data.data.total
+                        this.money = data.data.totalInfo.money
+                        this.number = data.data.totalInfo.number
+                        if (data.data.list.length == 0) {
+                            this.disabled = true
+                        } else {
+                            this.disabled = false
+                        }
+                    } else {
+                        this.customerTableData = []
+                        this.totalPage = 0
+                    }
+                    this.dataListLoading = false
+                })
             },
             // 每页数
             sizeChangeHandle(val) {
@@ -188,7 +211,22 @@
                     }
                 }
                 window.open(this.$http.adornUrl(`agent/finance/user/recharge/list/export?token=${this.$cookie.get('token')}&currentPage=${this.pageIndex}&pageSize=${this.pageSize}&userName=${this.customerSearchData.custName}&companyName=${this.customerSearchData.agentName}&startTime=${startTime}&endTime=${endTime}`))
-            }
+            },
+            getNowFormatDate() {
+                var date = new Date();
+                var seperator1 = "-";
+                var year = date.getFullYear();
+                var month = date.getMonth() + 1;
+                var strDate = date.getDate();
+                if (month >= 1 && month <= 9) {
+                    month = "0" + month;
+                }
+                if (strDate >= 0 && strDate <= 9) {
+                    strDate = "0" + strDate;
+                }
+                var currentdate = year + seperator1 + month + seperator1 + strDate;
+                return currentdate;
+            },
         }
     }
 

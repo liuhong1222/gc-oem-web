@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="选定用户" :visible.sync="dialogTableVisible" width="50%" :before-close="clseoeoe">
+    <el-dialog title="选定用户" :visible.sync="dialogTableVisible" width="50%" :before-close="clseoeoe" :modal="false">
         <div style="text-align: center">
             <el-transfer style="text-align: left; display: inline-block" v-model="value4" filterable :titles="['全部', '已选中']" :button-texts="['删除', '选中']"
                 :format="{

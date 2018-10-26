@@ -4,8 +4,9 @@
             <h2>客户消耗记录</h2>
             <el-form :inline="true" :model="consumeSearchData" @keyup.enter.native="consumeList()">
                 <el-form-item label="创建时间：">
-                    <el-date-picker v-model="consumeSearchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
+                    <el-date-picker v-model="consumeSearchData.dateTime" type="daterange" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" :picker-options="pickerOptions0"
+                        onPick="consumeList()">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="客户手机号：" style="margin-left:35px;">
@@ -43,8 +44,8 @@
             </el-table>
         </div>
         <div class="agentPage">
-            <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex" :page-sizes="[10,20,30,50]"
-                :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
+            <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex"
+                :page-sizes="[10,20,30,50]" :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
             </el-pagination>
         </div>
     </div>
@@ -77,9 +78,32 @@
             }
         },
         activated() {
+            if (!this.consumeSearchData.dateTime) {
+                this.consumeSearchData.dateTime = [];
+                var date = new Date()
+                this.consumeSearchData.dateTime[0] = this.consumeSearchData.dateTime[1] = this.formatDate(date)
+            }
             this.consumeList()
         },
+        created() {
+            var date = new Date()
+            this.consumeSearchData.dateTime[0] = this.consumeSearchData.dateTime[1] = this.formatDate(date)
+        },
         methods: {
+            formatDate(date) {
+                var seperator1 = '-'
+                var year = date.getFullYear()
+                var month = date.getMonth() + 1
+                var strDate = date.getDate()
+                if (month >= 1 && month <= 9) {
+                    month = '0' + month
+                }
+                if (strDate >= 0 && strDate <= 9) {
+                    strDate = '0' + strDate
+                }
+                var currentdate = year + seperator1 + month + seperator1 + strDate
+                return currentdate
+            },
             // 获取消耗记录接口
             consumeList() {
                 if (sessionStorage.getItem('msjRoleName') == '2') {

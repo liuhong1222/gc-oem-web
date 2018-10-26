@@ -96,6 +96,9 @@
                         <el-form-item label="客服qq" prop="keyqq">
                             <el-input v-model="customerDataForm.keyqq" placeholder="客服qq"></el-input>
                         </el-form-item>
+                        <el-form-item label="美洽ID：" prop="beautyID">
+                            <el-input v-model="customerDataForm.beautyID" placeholder="美洽ID"></el-input>
+                        </el-form-item>
                         <el-form-item label="商务合作号" prop="businNO">
                             <el-input v-model="customerDataForm.businNO" placeholder="商务合作号"></el-input>
                         </el-form-item>
@@ -272,6 +275,9 @@
                         </el-form-item>
                         <el-form-item label="客服qq：">
                             <el-input v-model="customerDataForm.keyqq" placeholder="客服qq" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="美洽ID：" prop="beautyID">
+                            <el-input v-model="customerDataForm.beautyID" placeholder="美洽ID"></el-input>
                         </el-form-item>
                         <el-form-item label="商务合作号：">
                             <el-input v-model="customerDataForm.businNO" placeholder="商务合作号" readonly></el-input>
@@ -462,6 +468,7 @@
                     kfLine: '',
                     keyqq: '',
                     businNO: '',
+                    beautyID: '',//美洽id
                     id: ''  //后端返回的id
                 },
                 customerDatarules: {
@@ -470,6 +477,9 @@
                     ],
                     keyqq: [
                         { required: true, message: '请输入客服qq', trigger: 'blur' }
+                    ],
+                    beautyID: [
+                        { required: false, message: '请输入美洽ID', trigger: 'blur' }
                     ],
                     businNO: [
                         { required: true, message: '请输入商务合作号', trigger: 'blur' }
@@ -652,11 +662,13 @@
                         if (data.data !== null) {
                             this.customerDataForm.kfLine = data.data.hotline
                             this.customerDataForm.keyqq = data.data.qq
+                            this.customerDataForm.beautyID = data.data.meiqiaEntid
                             this.customerDataForm.businNO = data.data.bizNo
                             this.customerDataForm.id = data.data.id
                         } else {
                             this.customerDataForm.kfLine = ""
                             this.customerDataForm.keyqq = ""
+                            this.customerDataForm.beautyID = ""
                             this.customerDataForm.businNO = ""
                         }
                     }
@@ -675,6 +687,7 @@
                                 'id': this.customerDataForm.id,
                                 'bizNo': this.customerDataForm.businNO,
                                 'qq': this.customerDataForm.keyqq,
+                                'meiqiaEntid': this.customerDataForm.beautyID,
                                 'hotline': this.customerDataForm.kfLine
                             })
                         }).then(({ data }) => {
@@ -1207,6 +1220,7 @@
                     this.customerDataForm.kfLine = ""
                     this.customerDataForm.keyqq = ""
                     this.customerDataForm.businNO = ""
+                    this.customerDataForm.beautyID = ""
                     this.$http({
                         url: this.$http.adornUrl(`agent/set/findCustService?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                         method: 'post',
@@ -1215,6 +1229,7 @@
                             if (data.data !== null) {
                                 this.customerDataForm.kfLine = data.data.hotline
                                 this.customerDataForm.keyqq = data.data.qq
+                                this.customerDataForm.beautyID = data.data.meiqiaEntid
                                 this.customerDataForm.businNO = data.data.bizNo
                             }
 
