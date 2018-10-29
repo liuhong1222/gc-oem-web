@@ -11,7 +11,7 @@
         <el-form-item label="手机号：" style="margin-left:25px;">
           <el-input v-model="searchData.mobile" placeholder="手机号" clearable></el-input>
         </el-form-item>
-        <el-form-item label="客户类型：" style="margin-left:-25px;">
+        <el-form-item label="客户类型：" >
           <el-select v-model="searchData.custType" placeholder="客户类型">
             <el-option label="全部" value="-1"></el-option>
             <el-option label="个人" value="0"></el-option>
