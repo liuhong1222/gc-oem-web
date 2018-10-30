@@ -22,7 +22,7 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="visible = false">取消</el-button>
-            <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+            <el-button type="primary" @click="dataFormSubmit()">提交修改审核</el-button>
         </span>
     </el-dialog>
 </template>
@@ -96,7 +96,7 @@
                         }).then(({ data }) => {
                             if (data && data.code === 0) {
                                 this.$message({
-                                    message: '操作成功',
+                                    message: '消息已提交审核!',
                                     type: 'success',
                                     duration: 1500,
                                     onClose: () => {

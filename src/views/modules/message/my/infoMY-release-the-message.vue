@@ -22,7 +22,7 @@
                 <el-input type="textarea" v-model="ruleForm.desc" :rows="20"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm')">确认发布</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')">提交发布申请</el-button>
                 <el-button @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
         </el-form>
@@ -122,7 +122,7 @@
                     })
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
-                        this.$message.success('消息发布成功!')
+                        this.$message.success('消息已提交审核!')
                         this.messageList = []
                         this.childValues = []
                         this.$nextTick(() => {
