@@ -8,13 +8,13 @@
                         start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="客户手机号：" style="margin-left:35px;">
+                <el-form-item label="客户手机号：" style="margin-left:35px;" class="transferInput">
                     <el-input v-model="transferSearchData.mobile" placeholder="请输入客户手机号" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="转出代理商名称：">
+                <el-form-item label="转出代理商名称：" class="transferInput">
                     <el-input v-model="transferSearchData.agentName" placeholder="请输入转出代理商名称" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="转入代理商名称：" style="margin-left:-2px;">
+                <el-form-item label="转入代理商名称：" style="margin-left:-2px;" class="transferInput">
                     <el-input v-model="transferSearchData.transferAgent" placeholder="请输入转入的代理商名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item style="margin-left:6px">
@@ -157,5 +157,13 @@
         background-color: #fff;
         margin-bottom: 24px;
         box-shadow: 0px 7px 9px 0px rgba(153, 153, 153, 0.05);
+    }
+
+    .transferInput .el-input__inner {
+        width: 185px
+    }
+
+    .transferInput .el-input__suffix {
+        left: 150px;
     }
 </style>
