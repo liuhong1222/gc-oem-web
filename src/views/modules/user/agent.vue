@@ -4,8 +4,8 @@
             <h2>OEM列表</h2>
             <el-form :inline="true" :model="searchData" @keyup.enter.native="getDataList()">
                 <el-form-item label="创建时间：">
-                    <el-date-picker v-model="searchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
+                    <el-date-picker v-model="searchData.dateTime" type="daterange" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="代理商名称：" style="margin-left:25px;">
@@ -63,14 +63,16 @@
                         <el-button @click="seeClick(scope.row.agentId)" type="text" size="small">查看</el-button>
                         <el-button type="text" size="small" @click="addUpdateAgent(scope.row.agentId)">修改</el-button>
                         <el-button type="text" size="small" @click="chdataBtn(scope.row.agentId,scope.row.companyName,scope.row.price)">充值</el-button>
-                        <el-button type="text" size="small" @click="disableAndEnabled(scope.row)">{{scope.row.status == 0 ? '启用': '禁用'}}</el-button>
+                        <el-button type="text" size="small" @click="disableAndEnabled(scope.row)">{{scope.row.status ==
+                            0 ? '启用':
+                            '禁用'}}</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
         <div class="agentPage">
-            <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex" :page-sizes="[10, 20,30,50]"
-                :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
+            <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex"
+                :page-sizes="[10, 20,30,50]" :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
             </el-pagination>
         </div>
         <!-- 充值弹窗 -->
@@ -115,9 +117,9 @@
             <!-- <p v-show="jinShow">您将禁用账号<input type="text" value="*****" style="border:none; color:#3E8EF7;min-width:50px" v-model="account">，禁用后该账户将不可登录该系统</p>
             <p v-show="qiShow">您将启用账号<input type="text" value="*****" style="border:none;min-width:50px" v-model="account">，启用后该账户将恢复正常使用。</p> -->
             <span slot="footer" class="dialog-footer">
-            <el-button @click="disableVisible = false">取 消</el-button>
-            <el-button type="primary" @click="ddd">确 定</el-button>
-        </span>
+                <el-button @click="disableVisible = false">取 消</el-button>
+                <el-button type="primary" @click="ddd">确 定</el-button>
+            </span>
         </el-dialog>
         <!-- 修改,新增 -->
         <add-or-update v-if="addSeeUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>

@@ -76,7 +76,7 @@
                 })
             },
             // 点击删除
-            del(id,name) {
+            del(id, name) {
                 this.$confirm(`是否删除${name}以及相关信息？`, '删除代理商等级', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',

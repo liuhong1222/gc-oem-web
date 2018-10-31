@@ -1,13 +1,11 @@
 <template>
-    <div class="main">
-        <h2 style="margin-bottom:35px">消息管理</h2>
+    <el-dialog title="发布消息" :close-on-click-modal="false" :visible.sync="releaseVisible" class="el-dialog-enter" width="640px">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-form-item label="消息标题" prop="name">
                 <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
             <el-form-item label="消息类别" prop="type">
                 <el-select v-model="ruleForm.type" placeholder="请选择消息类别">
-                    <!-- <el-option label="区域一" value="shanghai"></el-option> -->
                     <el-option label="系统消息" value="1"></el-option>
                     <el-option label="更新通知" value="4"></el-option>
                     <el-option label="活动通知" value="2"></el-option>
@@ -24,21 +22,21 @@
                 <el-input type="textarea" v-model="ruleForm.desc" :rows="20"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm')">确认发布</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')">提交发布申请</el-button>
                 <el-button @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
         </el-form>
-
         <!-- 选定用户弹窗 -->
         <!-- v-on:childByValue  子给父传值 -->
         <select-user v-if="selectUserVisible" ref="selectUserRef" v-on:childByValue="childByValue" v-bind:param="messageList"></select-user>
-    </div>
+    </el-dialog>
 </template>
 <script>
-    import selectUser from './mess-select-user'
+    import selectUser from '../../sys/mess-select-user'
     export default {
         data() {
             return {
+                releaseVisible: false,
                 selectUserVisible: false,
                 childValues: "",
                 messageList: [],
@@ -62,16 +60,23 @@
                         { required: true, message: '请填写消息内容', trigger: 'blur' }
                     ]
                 }
-            };
+            }
         },
         components: {
             selectUser
         },
         methods: {
+            releaseShowInit() {
+                this.releaseVisible = true
+                this.$nextTick(() => {
+                    this.$refs['ruleForm'].resetFields();
+                })
+            },
             clickitem(e) {
                 // alert(e)
                 if (e == 2) {
                     e === this.ruleForm.object ? this.ruleForm.object = e : this.ruleForm.object = e
+
                     this.selectUserVisible = true
                     this.$nextTick(() => {
                         this.$refs.selectUserRef.showInit()
@@ -117,11 +122,13 @@
                     })
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
-                        this.$message.success('消息发布成功!')
+                        this.$message.success('消息已提交审核!')
                         this.messageList = []
                         this.childValues = []
                         this.$nextTick(() => {
                             this.$refs['ruleForm'].resetFields();
+                            this.releaseVisible = false
+                            this.$emit('releaseRefreshDataList')
                         })
                         // 清空选定的用户
                     } else {
@@ -131,6 +138,7 @@
                         this.$nextTick(() => {
                             this.$refs['ruleForm'].resetFields();
                         })
+
                     }
                 })
             },
@@ -139,11 +147,4 @@
             }
         }
     }
-
 </script>
-<style>
-    .main {
-        background: #fff;
-        padding: 20px
-    }
-</style>

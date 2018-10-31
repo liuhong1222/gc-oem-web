@@ -3,7 +3,8 @@
         <el-dialog title="查看" :visible.sync="dialogVisible" width="50%" @close="closeDialog">
             <el-collapse v-model="activeNames" @change="handleChange" accordion>
                 <el-collapse-item title="基本信息 ✚" name="1">
-                    <el-form :model="basicdataForm" ref="basicdataForm" label-width="150px" class="demo-ruleForm" :label-position="labelPosition">
+                    <el-form :model="basicdataForm" ref="basicdataForm" label-width="150px" class="demo-ruleForm"
+                        :label-position="labelPosition">
                         <!-- <el-form-item label="代理商序号：">
                             <el-input v-model="basicdataForm.agentNumber" placeholder="代理商序号" readonly></el-input>
                         </el-form-item> -->
@@ -54,6 +55,9 @@
                         <el-form-item label="客服qq：">
                             <el-input v-model="customerDataForm.keyqq" placeholder="客服qq" readonly></el-input>
                         </el-form-item>
+                        <el-form-item label="美洽ID：">
+                            <el-input v-model="customerDataForm.beautyID" placeholder="美洽ID" readonly></el-input>
+                        </el-form-item>
                         <el-form-item label="商务合作号：">
                             <el-input v-model="customerDataForm.businNO" placeholder="商务合作号" readonly></el-input>
                         </el-form-item>
@@ -78,8 +82,28 @@
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
-
-                <el-collapse-item title="合同资料 ✚" name="4">
+                <el-collapse-item title=" 支付宝资料 ✚" name="4">
+                    <el-form :model="alipaydataForm" ref="alipaydataFormref" label-width="110px" class="demo-ruleForm">
+                        <el-form-item label="appid">
+                            <el-input v-model="alipaydataForm.aliappid" placeholder="appid" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="支付宝调用地址">
+                            <el-input v-model="alipaydataForm.alicallUrl" placeholder="支付宝调用地址" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="支付回调地址">
+                            <el-input v-model="alipaydataForm.alicallbackUrl" placeholder="支付回调地址" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="公钥">
+                            <el-input type="textarea" v-model="alipaydataForm.alipublicKey" placeholder="公钥" :rows="5"
+                                readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="私钥">
+                            <el-input type="textarea" v-model="alipaydataForm.aliprivateKey" placeholder="私钥" :rows="5"
+                                readonly></el-input>
+                        </el-form-item>
+                    </el-form>
+                </el-collapse-item>
+                <el-collapse-item title="合同资料 ✚" name="5">
                     <el-form :model="contractdataForm" ref="contractdataFormref" label-width="110px" class="demo-ruleForm">
                         <el-form-item label="公司名称">
                             <el-input v-model="contractdataForm.comName" placeholder="公司名称" readonly></el-input>
@@ -101,25 +125,7 @@
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
-                <el-collapse-item title=" 支付宝资料 ✚" name="5">
-                    <el-form :model="alipaydataForm" ref="alipaydataFormref" label-width="110px" class="demo-ruleForm">
-                        <el-form-item label="appid">
-                            <el-input v-model="alipaydataForm.aliappid" placeholder="appid" readonly></el-input>
-                        </el-form-item>
-                        <el-form-item label="支付宝调用地址">
-                            <el-input v-model="alipaydataForm.alicallUrl" placeholder="支付宝调用地址" readonly></el-input>
-                        </el-form-item>
-                        <el-form-item label="支付回调地址">
-                            <el-input v-model="alipaydataForm.alicallbackUrl" placeholder="支付回调地址" readonly></el-input>
-                        </el-form-item>
-                        <el-form-item label="公钥">
-                            <el-input type="textarea" v-model="alipaydataForm.alipublicKey" placeholder="公钥" :rows="5" readonly></el-input>
-                        </el-form-item>
-                        <el-form-item label="私钥">
-                            <el-input type="textarea" v-model="alipaydataForm.aliprivateKey" placeholder="私钥" :rows="5" readonly></el-input>
-                        </el-form-item>
-                    </el-form>
-                </el-collapse-item>
+
                 <el-collapse-item title="微信收款资料 ✚" name="6">
                     <el-form :model="wxdataForm" ref="wxdataFormref" label-width="110px" class="demo-ruleForm">
                         <el-form-item label="微信调用地址">
@@ -172,7 +178,7 @@
                     businNumber: '',
                     agentName: '',
                     dxName: '',
-                    domaintName: ''
+                    domaintName: '',
 
                 },
                 domainDataForm: { //域名备案信息
@@ -186,7 +192,8 @@
                 customerDataForm: {  //客服资料信息
                     kfLine: '',
                     keyqq: '',
-                    businNO: ''
+                    businNO: '',
+                    beautyID: ''
                 },
                 contractdataForm: {  //合同信息
                     comName: '',
@@ -248,6 +255,7 @@
                 if (val == 2) {  //客服
                     this.customerDataForm.kfLine = ""
                     this.customerDataForm.keyqq = ""
+                    this.customerDataForm.beautyID = ""
                     this.customerDataForm.businNO = ""
                     this.$http({
                         url: this.$http.adornUrl(`agent/set/findCustService?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
@@ -258,6 +266,7 @@
                             if (data.data !== null) {
                                 this.customerDataForm.kfLine = data.data.hotline
                                 this.customerDataForm.keyqq = data.data.qq
+                                this.customerDataForm.beautyID = data.data.meiqiaEntid
                                 this.customerDataForm.businNO = data.data.bizNo
                             }
                         }
@@ -284,7 +293,30 @@
                             }
                         }
                     })
-                } else if (val == 4) {  //合同
+                } else if (val == 4) { //支付宝资料
+
+                    this.alipaydataForm.aliappid = ""
+                    this.alipaydataForm.alicallUrl = ""
+                    this.alipaydataForm.alicallbackUrl = ""
+                    this.alipaydataForm.alipublicKey = ""
+                    this.alipaydataForm.aliprivateKey = ""
+                    this.$http({
+                        url: this.$http.adornUrl(`agent/set/findAlipay?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
+                        method: 'post',
+                    }).then(({ data }) => {
+                        if (data && data.code === 0) {
+                            // console.log(data)
+                            if (data.data !== null) {
+                                this.alipaydataForm.aliappid = data.data.appid
+                                this.alipaydataForm.alicallUrl = data.data.callUrl
+                                this.alipaydataForm.alicallbackUrl = data.data.callbackUrl
+                                this.alipaydataForm.alipublicKey = data.data.publicKey
+                                this.alipaydataForm.aliprivateKey = data.data.privateKey
+                            }
+                        }
+                    })
+                } else if (val == 5) {  //合同
+
                     this.contractdataForm.comName = ""
                     this.contractdataForm.comAdress = ""
                     this.contractdataForm.comAccount = ""
@@ -307,28 +339,8 @@
                             }
                         }
                     })
-                } else if (val == 5) { //支付宝资料
-                    this.alipaydataForm.aliappid = ""
-                    this.alipaydataForm.alicallUrl = ""
-                    this.alipaydataForm.alicallbackUrl = ""
-                    this.alipaydataForm.alipublicKey = ""
-                    this.alipaydataForm.aliprivateKey = ""
-                    this.$http({
-                        url: this.$http.adornUrl(`agent/set/findAlipay?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
-                        method: 'post',
-                    }).then(({ data }) => {
-                        if (data && data.code === 0) {
-                            // console.log(data)
-                            if (data.data !== null) {
-                                this.alipaydataForm.aliappid = data.data.appid
-                                this.alipaydataForm.alicallUrl = data.data.callUrl
-                                this.alipaydataForm.alicallbackUrl = data.data.callbackUrl
-                                this.alipaydataForm.alipublicKey = data.data.publicKey
-                                this.alipaydataForm.aliprivateKey = data.data.privateKey
-                            }
-                        }
-                    })
-                } else if (val == 6) {
+                }
+                else if (val == 6) {
                     this.wxdataForm.wxkey = ""
                     this.wxdataForm.wxappid = ""
                     this.wxdataForm.wxmchid = ""

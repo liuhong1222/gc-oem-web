@@ -1,7 +1,8 @@
 <template>
     <div>
         <el-dialog title="退款" :visible.sync="refundVisible" width="52%">
-            <el-form :model="refundDataForm" :rules="refunddatarules" ref="refundDataFormRef" label-width="150px" :label-position="labelPosition">
+            <el-form :model="refundDataForm" :rules="refunddatarules" ref="refundDataFormRef" label-width="150px"
+                :label-position="labelPosition">
                 <el-form-item label="手机号码：" prop="mobile">
                     <el-input v-model="refundDataForm.mobile" placeholder="手机号码" id="mobile" readonly></el-input>
                 </el-form-item>
@@ -11,6 +12,10 @@
                 <el-form-item label="剩余条数：" prop="refunCounts">
                     <el-input v-model="refundDataForm.refunCounts" placeholder="剩余条数" id="refunCounts" readonly></el-input>
                 </el-form-item>
+                <!-- <el-form-item label="可退条数：" prop="refundableCounts">
+                    <el-input v-model="refundDataForm.refundableCounts" placeholder="剩余条数" id="refundableCounts"
+                        readonly></el-input>
+                </el-form-item> -->
                 <el-form-item label="退款条数：" prop="refunNumber">
                     <el-input v-model="refundDataForm.refunNumber" placeholder="退款条数不能大于剩余条数"></el-input>
                     <span>条</span>
@@ -28,9 +33,9 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                        <el-button @click="refundVisible = false">取 消</el-button>
-                        <el-button type="primary" @click="refundDataFormTrue" :disabled="disabled">确 定</el-button>
-                    </span>
+                <el-button @click="refundVisible = false">取 消</el-button>
+                <el-button type="primary" @click="refundDataFormTrue" :disabled="disabled">确 定</el-button>
+            </span>
         </el-dialog>
 
     </div>
@@ -46,6 +51,7 @@
                     mobile: '',
                     custNanme: '',
                     refunCounts: '',
+                    // refundableCounts: '',
                     refunNumber: '',
                     refunPrice: '',
                     refunMoney: '',
@@ -61,6 +67,9 @@
                     refunCounts: [
                         { required: true, message: '请输入剩余条数', trigger: 'blur' }
                     ],
+                    // refundableCounts: [
+                    //     { required: true, message: '可退条数', trigger: 'blur' }
+                    // ],
                     refunNumber: [
                         { required: true, message: '请输入退款条数', trigger: 'blur' }
 

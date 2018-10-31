@@ -2,16 +2,16 @@
   <div class="main">
     <div class="topSearch">
       <h2>客户列表</h2>
-      <el-form :inline="true" :model="searchData"  @keyup.enter.native="getCustomList()">
+      <el-form :inline="true" :model="searchData" @keyup.enter.native="getCustomList()">
         <el-form-item label="创建时间：">
-          <el-date-picker v-model="searchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-            value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
+          <el-date-picker v-model="searchData.dateTime" type="daterange" range-separator="至" start-placeholder="开始日期"
+            end-placeholder="结束日期" value-format="yyyy-MM-dd" :picker-options="pickerOptions0">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="手机号：" style="margin-left:25px;">
           <el-input v-model="searchData.mobile" placeholder="手机号" clearable></el-input>
         </el-form-item>
-        <el-form-item label="客户类型：" style="margin-left:-25px;">
+        <el-form-item label="客户类型：" >
           <el-select v-model="searchData.custType" placeholder="客户类型">
             <el-option label="全部" value="-1"></el-option>
             <el-option label="个人" value="0"></el-option>
@@ -43,31 +43,36 @@
         </el-table-column>
         <el-table-column prop="custName" label=" 客户名称" align="center">
         </el-table-column>
-        <el-table-column prop="company_name" label="代理商名称" align="center"  v-if="disableAgentName">
+        <el-table-column prop="company_name" label="代理商名称" align="center" v-if="disableAgentName">
         </el-table-column>
-        <el-table-column prop="create_time" label="注册时间" align="center" >
+        <el-table-column prop="create_time" label="注册时间" align="center">
         </el-table-column>
         <el-table-column prop="money" label="充值总计（元）" align="center">
         </el-table-column>
-        <el-table-column prop="number" label="充值总条数"  align="center">
+        <el-table-column prop="number" label="充值总条数" align="center">
         </el-table-column>
-        <el-table-column prop="account" label="剩余条数"  align="center">
+        <el-table-column prop="account" label="剩余条数" align="center">
         </el-table-column>
-        <el-table-column fixed="right" label="操作" align="center" width="150">
+        <el-table-column fixed="right" label="操作" align="center" width="220">
           <template slot-scope="scope">
             <el-button @click="perPriseSee(scope.row)" type="text" size="small">查看</el-button>
             <!-- <el-button type="text" size="small" @click="perEnterEditBtn(scope.row)">修改</el-button> -->
-            <el-button type="text" size="small" @click="rechargedataBtn(scope.row)" v-if="scope.row.canRefundFlag == 'false'" disabled>充值</el-button>
+            <el-button type="text" size="small" @click="rechargedataBtn(scope.row)" v-if="scope.row.canRefundFlag == 'false'"
+              disabled>充值</el-button>
             <el-button type="text" size="small" @click="rechargedataBtn(scope.row)" v-else>充值</el-button>
-            <el-button type="text" size="small" @click="refundBtn(scope.row)" v-if="scope.row.canRefundFlag == 'false'" disabled>退款</el-button>
+            <el-button type="text" size="small" @click="refundBtn(scope.row)" v-if="scope.row.canRefundFlag == 'false'"
+              disabled>退款</el-button>
             <el-button type="text" size="small" @click="refundBtn(scope.row)" v-else>退款</el-button>
+            <el-button type="text" size="small" @click="transferAgent(scope.row)" v-if="scope.row.isAdmin == 'false'"
+              disabled>转代理商</el-button>
+            <el-button type="text" size="small" @click="transferAgent(scope.row)" v-else>转代理商</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <div class="agentPage">
-      <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex" :page-sizes="[10,20,30,50]"
-        :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
+      <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" :current-page="pageIndex"
+        :page-sizes="[10,20,30,50]" :page-size="pageSize" :total="totalPage" layout="total, sizes, prev, pager, next, jumper">
       </el-pagination>
     </div>
 
@@ -79,6 +84,8 @@
     <per-recharge-prise v-if="chargeVisible" ref="rechargecon" @refreshDataList="getCustomList"></per-recharge-prise>
     <!-- 个人，企业退款 -->
     <per-refund-prise v-if="refundVisible" ref="refundcon" @refreshDataList="getCustomList"></per-refund-prise>
+    <!-- 转代理商 -->
+    <transfer-or-agent v-if="transferAgentVisible" ref="transferAgentcon" @refreshDataList="getCustomList"></transfer-or-agent>
   </div>
 </template>
 <script>
@@ -86,6 +93,7 @@
   import perSeeEnterprise from './user-per-see-enterprise'
   import perRechargePrise from './user-per-recharge-prise'
   import perRefundPrise from './user-per-refund-prise'
+  import transferOrAgent from './user-transfer-agent'
   export default {
     data() {
       return {
@@ -97,6 +105,7 @@
         dataListLoading: false,
         disableAgent: true,
         disableAgentName: true,
+        transferAgentVisible: false,
         arr: [],  //保存点击的id和区分个人和企业的id
         searchData: {
           dateTime: [],
@@ -128,7 +137,8 @@
       // perEditEnterise,
       perSeeEnterprise,
       perRechargePrise,
-      perRefundPrise
+      perRefundPrise,
+      transferOrAgent
     },
     activated() {
       this.getCustomList()
@@ -238,7 +248,13 @@
           this.$refs.refundcon.refundInit(arr)
         })
       },
-
+      // 转代理商
+      transferAgent(row) {
+        this.transferAgentVisible = true;
+        this.$nextTick(() => {
+          this.$refs.transferAgentcon.transferAgentInit(row)
+        })
+      },
       // 导出
       exportUser() {
         let startTime;

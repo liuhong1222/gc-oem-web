@@ -8,7 +8,8 @@
             <li v-for="(item,index) in basicList" :key="index">
               <p>{{item.title}}</p>
               <input type="text" v-model="item.counts" :value="item.counts" readonly>
-              <button v-show="item.flag" @click="basicBtn(index,item.counts)">{{item.title === '邮箱' && item.counts === '' ||  item.counts === null  ? '添加' : item.btnText}}</button>
+              <button v-show="item.flag" @click="basicBtn(index,item.counts)">{{item.title === '邮箱' && item.counts ===
+                '' || item.counts === null ? '添加' : item.btnText}}</button>
             </li>
             <li>
               <button class="copyLink" @click="copyLink">复制推广链接</button>
@@ -47,7 +48,7 @@
         <div class="grid-content bg-purple">
           <div>
             <h2>充值套餐</h2>
-            <!-- <el-button type="text" style="float:right" @click="editMeal">修改</el-button> -->
+            <el-button type="text" style="float:right" @click="editMeal">修改</el-button>
           </div>
           <ul class="cf mealPackage">
             <li v-for="(item,index) in mealList" :key="index">
@@ -77,9 +78,9 @@
     <el-dialog title="提示" :visible.sync="rejectDialogVisible" width="30%">
       <span>您的设置被管理员驳回，请联系管理员或重新设置并提交。</span>
       <span slot="footer" class="dialog-footer">
-      <el-button @click="rejectDialogVisible = false">稍后再说</el-button>
-      <el-button type="primary" @click="rejectRet()">前往设置</el-button>
-    </span>
+        <el-button @click="rejectDialogVisible = false">稍后再说</el-button>
+        <el-button type="primary" @click="rejectRet()">前往设置</el-button>
+      </span>
     </el-dialog>
 
     <!-- 充值弹框-->
@@ -127,30 +128,37 @@
     </el-dialog>
 
     <!-- 修改套餐 -->
-    <el-dialog title="套餐修改" :visible.sync="editmealVisible" id="mealDialog">
+    <el-dialog title="套餐修改" :visible.sync="editmealVisible" id="mealDialog" width="460px">
       <div>
         <div class="divInput" v-for="(item,i) in mealList" :key="i">
-          <span class="label" style="width:50px;display:inline-block">{{item.packageName}}</span>
+          <span class="label" style="width:90px;display:inline-block;text-align: right;margin-right: 5px">{{item.packageName}}：</span>
           <div class="mealinput">
-            <input type="text" v-model="dat.mealMoney[i]">
+            <input type="text" v-if="i == '3'" v-model="dat.mealMoney[i]" id="customValue" oninput="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')">
+            <input type="text" v-else v-model="dat.mealMoney[i]" oninput="value=value.replace(/[^\d]/g,'')">
           </div>
           <span>元</span>
-          <div class="mealinput">
-            <input type="text" v-if="i == '3'" v-model="dat.count[i]" readonly>
-            <input type="text" v-else v-model="dat.count[i]">
+          <div class="mealinput" style="width: 40px;">
+            <input type="text" v-if="i == '3'" v-model="dat.count[i]" style="border:none;text-align: center;" readonly>
+            <input type="text" v-else v-model="dat.count[i]" style="border:none;text-align: center" readonly>
           </div>
           <span class="label" v-if="i == '3'">条</span>
           <span class="label" v-else>万条</span>
         </div>
+        <p style="margin-left: 40px">注意：
+          <p style="margin-left: 80px;margin-top: -37px">1. 充值单价不得低于<span style="color:red">0.001</span>元/条；</p>
+          <p style="margin-left: 80px;line-height:2px">2.套餐价格必须为正整数。</p>
+        </p>
       </div>
+
       <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="editmealChange()">修改套餐</el-button>
-            </span>
+        <el-button type="primary" @click="editmealChange()">修改套餐</el-button>
+      </span>
     </el-dialog>
     <!-- 复制链接 -->
     <el-dialog title="复制推广链接" :visible.sync="copyVisible" width="30%">
       <el-input v-model="copyinput" id="copyInput"></el-input>
-      <el-button type="primary" id="copyBtn" v-clipboard:copy="copyinput" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</el-button>
+      <el-button type="primary" id="copyBtn" v-clipboard:copy="copyinput" v-clipboard:success="onCopy"
+        v-clipboard:error="onError">复制链接</el-button>
     </el-dialog>
 
     <!-- 添加邮箱 -->
@@ -410,7 +418,7 @@
       rejectVisibie() {
         if ((sessionStorage.getItem('isExamine')) && (sessionStorage.getItem('isExamine') == 'reject')) {
           this.myReject = true
-        }else {
+        } else {
           this.myReject = false
         }
       },
@@ -420,7 +428,7 @@
         if ((sessionStorage.getItem('remarkDialog')) && (sessionStorage.getItem('remarkDialog') == 'remarkDialogTr')) {
           this.rejectDialogVisible = true
           sessionStorage.setItem('remarkDialog', '')
-        }else {
+        } else {
           this.rejectDialogVisible = false
           sessionStorage.setItem('remarkDialog', '')
         }
@@ -550,7 +558,7 @@
 
       // 驳回,重新设置
       rejectRet() {
-        this.rejectDialogVisible=false
+        this.rejectDialogVisible = false
         this.$router.push({ name: 'user-selfsetting' })
       },
 
@@ -619,6 +627,32 @@
       },
       // 提交修改
       editmealChange() {
+
+        //设置最小自定义充值
+        var min = 0.001;
+        var customVal = document.getElementById('customValue').value;
+        if (customVal < min) {
+          this.$message.error('自定义充值单价不得低于0.001元/条');
+          return
+        }
+        //设置计算出的单价
+        var packListCount = this.dat.count;//条数
+        var packListMoney = this.dat.mealMoney //钱
+        for (var i = 0; i < 3; i++) {
+          // console.log((packListMoney[i] / packListCount[i]))
+          if ((packListMoney[i] / packListCount[i]) < 10) {
+            if (i == 0) {
+              this.$message.error('套餐A的充值单价不得低于0.001元/条');
+            } else if (i == 1) {
+              this.$message.error('套餐B的充值单价不得低于0.001元/条');
+            } else if (i == 2) {
+              this.$message.error('套餐C的充值单价不得低于0.001元/条');
+            }
+
+            return;
+          }
+        }
+
         for (let i = 0; i < this.dat.count.length; i++) {
           let activeSubjectsObject = {};
           for (let j = 0; j < this.dat.mealMoney.length; j++) {
@@ -652,12 +686,11 @@
             this.packageId = [];
             this.list = []
           } else {
+            this.list = []
             this.$message.error(data.msg);
           }
         })
-
       }
-
     }
   }
 
@@ -666,6 +699,7 @@
 <style lang="scss">
   .el-row {
     margin-bottom: 20px;
+
     &:last-child {
       margin-bottom: 0;
     }
@@ -732,14 +766,17 @@
     width: 33%;
     float: left;
     text-align: center;
+
     >.moneyMeal {
       font-size: 24px;
       font-weight: 700;
       color: #666;
     }
+
     >p span {
       display: block;
     }
+
     .line {
       width: 20px;
       height: 3px;
@@ -765,12 +802,15 @@
     text-align: left;
     padding-left: 20px;
     border-top: solid 1px #e5e5e5;
+
     >p {
       display: inline-block;
+
       .line {
         height: 0
       }
     }
+
     span.moneyMeal {
       font-size: 14px;
       color: #4680ff;
@@ -832,6 +872,7 @@
     color: #fff;
     cursor: pointer;
   }
+
   /* 二维码 */
 
   #qrcodeCon {
@@ -840,6 +881,7 @@
     border: solid 1px #e5e5e5;
     margin: 0 auto;
     position: relative;
+
     >button {
       width: 100%;
       height: 32px;

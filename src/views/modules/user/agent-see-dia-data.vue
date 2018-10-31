@@ -26,7 +26,7 @@
                     <el-input v-model="dataForm.bussicAdress" placeholder="营业执照所在地" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="法人姓名：">
-                    <el-input v-model="dataForm.lawName" placeholder="法人姓名" readonly></el-input> 
+                    <el-input v-model="dataForm.lawName" placeholder="法人姓名" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="营业执照号：">
                     <el-input v-model="dataForm.businNum" placeholder="营业执照号" readonly></el-input>
@@ -78,9 +78,9 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                  <el-button @click="dialogVisible = false">取 消</el-button>
-                  <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-                </span>
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>
@@ -154,6 +154,7 @@
     #seeAgent .el-input__inner {
         border: none !important;
     }
+
     /* #priceCss .el-input {
         width: auto;
         border:1px solid red
