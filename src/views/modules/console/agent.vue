@@ -231,7 +231,8 @@
         customMy: [  //我的客户
           { title: '客户数量', counts: '' },
           { title: '客户充值总计（元）', counts: '' },
-          { title: '客户消费条数（条）', counts: '' }
+          { title: '客户消费条数（条）', counts: '' },
+          { title: '充值总条数（条）', counts: '' }
         ],
         basicList: [ //基本信息
           { title: '我的代理价（元/条）', counts: '', btnText: '', flag: false },
@@ -587,6 +588,7 @@
             this.customMy[0].counts = data.data.creUserCount
             this.customMy[1].counts = data.data.rechargeSum
             this.customMy[2].counts = data.data.consumSum
+            this.customMy[3].counts = data.data.rechargeNumberSum
           } else {
             this.$message.error(data.msg)
           }
