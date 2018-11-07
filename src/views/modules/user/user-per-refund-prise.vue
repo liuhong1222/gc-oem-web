@@ -12,10 +12,10 @@
                 <el-form-item label="剩余条数：" prop="refunCounts">
                     <el-input v-model="refundDataForm.refunCounts" placeholder="剩余条数" id="refunCounts" readonly></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="可退条数：" prop="refundableCounts">
+                <el-form-item label="可退条数：" prop="refundableCounts">
                     <el-input v-model="refundDataForm.refundableCounts" placeholder="剩余条数" id="refundableCounts"
                         readonly></el-input>
-                </el-form-item> -->
+                </el-form-item>
                 <el-form-item label="退款条数：" prop="refunNumber">
                     <el-input v-model="refundDataForm.refunNumber" placeholder="退款条数不能大于剩余条数"></el-input>
                     <span>条</span>
@@ -25,7 +25,7 @@
                     <span>元/条</span>
                 </el-form-item>
                 <el-form-item label="退款金额：" prop="refunMoney">
-                    <el-input v-model="refundDataForm.refunMoney" placeholder="根据条数和单价，自动计算退款金额"></el-input>
+                    <el-input v-model="refundDataForm.refunMoney" placeholder="根据条数和单价，自动计算退款金额" id="refunMoney" readonly ></el-input>
                     <span>元</span>
                 </el-form-item>
                 <el-form-item label="备注：" prop="desc">
@@ -51,7 +51,7 @@
                     mobile: '',
                     custNanme: '',
                     refunCounts: '',
-                    // refundableCounts: '',
+                    refundableCounts: '',
                     refunNumber: '',
                     refunPrice: '',
                     refunMoney: '',
@@ -67,9 +67,9 @@
                     refunCounts: [
                         { required: true, message: '请输入剩余条数', trigger: 'blur' }
                     ],
-                    // refundableCounts: [
-                    //     { required: true, message: '可退条数', trigger: 'blur' }
-                    // ],
+                    refundableCounts: [
+                        { required: true, message: '可退条数', trigger: 'blur' }
+                    ],
                     refunNumber: [
                         { required: true, message: '请输入退款条数', trigger: 'blur' }
 
@@ -89,14 +89,25 @@
         watch: {
             refundDataForm: {
                 handler: function (val, oldval) {
+                    if (this.refundDataForm.refunNumber > this.refundDataForm.refundableCounts) {
+                        this.$message.error('退款条数不能大于可退条数');
+                        this.refundDataForm.refunMoney = ""
+                        this.refundDataForm.refunPrice = ""
+                        return;
+                    }
                     if (this.refundDataForm.refunNumber !== "" && this.refundDataForm.refunPrice !== "") {
-                        this.refundDataForm.refunMoney = Number(this.refundDataForm.refunNumber) * (this.refundDataForm.refunPrice);
+                        if (isNaN(Number(this.refundDataForm.refunNumber) * (this.refundDataForm.refunPrice))) {
+                            this.refundDataForm.refunMoney = "";
+                            this.$message.error('格式不正确!')
+                            return
+                        } else {
+                            this.refundDataForm.refunMoney = Number(this.refundDataForm.refunNumber) * (this.refundDataForm.refunPrice);
+                        }
+
                     } else {
                         this.refundDataForm.refunMoney = ""
                     }
-                    if (this.refundDataForm.refunNumber > this.refundDataForm.refunCounts) {
-                        this.$message.error('退款条数不能大于剩余条数')
-                    }
+
                 },
                 deep: true
             }
@@ -115,6 +126,7 @@
                         this.refundDataForm.mobile = data.data.mobile
                         this.refundDataForm.custNanme = data.data.custName
                         this.refundDataForm.refunCounts = data.data.account
+                        this.refundDataForm.refundableCounts = data.data.refundableAccount  //可退条数
 
                     } else {
                         this.$message.error(data.msg)
@@ -144,7 +156,6 @@
                 }
             },
             refundDataFormTrue() {
-
                 this.$refs['refundDataFormRef'].validate((valid) => {
                     if (valid) {
                         // console.log('表单验证通过')
@@ -170,7 +181,7 @@
                     if (data && data.code === 0) {
                         this.disabled = true
                         this.$message({
-                            message: '操作成功',
+                            message: '退款成功',
                             type: 'success',
                             duration: 1500,
                             onClose: () => {
@@ -192,7 +203,9 @@
 <style>
     #mobile,
     #custNanme,
-    #refunCounts {
+    #refunCounts,
+    #refundableCounts,
+    #refunMoney {
         border: none
     }
 </style>

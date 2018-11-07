@@ -8,7 +8,8 @@
                         <li v-for="(item,i) in basicInfoList" :key="i">
                             <p>{{item.title}}</p>
                             <input type="text" v-model="item.data" :value="item.data" readonly>
-                            <button v-show="item.flag" @click="basicInfoBtn(i,item.data)">{{item.title === '邮箱' && item.data === '' || item.data === null ? '添加' : item.btnText}}</button>
+                            <button v-show="item.flag" @click="basicInfoBtn(i,item.data)">{{item.title === '邮箱' &&
+                                item.data === '' || item.data === null ? '添加' : item.btnText}}</button>
                         </li>
                     </ul>
                 </div>
@@ -117,7 +118,8 @@
                 oemAgent: [
                     { title: '代理商数量', counts: '' },
                     { title: '充值总金额（元）', counts: '' },
-                    { title: '消耗总计（条）', counts: '' }
+                    { title: '消耗总计（条）', counts: '' },
+                    { title: '充值总条数（条）', counts: '' }
                 ], //oem代理
 
             }
@@ -187,6 +189,7 @@
                         this.oemAgent[0].counts = data.data.agentCount
                         this.oemAgent[1].counts = data.data.rechargeSum
                         this.oemAgent[2].counts = data.data.consumSum
+                        this.oemAgent[3].counts = data.data.rechargeNumberSum
                     } else {
                         this.$message.error(data.msg)
                     }
@@ -263,6 +266,7 @@
 <style>
     .el-row {
         margin-bottom: 20px;
+
         &:last-child {
             margin-bottom: 0;
         }

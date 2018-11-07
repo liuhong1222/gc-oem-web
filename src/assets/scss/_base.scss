@@ -396,19 +396,22 @@ li {
 
 // 控制台公共
 .customerList li {
-  width: 33%;
+  width: 45%;
+  height: 125px;
   text-align: center;
   float: left;
   color: #666;
   word-break: break-all; 
   word-wrap:break-word;
 }
-.customerList {
-  margin-left: -60px
-}
-.customerList,
+
+
 .mealPackage {
   margin-top: 80px;
+}
+.customerList{
+  margin-top: 0px;
+  margin-left: -42px;
 }
 
 .customerList p:nth-child(2) {
