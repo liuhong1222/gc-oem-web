@@ -96,11 +96,17 @@
                         return;
                     }
                     if (this.refundDataForm.refunNumber !== "" && this.refundDataForm.refunPrice !== "") {
-                        this.refundDataForm.refunMoney = Number(this.refundDataForm.refunNumber) * (this.refundDataForm.refunPrice);
+                        if (isNaN(Number(this.refundDataForm.refunNumber) * (this.refundDataForm.refunPrice))) {
+                            this.refundDataForm.refunMoney = "";
+                            this.$message.error('格式不正确!')
+                            return
+                        } else {
+                            this.refundDataForm.refunMoney = Number(this.refundDataForm.refunNumber) * (this.refundDataForm.refunPrice);
+                        }
+
                     } else {
                         this.refundDataForm.refunMoney = ""
                     }
-
                 },
                 deep: true
             }
@@ -196,7 +202,8 @@
 <style>
     #mobile,
     #custNanme,
-    #refunCounts {
+    #refunCounts,
+    #refundableCounts {
         border: none
     }
 </style>
