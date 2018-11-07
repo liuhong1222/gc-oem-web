@@ -25,7 +25,7 @@
                     <span>元/条</span>
                 </el-form-item>
                 <el-form-item label="退款金额：" prop="refunMoney">
-                    <el-input v-model="refundDataForm.refunMoney" placeholder="根据条数和单价，自动计算退款金额"></el-input>
+                    <el-input v-model="refundDataForm.refunMoney" placeholder="根据条数和单价，自动计算退款金额" id="refunMoney" readonly ></el-input>
                     <span>元</span>
                 </el-form-item>
                 <el-form-item label="备注：" prop="desc">
@@ -107,6 +107,7 @@
                     } else {
                         this.refundDataForm.refunMoney = ""
                     }
+
                 },
                 deep: true
             }
@@ -203,7 +204,8 @@
     #mobile,
     #custNanme,
     #refunCounts,
-    #refundableCounts {
+    #refundableCounts,
+    #refunMoney {
         border: none
     }
 </style>
