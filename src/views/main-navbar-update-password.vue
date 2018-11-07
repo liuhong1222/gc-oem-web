@@ -14,6 +14,7 @@
         <el-input type="password" v-model="dataForm.confirmPassword"></el-input>
       </el-form-item>
     </el-form>
+    <p style="margin-left: 15px">为保障您的数据安全，请您尽快修改初始密码。</p>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
