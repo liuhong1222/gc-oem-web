@@ -81,22 +81,23 @@
                     if (valid) {
                         let content = this.$refs.ue.getUEContentMsj();
                         // 不带标签
-                        // let noLableCon = this.$refs.ue.getContentTxtMsj();
+                        let noLableCon = this.$refs.ue.getContentTxtMsj();
                         // console.log(noLableCon)
-                        if (content == "") {
-                            this.$message({
-                                message: '请输入新闻内容',
-                                type: 'warning'
-                            });
-                            return;
-                        }
+                        // if (content == "") {
+                        //     this.$message({
+                        //         message: '请输入新闻内容',
+                        //         type: 'warning'
+                        //     });
+                        //     return;
+                        // }
                         this.$http({
                             url: this.$http.adornUrl(`agent/news/my/${!this.dataForm.id ? 'save' : 'update'}?token=${this.$cookie.get('token')}`),
                             method: 'post',
                             params: this.$http.adornParams({
                                 'newsId': this.dataForm.id || undefined,
                                 'title': this.newsForm.newsTitle,
-                                'message': content
+                                'message': content,
+                                'newsContent': noLableCon
                             })
                         }).then(({ data }) => {
                             if (data && data.code === 0) {
