@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="修改密码" :visible.sync="visible" :append-to-body="true">
+  <el-dialog title="修改初始密码" :visible.sync="visible" :append-to-body="true" :close-on-click-modal="false">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
       <el-form-item label="账号">
         <span>{{ userName }}</span>
@@ -14,7 +14,7 @@
         <el-input type="password" v-model="dataForm.confirmPassword"></el-input>
       </el-form-item>
     </el-form>
-    <p style="margin-left: 15px">为保障您的数据安全，请您尽快修改初始密码。</p>
+    <p style="margin-left: 15px">注：为保障您的数据安全，请您尽快修改初始密码。</p>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
@@ -85,7 +85,7 @@
             }).then(({ data }) => {
               if (data && data.code === 0) {
                 this.$message({
-                  message: '操作成功',
+                  message: '修改成功，请重新登录!',
                   type: 'success',
                   duration: 1500,
                   onClose: () => {

@@ -189,11 +189,14 @@
 
     <!-- 重新绑定手机号 -->
     <re-bind-phone v-if="reBindVisible" ref="reBindPhoneCon" @refreshDataList="getAgentDeskInfo"></re-bind-phone>
+    <!-- 修改密码 -->
+    <update-password v-if="updatePwdVisible" ref="updatePwdCon"></update-password>
   </div>
 </template>
 
 <script>
   import reBindPhone from './re-bind-phone'
+  import UpdatePassword from '../../main-navbar-update-password'
   import QRCode from 'qrcodejs2'
   import { isEmail, isMobile } from '@/utils/validate'
   export default {
@@ -215,6 +218,7 @@
       return {
         remarksCon: '',
         myReject: false,  //我的代办
+        updatePwdVisible: false,
         rejectDialogVisible: false,
         copyinput: '',
         time: null,
@@ -293,7 +297,8 @@
       }
     },
     components: {
-      reBindPhone
+      reBindPhone,
+      UpdatePassword
     },
     watch: {
       'chdataForm.chMoney'() {
@@ -371,7 +376,8 @@
         this.myRechargeList(),
         this.findAgentPackage(),
         this.rejectVisibie(),
-        this.remarkDialog()
+        this.remarkDialog(),
+        this.updatePwd()
     },
     // created: function () {
     //   // `this` 指向 vm 实例
@@ -434,11 +440,23 @@
           sessionStorage.setItem('remarkDialog', '')
         }
       },
+      // 修改密码
+      updatePwd() {
+        if (sessionStorage.getItem('isFirstLogin') && (sessionStorage.getItem('isFirstLogin')) == 'true') {  //没修改过
+          this.updatePwdVisible = true
+          this.$nextTick(() => {
+            this.$refs.updatePwdCon.init()
+          })
+          sessionStorage.removeItem('isFirstLogin')
+        } else {
+          this.updatePwdVisible = false
+          sessionStorage.removeItem('isFirstLogin')
+        }
+      },
       // 必须输入正整数
       // proving1() {
       //   // let moneyType = (this.chdataForm.chMoney).toString()
       //   // this.chdataForm.chMoney = moneyType.replace(/[^0-9]*/g, '').replace(/\b(0+)/gi, "")
-
 
       //   // this.chdataForm.chMoney = Number(moneyType.replace(/[^\.\d]/g, ''));
       //   // this.chdataForm.chMoney = Number(moneyType.replace('.', ''));

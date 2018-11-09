@@ -13,7 +13,7 @@
                     <el-input v-model="refundDataForm.refunCounts" placeholder="剩余条数" id="refunCounts" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="可退条数：" prop="refundableCounts">
-                    <el-input v-model="refundDataForm.refundableCounts" placeholder="剩余条数" id="refundableCounts"
+                    <el-input v-model="refundDataForm.refundableCounts" placeholder="可退条数" id="refundableCounts"
                         readonly></el-input>
                 </el-form-item>
                 <el-form-item label="退款条数：" prop="refunNumber">
@@ -25,7 +25,8 @@
                     <span>元/条</span>
                 </el-form-item>
                 <el-form-item label="退款金额：" prop="refunMoney">
-                    <el-input v-model="refundDataForm.refunMoney" placeholder="根据条数和单价，自动计算退款金额"></el-input>
+                    <el-input v-model="refundDataForm.refunMoney" placeholder="根据条数和单价，自动计算退款金额" id="refunMoney"
+                        readonly></el-input>
                     <span>元</span>
                 </el-form-item>
                 <el-form-item label="备注：" prop="desc">
@@ -96,7 +97,14 @@
                         return;
                     }
                     if (this.refundDataForm.refunNumber !== "" && this.refundDataForm.refunPrice !== "") {
-                        this.refundDataForm.refunMoney = Number(this.refundDataForm.refunNumber) * (this.refundDataForm.refunPrice);
+                        if (isNaN(Number(this.refundDataForm.refunNumber) * (this.refundDataForm.refunPrice))) {
+                            this.refundDataForm.refunMoney = "";
+                            this.$message.error('格式不正确!')
+                            return
+                        } else {
+                            this.refundDataForm.refunMoney = Number(this.refundDataForm.refunNumber) * (this.refundDataForm.refunPrice);
+                        }
+
                     } else {
                         this.refundDataForm.refunMoney = ""
                     }
@@ -196,7 +204,9 @@
 <style>
     #mobile,
     #custNanme,
-    #refunCounts {
+    #refunCounts,
+    #refundableCounts,
+    #refunMoney {
         border: none
     }
 </style>

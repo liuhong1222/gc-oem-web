@@ -45,6 +45,9 @@
             getUEContentMsj() { // 获取内容方法
                 return this.editor.getContent()
             },
+            getContentTxtMsj() {
+                return this.editor.getContentTxt()
+            },
             execCommand() {   //清空内容
                 return this.editor.execCommand('cleardoc');
             },

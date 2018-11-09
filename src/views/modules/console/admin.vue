@@ -71,10 +71,13 @@
         </el-dialog>
         <!-- 重新绑定手机号 -->
         <re-bind-phone v-if="reBindVisible" ref="reBindPhoneCon"></re-bind-phone>
+        <!-- 修改密码 -->
+        <update-password v-if="updatePwdVisible" ref="updatePwdCon"></update-password>
     </div>
 </template>
 <script>
     import reBindPhone from './re-bind-phone'
+    import UpdatePassword from '../../main-navbar-update-password'
     import { isEmail, isMobile } from '@/utils/validate'
     export default {
         data() {
@@ -89,6 +92,7 @@
                 addEmailVisible: false,
                 reEmailVisible: false,
                 reBindVisible: false,
+                updatePwdVisible: false,
                 addemailform: {
                     email: ''
                 },
@@ -131,11 +135,13 @@
         },
         activated() {
             this.oemRegRecode(),
-                this.getAdminDeskInfo(),
-                this.myAgent()
+            this.getAdminDeskInfo(),
+            this.myAgent(),
+            this.updatePwd()
         },
         components: {
-            reBindPhone
+            reBindPhone,
+            UpdatePassword
         },
         methods: {
 
@@ -176,7 +182,19 @@
                     }
                 })
             },
-
+            // 修改密码
+            updatePwd() {
+                if (sessionStorage.getItem('isFirstLogin') && (sessionStorage.getItem('isFirstLogin')) == 'true') {  //没修改过
+                    this.updatePwdVisible = true
+                    this.$nextTick(() => {
+                        this.$refs.updatePwdCon.init()
+                    })
+                    sessionStorage.removeItem('isFirstLogin')
+                } else {
+                    this.updatePwdVisible = false
+                    sessionStorage.removeItem('isFirstLogin')
+                }
+            },
             // 管理员基本信息
             getAdminDeskInfo() {
                 this.$http({
