@@ -12,12 +12,12 @@ import { isAuth } from '@/utils'
 import VueRouter from 'vue-router';
 import VueClipboard from 'vue-clipboard2';
 
-import $ from 'jquery'
-import '../static/uediter-front/ueditor/ueditor.config.js'
-import '../static/uediter-front/ueditor/ueditor.all.js'
-import '../static/uediter-front/ueditor/lang/zh-cn/zh-cn.js'
-import '../static/uediter-front/ueditor/ueditor.parse.min.js'
 
+//import '../static/uediter-front/ueditor/ueditor.config.js'
+//import '../static/uediter-front/ueditor/ueditor.all.js'
+//import '../static/uediter-front/ueditor/lang/zh-cn/zh-cn.js'
+//import '../static/uediter-front/ueditor/ueditor.parse.min.js'
+window.jquery = $;
 Vue.use(VueCookie)
 Vue.config.productionTip = false
 

@@ -1,7 +1,7 @@
 /**
  * 动态加载初始资源
  */
-;(function() {
+; (function () {
   var resList = {
     icon: window.SITE_CONFIG.cdnUrl + '/static/img/favicon.ico',
     css: [
@@ -10,6 +10,11 @@
     js: [
       // 插件(放置业务之前加载, 以免业务需求依赖插件时, 还未加载出错)
       window.SITE_CONFIG.cdnUrl + '/static/plugins/echarts-3.8.5/echarts.common.min.js',
+      // 插件 - ueditor
+      window.SITE_CONFIG.cdnUrl + '/static/plugins/uediter-front/ueditor/jquery-3.2.1.min.js',
+      window.SITE_CONFIG.cdnUrl + '/static/plugins/uediter-front/ueditor/ueditor.config.js',
+      window.SITE_CONFIG.cdnUrl + '/static/plugins/uediter-front/ueditor/ueditor.all.js',
+      window.SITE_CONFIG.cdnUrl + '/static/plugins/uediter-front/ueditor/lang/zh-cn/zh-cn.js',
       // 业务
       window.SITE_CONFIG.cdnUrl + '/static/js/manifest.js',
       window.SITE_CONFIG.cdnUrl + '/static/js/vendor.js',
