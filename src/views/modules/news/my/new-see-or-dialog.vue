@@ -1,6 +1,6 @@
 <template>
     <div class="auditSee">
-        <el-dialog title="查看" :close-on-click-modal="false" :visible.sync="visible" width="60%" :before-close="closeNewsSeeDialod">
+        <el-dialog title="查看" :close-on-click-modal="false" :visible.sync="visible" width="1078px" :before-close="closeNewsSeeDialod">
             <el-form :model="newsSeeForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="新闻标题:">
                     <el-input v-model="newsSeeForm.newsTitle" readonly></el-input>

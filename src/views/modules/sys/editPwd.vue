@@ -15,13 +15,14 @@
                 <el-input type="password" v-model="dataForm.confirmPassword"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+                <el-button type="primary" @click="dataFormSubmit()" :disabled="disabled">确定</el-button>
             </el-form-item>
         </el-form>
     </div>
 </template>
 <script>
     import md5 from 'js-md5';
+    import { pwdRule } from '@/utils/validate'
     export default {
         data() {
             var validateConfirmPassword = (rule, value, callback) => {
@@ -30,8 +31,16 @@
                 } else {
                     callback()
                 }
+            };
+            var validatePwd = (rule, value, callback) => {
+                if (!pwdRule(value)) {
+                    callback(new Error('8~16 个字符，至少包括一个大写字母、一个小写字母以及一个数字!'))
+                } else {
+                    callback()
+                }
             }
             return {
+                disabled: true,
                 dataForm: {
                     password: '',
                     newPassword: '',
@@ -42,11 +51,13 @@
                         { required: true, message: '原密码不能为空', trigger: 'blur' }
                     ],
                     newPassword: [
-                        { required: true, message: '新密码不能为空', trigger: 'blur' }
+                        { required: true, message: '新密码不能为空', trigger: 'blur' },
+                        { validator: validatePwd, trigger: 'blur' }
                     ],
                     confirmPassword: [
                         { required: true, message: '确认密码不能为空', trigger: 'blur' },
-                        { validator: validateConfirmPassword, trigger: 'blur' }
+                        { validator: validateConfirmPassword, trigger: 'blur' },
+                      
                     ]
                 }
             }
@@ -58,6 +69,23 @@
             mainTabs: {
                 get() { return this.$store.state.common.mainTabs },
                 set(val) { this.$store.commit('common/updateMainTabs', val) }
+            }
+        },
+        watch: {
+            dataForm: {
+                handler: function (val, oldval) {
+                    if (this.dataForm.password !== "" && this.dataForm.newPassword !== "") {
+                        if (this.dataForm.password == this.dataForm.newPassword) {
+                            this.$message.error('新旧密码不能一致!');
+                            this.disabled = true;
+                            return;
+                        } else {
+                            this.disabled = false;
+                        }
+                    }
+
+                },
+                deep: true
             }
         },
         methods: {

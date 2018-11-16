@@ -52,14 +52,16 @@
             'directionalityltr', 'directionalityrtl', 'indent', '|',
             'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
             'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
-            'simpleupload', 'insertimage', 'emotion', 'insertvideo', 'insertcode', 'webapp', 'pagebreak', 'template', '|',
-            'horizontal', 'date', 'time', 'spechars', 'wordimage', '|',
-            'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts', '|',
+            'simpleupload', 'insertimage', 'emotion', 'insertvideo',
+            'horizontal', 'date', 'time', 'spechars', '|',
+
 
         ]]
         //启用自动保存
-        , enableAutoSave: false
+        , enableAutoSave: false,
+        enableContextMenu: false
         //自动保存间隔时间， 单位ms
+        
 
     };
 

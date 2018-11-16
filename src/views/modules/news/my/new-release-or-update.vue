@@ -1,6 +1,6 @@
 <template>
     <div class="updateInput">
-        <el-dialog :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="visible" width="60%"
+        <el-dialog :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :visible.sync="visible" width="1078px"
             :before-close="closeNewsDialod">
             <el-form :model="newsForm" :rules="newsRules" ref="newsRuleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="新闻标题" prop="newsTitle">

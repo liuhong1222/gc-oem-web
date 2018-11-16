@@ -6917,7 +6917,8 @@
                         '.view{padding:0;word-wrap:break-word;cursor:text;height:90%;}\n' +
                         //设置默认字体和字号
                         //font-family不能呢随便改，在safari下fillchar会有解析问题
-                        'body{margin:8px;font-family:sans-serif;font-size:16px;}' +
+                        'body{margin:8px;font-family:微软雅黑;font-size:14px;}' +
+                        'img{max-width:920px}' +
                         //设置段落间距
                         'p{margin:5px 0;}</style>' +
                         (options.iframeCssUrl ? '<link rel=\'stylesheet\' type=\'text/css\' href=\'' + utils.unhtml(options.iframeCssUrl) + '\'/>' : '') +
@@ -17662,9 +17663,9 @@
                 case 'video':
                     var ext = url.substr(url.lastIndexOf('.') + 1);
                     if (ext == 'ogv') ext = 'ogg';
-                    str = '<video' + (id ? ' id="' + id + '"' : '') + ' class="' + classname + ' video-js" ' + (align ? ' style="float:' + align + '"' : '') +
+                    str = '<video' + (id ? ' id="' + id + '"' : '') + ' autoplay class="' + classname + ' video-js" ' + (align ? ' style="float:' + align + '"' : '') +
                         ' controls preload="none" width="' + width + '" height="' + height + '" src="' + url + '" data-setup="{}">' +
-                        '<source src="' + url + '" type="video/' + ext + '" /></video>';
+                        '<source src="' + url + '" type="video/' + ext + '"  /></video>';
                     break;
             }
             return str;
