@@ -17663,9 +17663,9 @@
                 case 'video':
                     var ext = url.substr(url.lastIndexOf('.') + 1);
                     if (ext == 'ogv') ext = 'ogg';
-                    str = '<video' + (id ? ' id="' + id + '"' : '') + ' autoplay class="' + classname + ' video-js" ' + (align ? ' style="float:' + align + '"' : '') +
-                        ' controls preload="none" width="' + width + '" height="' + height + '" src="' + url + '" data-setup="{}">' +
-                        '<source src="' + url + '" type="video/' + ext + '"  /></video>';
+                    str = '<a><video' + (id ? ' id="' + id + '"' : '') + ' autoplay class="' + classname + ' video-js" ' + (align ? ' style="float:' + align + '"' : '') +
+                        ' controls preload="meta" width="' + width + '" height="' + height + '" src="' + url + '" data-setup="{}">' +
+                        '<source src="' + url + '" type="video/' + ext + '"  /></video></a>';
                     break;
             }
             return str;

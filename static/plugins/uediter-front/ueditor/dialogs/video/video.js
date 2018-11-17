@@ -754,8 +754,8 @@
             uploader.on('error', function (code, file) {
                 if (code == 'F_DUPLICATE') {
                     layer.msg('视频名称不能一致!');
-                    
-                }else if (code == 'Q_TYPE_DENIED' || code == 'F_EXCEED_SIZE') {
+
+                } else if (code == 'Q_TYPE_DENIED' || code == 'F_EXCEED_SIZE') {
                     addFile(file);
                 }
             });
