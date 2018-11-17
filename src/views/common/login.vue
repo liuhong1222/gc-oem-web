@@ -71,6 +71,8 @@
             }).then(({ data }) => {
               if (data && data.code === 0) {
                 this.$cookie.set('token', data.token)
+                // 初始密码：true是没修改过,false是修改过
+                sessionStorage.setItem('isFirstLogin', data.isFirstLogin)
                 // 判断哪个，进入不同的工作台
                 if (data.roleIdList[0] == 1) {
                   this.$router.replace({ name: 'console-admin' })
@@ -79,7 +81,6 @@
                   this.$router.replace({ name: 'console-agent' })
                   sessionStorage.setItem('msjRoleName', '2')
                   this.auditStatus()
-
                 }
               } else {
                 this.$message.error(data.msg)
@@ -119,6 +120,7 @@
 <style lang="scss">
   $bc:#4680ff;
   $lbc:#6192FC;
+
   .site-wrapper.site-page--login {
     position: fixed;
     width: 100%;
@@ -148,9 +150,11 @@
     >img {
       float: right;
     }
+
     >.context {
       margin-top: 90px;
       margin-bottom: 25px;
+
       >span {
         width: 4px;
         display: inline-block;
@@ -158,6 +162,7 @@
         background-color: #4680ff;
         vertical-align: middle;
       }
+
       >h3 {
         font-size: 18px;
         color: #333;
@@ -166,6 +171,7 @@
         margin-left: 5px;
         vertical-align: middle;
       }
+
       >p {
         font-size: 14px;
         color: #999;

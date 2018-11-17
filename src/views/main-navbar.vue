@@ -25,7 +25,7 @@
               <img src="~@/assets/img/avatar.png" :alt="userName">{{ userName }}
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="updatePasswordHandle()">修改密码</el-dropdown-item>
+              <!-- <el-dropdown-item @click.native="updatePasswordHandle()">修改密码</el-dropdown-item> -->
               <el-dropdown-item @click.native="logoutHandle()">退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -92,6 +92,8 @@
           }).then(({ data }) => {
             if (data && data.code === 0) {
               this.$cookie.delete('token')
+              sessionStorage.removeItem('isFirstLogin');
+              
               this.$router.push({ name: 'login' }, () => {
                 location.reload() // 刷新页面, 清空整站临时存储数据
               })

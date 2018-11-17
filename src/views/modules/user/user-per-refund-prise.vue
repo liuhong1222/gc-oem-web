@@ -13,8 +13,7 @@
                     <el-input v-model="refundDataForm.refunCounts" placeholder="剩余条数" id="refunCounts" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="可退条数：" prop="refundableCounts">
-                    <el-input v-model="refundDataForm.refundableCounts" placeholder="剩余条数" id="refundableCounts"
-                        readonly></el-input>
+                    <el-input v-model="refundDataForm.refundableCounts" placeholder="可退条数" id="refundableCounts" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="退款条数：" prop="refunNumber">
                     <el-input v-model="refundDataForm.refunNumber" placeholder="退款条数不能大于剩余条数"></el-input>
