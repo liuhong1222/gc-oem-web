@@ -117,6 +117,9 @@
                         <el-form-item label="公司地址：" prop="compAdress">
                             <el-input v-model="domainDataForm.compAdress" placeholder="请输入公司地址"></el-input>
                         </el-form-item>
+                        <el-form-item label="联系方式：" prop="custHotline">
+                            <el-input v-model="domainDataForm.custHotline" placeholder="请输入联系方式"></el-input>
+                        </el-form-item>
                         <el-form-item label="增值电信业务经营许可证：" prop="telservice">
                             <el-input v-model="domainDataForm.telservice" placeholder="请输入增值电信业务经营许可证"></el-input>
                         </el-form-item>
@@ -293,6 +296,9 @@
                         <el-form-item label="公司地址：">
                             <el-input v-model="domainDataForm.compAdress" placeholder="公司地址" readonly></el-input>
                         </el-form-item>
+                        <el-form-item label="联系方式：">
+                            <el-input v-model="domainDataForm.custHotline" placeholder="客服热线" readonly></el-input>
+                        </el-form-item>
                         <el-form-item label="增值电信业务经营许可证：">
                             <el-input v-model="domainDataForm.telservice" placeholder="增值电信业务经营许可证" readonly></el-input>
                         </el-form-item>
@@ -442,6 +448,7 @@
                 domainDataForm: { //域名备案信息
                     copyinfo: '',
                     compAdress: '',
+                    custHotline: '',
                     telservice: '',
                     icpInfo: '',
                     secrecord: '',
@@ -453,6 +460,9 @@
                     ],
                     compAdress: [
                         { required: true, message: '请输入公司地址', trigger: 'blur' }
+                    ],
+                    custHotline: [
+                        { required: false, message: '请输入客服热线', trigger: 'blur' }
                     ],
                     icpInfo: [
                         { required: true, message: '请输入icp备案', trigger: 'blur' }
@@ -720,6 +730,7 @@
                             this.domainDataForm.telservice = data.data.licence
                             this.domainDataForm.icpInfo = data.data.icpRecord
                             this.domainDataForm.secrecord = data.data.policeRecord
+                            this.domainDataForm.custHotline = data.data.contactInfo
                             this.domainDataForm.id = data.data.id
                         } else {
                             this.domainDataForm.copyinfo = ""
@@ -727,6 +738,7 @@
                             this.domainDataForm.telservice = ""
                             this.domainDataForm.icpInfo = ""
                             this.domainDataForm.secrecord = ""
+                            this.domainDataForm.custHotline = ""
                         }
                     }
                 })
@@ -746,7 +758,8 @@
                                 'copyright': this.domainDataForm.copyinfo,
                                 'icpRecord': this.domainDataForm.icpInfo,
                                 'policeRecord': this.domainDataForm.secrecord,
-                                'address': this.domainDataForm.compAdress
+                                'address': this.domainDataForm.compAdress,
+                                'contactInfo': this.domainDataForm.custHotline
                             })
                         }).then(({ data }) => {
                             // console.log(data)
@@ -1241,6 +1254,7 @@
                     this.domainDataForm.telservice = ""
                     this.domainDataForm.icpInfo = ""
                     this.domainDataForm.secrecord = ""
+                    this.domainDataForm.custHotline = ""
                     this.domainDataForm.id = ""
                     this.$http({
                         url: this.$http.adornUrl(`agent/set/findDomainInfo?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
@@ -1253,6 +1267,7 @@
                                 this.domainDataForm.telservice = data.data.licence
                                 this.domainDataForm.icpInfo = data.data.icpRecord
                                 this.domainDataForm.secrecord = data.data.policeRecord
+                                this.domainDataForm.custHotline = data.data.contactInfo
                                 this.domainDataForm.id = data.data.id
                             }
 

@@ -71,6 +71,9 @@
                         <el-form-item label="公司地址：">
                             <el-input v-model="domainDataForm.compAdress" placeholder="公司地址" readonly></el-input>
                         </el-form-item>
+                        <el-form-item label="联系方式：">
+                            <el-input v-model="domainDataForm.custHotline" placeholder="联系方式" readonly></el-input>
+                        </el-form-item>
                         <el-form-item label="增值电信业务经营许可证：">
                             <el-input v-model="domainDataForm.telservice" placeholder="增值电信业务经营许可证" readonly></el-input>
                         </el-form-item>
@@ -184,6 +187,7 @@
                 domainDataForm: { //域名备案信息
                     copyinfo: '',
                     compAdress: '',
+                    custHotline: '',
                     telservice: '',
                     icpInfo: '',
                     secrecord: '',
@@ -277,7 +281,9 @@
                     this.domainDataForm.telservice = ""
                     this.domainDataForm.icpInfo = ""
                     this.domainDataForm.secrecord = ""
+                    this.domainDataForm.custHotline = ""
                     this.domainDataForm.id = ""
+
                     this.$http({
                         url: this.$http.adornUrl(`agent/set/findDomainInfo?token=${this.$cookie.get('token')}&agentId=${this.agentId}`),
                         method: 'post',
@@ -289,6 +295,7 @@
                                 this.domainDataForm.telservice = data.data.licence
                                 this.domainDataForm.icpInfo = data.data.icpRecord
                                 this.domainDataForm.secrecord = data.data.policeRecord
+                                this.domainDataForm.custHotline = data.data.contactInfo
                                 this.domainDataForm.id = data.data.id
                             }
                         }
