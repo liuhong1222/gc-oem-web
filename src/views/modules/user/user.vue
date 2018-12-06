@@ -11,7 +11,7 @@
         <el-form-item label="手机号：" style="margin-left:25px;">
           <el-input v-model="searchData.mobile" placeholder="手机号" clearable></el-input>
         </el-form-item>
-        <el-form-item label="客户类型：" >
+        <el-form-item label="客户类型：">
           <el-select v-model="searchData.custType" placeholder="客户类型">
             <el-option label="全部" value="-1"></el-option>
             <el-option label="个人" value="0"></el-option>
@@ -56,16 +56,9 @@
         <el-table-column fixed="right" label="操作" align="center" width="220">
           <template slot-scope="scope">
             <el-button @click="perPriseSee(scope.row)" type="text" size="small">查看</el-button>
-            <!-- <el-button type="text" size="small" @click="perEnterEditBtn(scope.row)">修改</el-button> -->
-            <el-button type="text" size="small" @click="rechargedataBtn(scope.row)" v-if="scope.row.canRefundFlag == 'false'"
-              disabled>充值</el-button>
-            <el-button type="text" size="small" @click="rechargedataBtn(scope.row)" v-else>充值</el-button>
-            <el-button type="text" size="small" @click="refundBtn(scope.row)" v-if="scope.row.canRefundFlag == 'false'"
-              disabled>退款</el-button>
-            <el-button type="text" size="small" @click="refundBtn(scope.row)" v-else>退款</el-button>
-            <el-button type="text" size="small" @click="transferAgent(scope.row)" v-if="scope.row.isAdmin == 'false'"
-              disabled>转代理商</el-button>
-            <el-button type="text" size="small" @click="transferAgent(scope.row)" v-else>转代理商</el-button>
+            <el-button type="text" size="small" @click="rechargedataBtn(scope.row)" :disabled="regDisabled">充值</el-button>
+            <el-button type="text" size="small" @click="refundBtn(scope.row)" :disabled="refundDisabled">退款</el-button>
+            <el-button type="text" size="small" @click="transferAgent(scope.row)" :disabled="transferDisabled">转代理商</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -106,6 +99,9 @@
         disableAgent: true,
         disableAgentName: true,
         transferAgentVisible: false,
+        regDisabled: false,
+        refundDisabled: false,
+        transferDisabled: false,
         arr: [],  //保存点击的id和区分个人和企业的id
         searchData: {
           dateTime: [],
@@ -156,6 +152,13 @@
         if (sessionStorage.getItem('msjRoleName') == '2') {
           this.disableAgent = false
           this.disableAgentName = false
+          this.regDisabled = false;
+          this.refundDisabled = false;
+          this.transferDisabled = true
+        } else if (sessionStorage.getItem('msjRoleName') == '1') {  //管理员
+          this.regDisabled = true;
+          this.refundDisabled = true;
+          this.transferDisabled = false
         }
         this.dataListLoading = true
         this.$http({
