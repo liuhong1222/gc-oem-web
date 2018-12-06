@@ -137,9 +137,42 @@
       transferOrAgent
     },
     activated() {
+      if (sessionStorage.getItem('msjRoleName') == '1') {
+        if (!this.searchData.dateTime) {
+          this.searchData.dateTime = [];
+          var date = new Date()
+          var dateSeven = new Date(new Date() - (7 * 24 * 3600 * 1000))
+          this.searchData.dateTime[0] = this.formatDate(dateSeven)
+          this.searchData.dateTime[1] = this.formatDate(date)
+        }
+      }
+
       this.getCustomList()
     },
+    created() {
+      if (sessionStorage.getItem('msjRoleName') == '1') {
+        var date = new Date()
+        var dateSeven = new Date(new Date() - (7 * 24 * 3600 * 1000))
+        this.searchData.dateTime[0] = this.formatDate(dateSeven)
+        this.searchData.dateTime[1] = this.formatDate(date)
+      }
+
+    },
     methods: {
+      formatDate(date) {
+        var seperator1 = '-'
+        var year = date.getFullYear()
+        var month = date.getMonth() + 1
+        var strDate = date.getDate()
+        if (month >= 1 && month <= 9) {
+          month = '0' + month
+        }
+        if (strDate >= 0 && strDate <= 9) {
+          strDate = '0' + strDate
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate
+        return currentdate
+      },
       getRowClass({ row, column, rowIndex, columnIndex }) {
         if (rowIndex == 0) {
           return 'background-color: #f8f8f8;color:#666;'
