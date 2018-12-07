@@ -111,7 +111,7 @@
                         <el-input v-model="domainDataForm.compAdress" placeholder="请输入公司地址"></el-input>
                     </el-form-item>
                     <el-form-item label="联系方式：" prop="custHotline">
-                        <el-input v-model="domainDataForm.custHotline" placeholder="请输入客服热线"></el-input>
+                        <el-input v-model="domainDataForm.custHotline" placeholder="请输入联系方式"></el-input>
                     </el-form-item>
                     <el-form-item label="增值电信业务经营许可证：" prop="telservice">
                         <el-input v-model="domainDataForm.telservice" placeholder="请输入增值电信业务经营许可证"></el-input>

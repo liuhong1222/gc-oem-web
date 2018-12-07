@@ -297,7 +297,7 @@
                             <el-input v-model="domainDataForm.compAdress" placeholder="公司地址" readonly></el-input>
                         </el-form-item>
                         <el-form-item label="联系方式：">
-                            <el-input v-model="domainDataForm.custHotline" placeholder="客服热线" readonly></el-input>
+                            <el-input v-model="domainDataForm.custHotline" placeholder="联系方式" readonly></el-input>
                         </el-form-item>
                         <el-form-item label="增值电信业务经营许可证：">
                             <el-input v-model="domainDataForm.telservice" placeholder="增值电信业务经营许可证" readonly></el-input>
