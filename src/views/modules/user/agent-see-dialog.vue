@@ -78,10 +78,11 @@
                             <el-input v-model="domainDataForm.telservice" placeholder="增值电信业务经营许可证" readonly></el-input>
                         </el-form-item>
                         <el-form-item label="ICP备案：">
-                            <el-input v-model="domainDataForm.icpInfo" placeholder="ICP备案" readonly></el-input>
+                            <el-input v-model="domainDataForm.icpInfo" placeholder="请输入ICP备案，例：沪ICP备案：15046301号-2
+                            " readonly></el-input>
                         </el-form-item>
                         <el-form-item label="公安备案：">
-                            <el-input v-model="domainDataForm.secrecord" placeholder="公安备案" readonly></el-input>
+                            <el-input v-model="domainDataForm.secrecord" placeholder="请输入公安备案，例：沪公网安备案 31011702001190号" readonly></el-input>
                         </el-form-item>
                     </el-form>
                 </el-collapse-item>
