@@ -139,7 +139,7 @@
     .auditSee .el-input__inner {
         width: 100%;
     }
-    
+
     .auditSee #editor2 {
         margin-top: 7px;
     }

@@ -110,14 +110,18 @@
                     <el-form-item label="公司地址：" prop="compAdress">
                         <el-input v-model="domainDataForm.compAdress" placeholder="请输入公司地址"></el-input>
                     </el-form-item>
+                    <el-form-item label="联系方式：" prop="custHotline">
+                        <el-input v-model="domainDataForm.custHotline" placeholder="请输入联系方式"></el-input>
+                    </el-form-item>
                     <el-form-item label="增值电信业务经营许可证：" prop="telservice">
                         <el-input v-model="domainDataForm.telservice" placeholder="请输入增值电信业务经营许可证"></el-input>
                     </el-form-item>
                     <el-form-item label="ICP备案：" prop="icpInfo">
-                        <el-input v-model="domainDataForm.icpInfo" placeholder="请输入ICP备案"></el-input>
+                        <el-input v-model="domainDataForm.icpInfo" placeholder="请输入ICP备案，例：沪ICP备案：15046301号-2
+                        "></el-input>
                     </el-form-item>
                     <el-form-item label="公安备案：" prop="secrecord">
-                        <el-input v-model="domainDataForm.secrecord" placeholder="请输入公安备案"></el-input>
+                        <el-input v-model="domainDataForm.secrecord" placeholder="请输入公安备案，例：沪公网安备案 31011702001190号"></el-input>
                     </el-form-item>
                     <el-button style="margin-top: 12px;" @click="lastStep">上一步</el-button>
                     <el-button style="margin-top: 12px;" @click="nextDomain">下一步</el-button>
@@ -283,6 +287,7 @@
                 domainDataForm: { //域名备案信息
                     copyinfo: '',
                     compAdress: '',
+                    custHotline: '',
                     telservice: '',
                     icpInfo: '',
                     secrecord: '',
@@ -294,6 +299,9 @@
                     ],
                     compAdress: [
                         { required: true, message: '请输入公司地址', trigger: 'blur' }
+                    ],
+                    custHotline: [
+                        { required: false, message: '请输入客服热线', trigger: 'blur' }
                     ],
                     icpInfo: [
                         { required: true, message: '请输入icp备案', trigger: 'blur' }
@@ -549,6 +557,7 @@
                             this.domainDataForm.telservice = data.data.licence
                             this.domainDataForm.icpInfo = data.data.icpRecord
                             this.domainDataForm.secrecord = data.data.policeRecord
+                            this.domainDataForm.custHotline = data.data.contactInfo
                             this.domainDataForm.id = data.data.id
                         } else {
                             this.domainDataForm.copyinfo = ""
@@ -556,6 +565,7 @@
                             this.domainDataForm.telservice = ""
                             this.domainDataForm.icpInfo = ""
                             this.domainDataForm.secrecord = ""
+                            this.domainDataForm.custHotline = ""
                         }
                     }
                 })
@@ -576,7 +586,8 @@
                                 'copyright': this.domainDataForm.copyinfo,
                                 'icpRecord': this.domainDataForm.icpInfo,
                                 'policeRecord': this.domainDataForm.secrecord,
-                                'address': this.domainDataForm.compAdress
+                                'address': this.domainDataForm.compAdress,
+                                'contactInfo': this.domainDataForm.custHotline
                             })
                         }).then(({ data }) => {
                             // console.log(data)
