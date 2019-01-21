@@ -251,7 +251,7 @@
             break;
 
           case 5:
-            return "创蓝对公支付宝";
+            return "对公支付宝";
             break;
 
           case 25:

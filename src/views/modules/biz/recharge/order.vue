@@ -33,7 +33,7 @@
          label="产品名称">
         <template slot-scope="scope">
           <p>
-             创蓝万数
+     
           </p>
         </template>
       </el-table-column> -->
@@ -247,19 +247,19 @@
       forBankNo(row, column) {
         switch (row.bankNo) {
           case 1:
-            return "创蓝对公农行";
+            return "对公农行";
             break;
 
           case 3:
-            return "创蓝对公招行";
+            return "对公招行";
             break;
 
           case 4:
-            return "创蓝对公建行";
+            return "对公建行";
             break;
 
           case 5:
-            return "创蓝对公支付宝";
+            return "对公支付宝";
             break;
 
           case 25:

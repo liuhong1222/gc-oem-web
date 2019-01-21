@@ -15,9 +15,6 @@ module.exports = {
     proxyTable: devEnv.OPEN_PROXY === false ? {} : {
       '/proxyApi': {
         target: 'http://localhost:9999/',
-        //  target:'http://172.16.4.222:9999/', 红姐
-        // target:'http://172.16.20.33:9999/open/',
-        //target:'http://oem.haifou.com/open/',
         changeOrigin: true,
         pathRewrite: {
           '^/proxyApi': '/'
