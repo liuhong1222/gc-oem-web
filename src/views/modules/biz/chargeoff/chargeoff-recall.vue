@@ -17,7 +17,7 @@
 					{{balance }} 元
       </el-form-item><br />
       <el-form-item >
-        <div style="text-align:center;    margin: 4px 7px 20px 33px;">
+        <div style="text-align:center; margin: 4px 7px 20px 33px;">
 					是否撤回对该笔订单的申请？
         </div>
       </el-form-item><br />
