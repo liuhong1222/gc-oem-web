@@ -1,6 +1,6 @@
 <template>
     <div class="main">
-        <div class="topSearch">
+        <div class="topSearch" id="userReg">
             <h2>客户充值明细记录</h2>
             <el-form :inline="true" :model="customerSearchData" @keyup.enter.native="uerRechargeList()">
                 <el-form-item label="创建时间：">
@@ -12,11 +12,17 @@
                 <el-form-item label="代理商名称：" style="margin-left:5px;" v-if="disableAgent">
                     <el-input v-model="customerSearchData.agentName" placeholder="代理商名称" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="客户名称：" style="margin-left:-2px;">
+                <el-form-item label="客户名称：" style="margin-left:10px;">
                     <el-input v-model="customerSearchData.custName" placeholder="客户名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="手机号：" style="margin-left:10px;">
                     <el-input v-model="customerSearchData.custMobile" placeholder="手机号" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="审核状态：" style="margin-left:10px;">
+                    <el-select v-model="auitStatus" placeholder="请选择状态">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item style="margin-left:6px">
                     <el-button type="primary" @click="uerRechargeList()">查询</el-button>
@@ -47,9 +53,13 @@
                 </el-table-column>
                 <el-table-column prop="number" label="条数" align="center">
                 </el-table-column>
+                <el-table-column prop="freeNumber" label="赠送条数" align="center">
+                </el-table-column>
                 <el-table-column prop="money" label="金额（元）" align="center">
                 </el-table-column>
                 <el-table-column prop="payTypeName" label="充值方式" align="center">
+                </el-table-column>
+                <el-table-column prop="statusName" label="审核状态" align="center" :formatter="statusNameFomart">
                 </el-table-column>
                 <el-table-column prop="remark" label="备注" align="center">
                 </el-table-column>
@@ -75,6 +85,23 @@
                 disableAgentName: true,
                 money: '',
                 number: '',
+                options: [{
+                    value: 'null',
+                    label: '全部'
+                }, {
+                    value: '1',
+                    label: '成功'
+                }, {
+                    value: '3',
+                    label: '待审核'
+                }, {
+                    value: '4',
+                    label: '已驳回'
+                }, {
+                    value: '2',
+                    label: '失败'
+                }],
+                auitStatus: '',
                 customerSearchData: {
                     dateTime: [],
                     agentName: "",
@@ -135,6 +162,7 @@
                         'companyName': this.customerSearchData.agentName,
                         'userName': this.customerSearchData.custName,
                         'userMobile': this.customerSearchData.custMobile,
+                        'payStatus': this.auitStatus,
                         'startTime': '' || this.customerSearchData.dateTime == null ? '' : this.customerSearchData.dateTime[0],
                         'endTime': '' || this.customerSearchData.dateTime == null ? '' : this.customerSearchData.dateTime[1]
                     })
@@ -227,6 +255,28 @@
                 var currentdate = year + seperator1 + month + seperator1 + strDate;
                 return currentdate;
             },
+            // 审核状态
+            statusNameFomart(row, column) {
+                switch (row.statusName) {
+                    case 1:
+                        return "成功";
+                        break;
+
+                    case 2:
+                        return "失败";
+                        break;
+
+                    case 3:
+                        return "待审核";
+                        break;
+
+                    case 4:
+                        return "已驳回";
+                        break;
+                    default:
+                        return "";
+                }
+            }
         }
     }
 
@@ -238,5 +288,10 @@
         background-color: #ffffff;
         margin-bottom: 24px;
         box-shadow: 0px 7px 9px 0px rgba(153, 153, 153, 0.05);
+    }
+
+    #userReg .el-input,
+    #userReg .el-input__inner {
+        width: 100%;
     }
 </style>

@@ -56,9 +56,11 @@
         <el-table-column fixed="right" label="操作" align="center" width="220">
           <template slot-scope="scope">
             <el-button @click="perPriseSee(scope.row)" type="text" size="small">查看</el-button>
-            <el-button type="text" size="small" @click="rechargedataBtn(scope.row)" :disabled="regDisabled">充值</el-button>
-            <el-button type="text" size="small" @click="refundBtn(scope.row)" :disabled="refundDisabled">退款</el-button>
+            <!-- <el-button type="text" size="small" @click="rechargedataBtn(scope.row)" :disabled="regDisabled">充值</el-button> -->
+            <!--  <el-button type="text" size="small" @click="refundBtn(scope.row)" :disabled="refundDisabled">退款</el-button> -->
+            <el-button type="text" size="small" @click="applicationBtn(scope.row)" :disabled="applicationDisabled" >入账申请</el-button>
             <el-button type="text" size="small" @click="transferAgent(scope.row)" :disabled="transferDisabled">转代理商</el-button>
+           
           </template>
         </el-table-column>
       </el-table>
@@ -79,6 +81,8 @@
     <per-refund-prise v-if="refundVisible" ref="refundcon" @refreshDataList="getCustomList"></per-refund-prise>
     <!-- 转代理商 -->
     <transfer-or-agent v-if="transferAgentVisible" ref="transferAgentcon" @refreshDataList="getCustomList"></transfer-or-agent>
+    <!-- 入账申请 -->
+    <entry-to-application v-if="entryApplicateVisible" ref="entryApplicateCon"></entry-to-application>
   </div>
 </template>
 <script>
@@ -87,6 +91,7 @@
   import perRechargePrise from './user-per-recharge-prise'
   import perRefundPrise from './user-per-refund-prise'
   import transferOrAgent from './user-transfer-agent'
+  import entryToApplication from './user-entry-application'
   export default {
     data() {
       return {
@@ -99,6 +104,8 @@
         disableAgent: true,
         disableAgentName: true,
         transferAgentVisible: false,
+        applicationDisabled:false,
+        entryApplicateVisible:false,
         regDisabled: false,
         refundDisabled: false,
         transferDisabled: false,
@@ -134,7 +141,8 @@
       perSeeEnterprise,
       perRechargePrise,
       perRefundPrise,
-      transferOrAgent
+      transferOrAgent,
+      entryToApplication
     },
     activated() {
       if (sessionStorage.getItem('msjRoleName') == '1') {
@@ -188,10 +196,12 @@
           this.regDisabled = false;
           this.refundDisabled = false;
           this.transferDisabled = true
+          this.applicationDisabled=false;
         } else if (sessionStorage.getItem('msjRoleName') == '1') {  //管理员
           this.regDisabled = true;
           this.refundDisabled = true;
-          this.transferDisabled = false
+          this.transferDisabled = false;
+          this.applicationDisabled=true;
         }
         this.dataListLoading = true
         this.$http({
@@ -289,6 +299,13 @@
         this.transferAgentVisible = true;
         this.$nextTick(() => {
           this.$refs.transferAgentcon.transferAgentInit(row)
+        })
+      },
+      // 入账申请
+      applicationBtn(row){
+        this.entryApplicateVisible = true;
+        this.$nextTick(() => {
+          this.$refs.entryApplicateCon.entryApplicateInit(row)
         })
       },
       // 导出
