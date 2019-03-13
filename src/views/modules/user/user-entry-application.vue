@@ -114,7 +114,7 @@
                         'amount': this.applicateDataForm.regMoney,
                         'payType': '6',
                         'freeNumber': this.applicateDataForm.GiveNumber,
-                        'remark': this.applicateDataForm.desc
+                        'remark': this.applicateDataForm.desc   
                     })
                 }).then(({ data }) => {
                     if (data && data.code === 0) {

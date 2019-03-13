@@ -34,6 +34,9 @@
                         <el-radio :label="0">驳回</el-radio>
                     </el-radio-group>
                 </el-form-item>
+                <!-- <el-form-item label="驳回原因：" prop="bohuidesc" v-if="auditDisable">
+                    <el-input type="textarea" v-model="applicateDataForm.bohuidesc"></el-input>
+                </el-form-item> -->
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -49,6 +52,7 @@
                 dialogVisible: false,
                 labelPosition: 'right',
                 disabled: false,
+                auditDisable: false,
                 applicateDataForm: {
                     creUserId: '',
                     mobile: '',
@@ -58,12 +62,16 @@
                     proNumber: '',
                     GiveNumber: '',
                     desc: '',
+                    // bohuidesc: '',
                     resource: '',
                 },
                 applicateDataFRules: {
                     resource: [
                         { required: true, message: '请选中审核', trigger: 'blur' }
                     ],
+                    // bohuidesc: [
+                    //     { required: true, message: '请输入驳回原因', trigger: 'blur' }
+                    // ],
                 }
             }
         },
@@ -72,6 +80,11 @@
                 this.applicateDataForm.orderId = arr.orderId
                 this.dialogVisible = true;
                 this.applicateDataForm.resource = ""
+                this.auditDisable = false;
+                // this.applicateDataForm.bohuidesc = ""
+                this.$nextTick(() => {
+                    this.$refs['applicateDataFormRef'].resetFields();
+                })
                 this.$http({
                     url: this.$http.adornUrl(`agent/finance/user/rechargeCheck/list/check`),
                     method: 'get',
@@ -99,7 +112,8 @@
                             method: 'get',
                             params: this.$http.adornParams({
                                 'orderId': this.applicateDataForm.orderId,
-                                'checkStatus': this.applicateDataForm.resource
+                                'checkStatus': this.applicateDataForm.resource,
+                                'remark': this.applicateDataForm.bohuidesc
                             })
                         }).then(({ data }) => {
                             if (data && data.code === 0) {
@@ -108,13 +122,19 @@
                                 this.$emit('refreshaccAuditList')
                             } else {
                                 this.$message.error(data.msg)
-
                             }
                         })
                     }
                 })
-            }
-
+            },
+            // auditChangeHandler(val) {
+            //     if (val == 0) {
+            //         this.auditDisable = true
+            //     } else {
+            //         this.auditDisable = false
+            //         this.applicateDataForm.bohuidesc = ""
+            //     }
+            // },
         }
     }
 </script>
@@ -124,8 +144,8 @@
         border: none
     }
 
-    .finnceAudit .el-textarea__inner {
+    /* .finnceAudit .el-textarea__inner {
         border: none;
         resize: none
-    }
+    } */
 </style>

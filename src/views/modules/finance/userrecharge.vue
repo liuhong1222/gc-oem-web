@@ -59,7 +59,7 @@
                 </el-table-column>
                 <el-table-column prop="payTypeName" label="充值方式" align="center">
                 </el-table-column>
-                <el-table-column prop="statusName" label="审核状态" align="center" :formatter="statusNameFomart">
+                <el-table-column prop="statusName" label="审核状态" align="center" >
                 </el-table-column>
                 <el-table-column prop="remark" label="备注" align="center">
                 </el-table-column>
@@ -256,27 +256,27 @@
                 return currentdate;
             },
             // 审核状态
-            statusNameFomart(row, column) {
-                switch (row.statusName) {
-                    case 1:
-                        return "成功";
-                        break;
+            // statusNameFomart(row, column) {
+            //     switch (row.statusName) {
+            //         case 1:
+            //             return "成功";
+            //             break;
 
-                    case 2:
-                        return "失败";
-                        break;
+            //         case 2:
+            //             return "失败";
+            //             break;
 
-                    case 3:
-                        return "待审核";
-                        break;
+            //         case 3:
+            //             return "待审核";
+            //             break;
 
-                    case 4:
-                        return "已驳回";
-                        break;
-                    default:
-                        return "";
-                }
-            }
+            //         case 4:
+            //             return "已驳回";
+            //             break;
+            //         default:
+            //             return "";
+            //     }
+            // }
         }
     }
 
