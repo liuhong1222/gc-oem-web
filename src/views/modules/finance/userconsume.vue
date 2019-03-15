@@ -37,7 +37,17 @@
                 </el-table-column>
                 <el-table-column prop="consumeTime" label="消耗时间" align="center">
                 </el-table-column>
-                <el-table-column prop="number" label="消耗条数（条）" align="center">
+                <el-table-column prop="fileName" label="文件名称" align="center">
+                </el-table-column>
+                <el-table-column prop="realCount" label="实号条数（条）" align="center">
+                </el-table-column>
+                <el-table-column prop="emptyCount" label="空号条数（条）" align="center">
+                </el-table-column>
+                <el-table-column prop="silentCount" label="沉默号条数（条）" align="center">
+                </el-table-column>
+                <el-table-column prop="riskCount" label="风险号条数（条）" align="center">
+                </el-table-column>
+                <el-table-column prop="number" label="总条数（条）" align="center">
                 </el-table-column>
                 <el-table-column prop="userMobile" label="手机号" align="center">
                 </el-table-column>

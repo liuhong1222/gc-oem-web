@@ -5,7 +5,7 @@
   window.SITE_CONFIG = {};
 
   // api接口请求地址
-  window.SITE_CONFIG['baseUrl'] = 'http://khjc.com.cn:8088/open/';
+  window.SITE_CONFIG['baseUrl'] = 'http://oem.khjc.com.cn/open/';
   window.SITE_CONFIG['imgUrl'] = 'http://khjc.com.cn:8180/'; //军哥图片地址
   window.SITE_CONFIG['zxaImgUrl'] = 'http://khjc.com.cn:8081/';//张新安图片地址
   // cdn地址 = 域名 + 版本号
