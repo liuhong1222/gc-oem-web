@@ -74,13 +74,18 @@
                 // 初始密码：true是没修改过,false是修改过
                 sessionStorage.setItem('isFirstLogin', data.isFirstLogin)
                 // 判断哪个，进入不同的工作台
-                if (data.roleIdList[0] == 1) {
-                  this.$router.replace({ name: 'console-admin' })
-                  sessionStorage.setItem('msjRoleName', '1')
-                } else if (data.roleIdList[0] == 2) {
+                // if (data.roleIdList[0] == 1) {
+                //   this.$router.replace({ name: 'console-admin' })
+                //   sessionStorage.setItem('msjRoleName', '1')
+                // } else 
+
+                if (data.roleIdList[0] == 2) {
                   this.$router.replace({ name: 'console-agent' })
                   sessionStorage.setItem('msjRoleName', '2')
                   this.auditStatus()
+                } else {
+                  this.$router.replace({ name: 'console-admin' })
+                  sessionStorage.setItem('msjRoleName', '1')
                 }
               } else {
                 this.$message.error(data.msg)
