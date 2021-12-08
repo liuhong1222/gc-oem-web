@@ -127,11 +127,8 @@
   $lbc:#6192FC;
 
   .site-wrapper.site-page--login {
-    position: fixed;
+    min-height: 100vh;
     width: 100%;
-    height: 100%;
-    top: 0px;
-    z-index: -1;
     background-image: linear-gradient(0deg, #152151 0%, #09102c 100%);
   }
 

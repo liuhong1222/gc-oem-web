@@ -7,7 +7,7 @@
           <ul class="cf basic-mess">
             <li v-for="(item,index) in basicList" :key="index">
               <p>{{item.title}}</p>
-              <input type="text" v-model="item.counts" :value="item.counts" readonly>
+              <input type="text" :value="item.counts" readonly>
               <button v-show="item.flag" @click="basicBtn(index,item.counts)">{{item.title === '邮箱' && item.counts ===
                 '' || item.counts === null ? '添加' : item.btnText}}</button>
             </li>

@@ -28,6 +28,7 @@
         <el-form-item>
           <el-button type="primary" @click="getCustomList()">查询</el-button>
           <el-button type="primary" @click="exportUser()" :disabled="disabled">导出</el-button>
+          <el-button type="primary" @click="handleAddUser()" v-if="showAddCusBtn">新增</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -83,10 +84,13 @@
     <transfer-or-agent v-if="transferAgentVisible" ref="transferAgentcon" @refreshDataList="getCustomList"></transfer-or-agent>
     <!-- 入账申请 -->
     <entry-to-application v-if="entryApplicateVisible" ref="entryApplicateCon"></entry-to-application>
+    <!-- 添加客户 -->
+    <add-customer-dia ref="addCustomerDiaRef" @refresh="getCustomList" />
   </div>
 </template>
 <script>
   // import perEditEnterise from './user-per-edit-enterise'
+  import AddCustomerDia from "./add-customer-dia.vue";
   import perSeeEnterprise from './user-per-see-enterprise'
   import perRechargePrise from './user-per-recharge-prise'
   import perRefundPrise from './user-per-refund-prise'
@@ -95,6 +99,7 @@
   export default {
     data() {
       return {
+        showAddCusBtn: false,
         disabled: false,
         seeVisible: false,
         updateVisible: false,
@@ -138,6 +143,7 @@
     },
     components: {
       // perEditEnterise,
+      AddCustomerDia,
       perSeeEnterprise,
       perRechargePrise,
       perRefundPrise,
@@ -153,6 +159,9 @@
           this.searchData.dateTime[0] = this.formatDate(dateSeven)
           this.searchData.dateTime[1] = this.formatDate(date)
         }
+        this.showAddCusBtn = false
+      } else {
+        this.showAddCusBtn = true
       }
 
       this.getCustomList()
@@ -167,6 +176,9 @@
 
     },
     methods: {
+      handleAddUser() {
+        this.$refs.addCustomerDiaRef.init()
+      },
       formatDate(date) {
         var seperator1 = '-'
         var year = date.getFullYear()
